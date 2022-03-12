@@ -18,5 +18,12 @@ namespace WiseEasyData.Controllers
             return View();
         }
 
+        
+        public IActionResult Profile()
+        {
+
+            return View();
+        }
+
     }
 }

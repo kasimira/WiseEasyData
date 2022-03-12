@@ -12,7 +12,7 @@ using WiseEasyData.Infrastructure.Data;
 namespace WiseEasyData.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220312091220_InitialMigration")]
+    [Migration("20220312223705_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -281,8 +281,8 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
 
                     b.Property<string>("Department")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("EGN")
                         .HasMaxLength(10)
@@ -297,15 +297,13 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
+                    b.Property<int>("Gender")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("int");
 
-                    b.Property<string>("Grade")
-                        .IsRequired()
+                    b.Property<int>("Grade")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime2");
@@ -325,11 +323,13 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
 
                     b.Property<string>("Nationality")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("NumberOfPersonalId")
-                        .HasColumnType("int");
+                    b.Property<string>("NumberOfPersonalId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -356,10 +356,9 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                     b.Property<Guid>("SalaryId1")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
+                    b.Property<int>("Status")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

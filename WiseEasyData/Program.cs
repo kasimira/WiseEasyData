@@ -1,5 +1,4 @@
 using Core.Constants;
-using Finbuckle.MultiTenant;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WiseEasyData.Infrastructure.Data;
@@ -37,7 +36,7 @@ else
     app.UseHsts();
 }
 
-app.UseMultiTenant(); // => tova dobavih
+
 
 
 app.UseHttpsRedirection();

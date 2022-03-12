@@ -1,0 +1,161 @@
+﻿@using Core.Models
+@using Infrastructure.Data.Enums
+@model AddEmployeeViewModel
+@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_LayoutIntro";
+}
+
+<div class="container-xl px-4 mt-4">
+    <div class="row">
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="card-title">Add new Employee</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (middle name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputFirstName">First name</label>
+                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter employee's first name" asp-for="FirstName">
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputFirstName">Middle name</label>
+                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter employee's middle name" asp-for="MiddleName">
+                                <span asp-validation-for="MiddleName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLastName">Last name</label>
+                                <input class="form-control" id="inputLastName" type="text" placeholder="Enter employee's last name" asp-for="LastName">
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputNationality">Nationality</label>
+                                <input class="form-control" id="inputNationality" type="text" placeholder="Enter employee's nationality" asp-for="Nationality">
+                                <span asp-validation-for="Nationality" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputNumberOfPersonalId">Number Of Personal Id</label>
+                                <input class="form-control" id="inputNumberOfPersonalId" type="number" placeholder="Enter employee's Id" asp-for="NumberOfPersonalId">
+                                <span asp-validation-for="NumberOfPersonalId" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputBirthday">Birthday</label>
+                                <input class="form-control" id="inputBirthday" type="date" placeholder="Enter your birthday" asp-for="DateOfBirth">
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputGender">Gender</label>
+                                <fieldset class="form-group">
+                                    <select class="form-select" id="basicSelect" asp-for="Gender" asp-items="@Html.GetEnumSelectList<Gender>()">
+                                    </select>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputGrade">Grade</label>
+                                <fieldset class="form-group">
+                                    <select class="form-select" id="basicSelect" name="Grade" asp-items="@Html.GetEnumSelectList<Grade>()">
+                                    </select>
+                                    <span asp-validation-for="Grade" class="text-danger"></span>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <!-- Form Row Contact-->
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                                <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter employee's email address" asp-for="Email">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone">Phone number</label>
+                                <input class="form-control" id="inputPhone" type="tel" placeholder="Enter employee's phone number" asp-for="PhoneNumber">
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (ADDRESS)-->
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputAddress">Address</label>
+                                <input class="form-control" id="inputAddress" type="text" placeholder="Enter employee's address" asp-for="Address">
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputCity">City</label>
+                                <input class="form-control" id="inputCity" type="text" placeholder="Enter employee's city" asp-for="City">
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputZip">Zip</label>
+                                <input type="text" class="form-control" id="inputZip" placeholder="Enter employee's zip" asp-for="PostalCode">
+                                <span asp-validation-for="PostalCode" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputpDepartment">Department</label>
+                                <fieldset class="form-group">
+                                    <input type="text" class="form-control" id="inputDepartment" asp-for="Department">
+                                    <span asp-validation-for="Department" class="text-danger"></span>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputpPosition">Position</label>
+                                <input class="form-control" id="inputPosition" type="text" placeholder="Enter employee's Position" asp-for="Position">
+                                <span asp-validation-for="Position" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputHireDate">Hire Date</label>
+                                <input class="form-control" id="inputHireDate" type="date" placeholder="Enter employee's hire date" asp-for="HireDate">
+                                <span asp-validation-for="HireDate" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputReleaseDate">Release Date</label>
+                                <input class="form-control" id="inputReleaseDate" type="date" placeholder="Enter employee's release date" asp-for="ReleaseDate">
+                                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputHireDate">Status</label>
+                                <fieldset class="form-group">
+                                    <select class="form-select" id="basicSelect" asp-for="Status" asp-items="@Html.GetEnumSelectList<Status>()"></select>
+                                    <span asp-validation-for="Status" class="text-danger"></span>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputSalary">Salary</label>
+                                <input class="form-control" id="inputSalary" type="number" placeholder="Enter employee's hourly salary " asp-for="Salary">
+                                <span asp-validation-for="Salary" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputImage">Image</label>
+                                <input asp-for="Image" class="form-control" id="inputSalary" placeholder="Please select a photo of the employee ">
+                                <span asp-validation-for="Image" class="text-danger"></span>
+                            </div>                        
+                        </div>
+                         <button class="btn btn-primary" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<partial name="_ValidationScriptsPartial" />
+}
+
+

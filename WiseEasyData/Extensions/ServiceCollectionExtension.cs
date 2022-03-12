@@ -1,4 +1,5 @@
-﻿using Infrastructure.Data.Repositories;
+﻿
+using Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using WiseEasyData.Infrastructure.Data;
 
@@ -9,6 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IApplicatioDbRepository, ApplicatioDbRepository>();
+           
 
             return services;
         }

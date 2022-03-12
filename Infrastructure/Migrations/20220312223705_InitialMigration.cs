@@ -98,8 +98,6 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         principalTable: "Countries",
                         principalColumn: "CountryId",
                         onDelete: ReferentialAction.Restrict);
-                    
-
                 });
 
             migrationBuilder.CreateTable(
@@ -187,24 +185,24 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nationality = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Nationality = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     EGN = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
-                    NumberOfPersonalId = table.Column<int>(type: "int", nullable: true),
+                    NumberOfPersonalId = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     MiddleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Gender = table.Column<int>(type: "int", maxLength: 10, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Position = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Department = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Department = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     HireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PhotoPath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     SalaryId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Grade = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Grade = table.Column<int>(type: "int", maxLength: 20, nullable: false),
+                    Status = table.Column<int>(type: "int", maxLength: 10, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),

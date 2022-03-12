@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - Wiseasydata</title>
+    <title>@ViewData["Title"] - WiseEasyData</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                            <a href="index.html"><img src="~/images/logo/logo.png" alt="Logo" srcset=""></a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="sidebar-menu">
-                     <partial name="_LayoutIntroSidebarPartial" />
+                    <partial name="_LayoutIntroSidebarPartial" />
                 </div>
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
             </div>
@@ -45,7 +45,7 @@
                     <i class="bi bi-justify fs-3"></i>
                 </a>
             </header>
-             @RenderBody()
+            @RenderBody()
 
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
@@ -53,13 +53,16 @@
                         <p>2021 &copy; Mazer</p>
                     </div>
                     <div class="float-end">
-                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
-                                href="http://ahmadsaugi.com">A. Saugi</a></p>
+                        <p>
+                            Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a href="http://ahmadsaugi.com">A. Saugi</a>
+                        </p>
                     </div>
                 </div>
             </footer>
         </div>
     </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="~/js/bootstrap.bundle.min.js"></script>
 
@@ -67,6 +70,7 @@
     <script src="~/js/pages/dashboard.js"></script>
 
     <script src="~/js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html>

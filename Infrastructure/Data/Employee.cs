@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Infrastructure.Data.Enums;
 
 namespace Infrastructure.Data
 {
@@ -14,13 +10,14 @@ namespace Infrastructure.Data
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
-        [StringLength(10)]
+        [StringLength(50)]
         public string Nationality { get; set; }
 
         [StringLength(10)]
         public string? EGN { get; set; }
 
-        public int? NumberOfPersonalId { get; set; }
+        [StringLength(20)]
+        public string NumberOfPersonalId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -39,7 +36,7 @@ namespace Infrastructure.Data
 
         [Required]
         [StringLength(10)]
-        public string Gender { get; set; }  
+        public Gender Gender { get; set; }
 
         [Required]
         [StringLength(45)]
@@ -53,12 +50,12 @@ namespace Infrastructure.Data
         [StringLength(20)]
         public string Position { get; set; }
         [Required]
-        [StringLength(20)]
-        public string Department{ get; set; }
+        [StringLength(50)]
+        public string Department { get; set; }
 
         [Required]
         public DateTime HireDate { get; set; }
-        
+
         public DateTime? ReleaseDate { get; set; }
 
         [StringLength(255)]
@@ -70,16 +67,17 @@ namespace Infrastructure.Data
 
 
         [StringLength(20)]
-        public string Grade { get; set; }
+        public Grade Grade { get; set; }
 
+        [Required]
         [StringLength(10)]
-        public string Status { get; set; }
+        public Status Status { get; set; }
 
         [Required]
         [StringLength(200)]
         public string Address { get; set; }
 
-        [Required]      
+        [Required]
         public Guid CityId { get; set; } = Guid.NewGuid();
 
         [ForeignKey(nameof(CityId))]
@@ -89,15 +87,11 @@ namespace Infrastructure.Data
         [StringLength(20)]
         public string PostalCode { get; set; }
 
-        [Required]      
+        [Required]
         public Guid CountryId { get; set; } = Guid.NewGuid();
 
         [ForeignKey(nameof(CountryId))]
-        public Country Country { get; set; }   
-        
-
+        public Country Country { get; set; }
         public bool IsDeleted { get; set; } = false;
-
-
     }
 }

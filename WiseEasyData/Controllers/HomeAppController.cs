@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WiseEasyData.Controllers
 {
@@ -18,12 +19,6 @@ namespace WiseEasyData.Controllers
             return View();
         }
 
-        
-        public IActionResult Profile()
-        {
-
-            return View();
-        }
-
+   
     }
 }

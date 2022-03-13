@@ -1,5 +1,8 @@
-﻿using Core.Models;
+﻿using Core.Contracts;
+using Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using WiseEasyData.Models;
 
 namespace WiseEasyData.Controllers
 {
@@ -7,18 +10,21 @@ namespace WiseEasyData.Controllers
     {
 
         private readonly ILogger<HomeController> _logger;
-        
+        private readonly IEmployeeService employeeService;
 
-        public EmployeeController(ILogger<HomeController> logger)
+
+
+        public EmployeeController(ILogger<HomeController> logger, IEmployeeService _employeeService)
         {
             _logger = logger;
+            employeeService = _employeeService;
            
         }
 
-        public IActionResult All()
+        public IActionResult All(AllEmployeesViewModel model)
         {
-
-            return View();
+            var employees = employeeService.GetEmployees(); 
+            return View(employees);
         }
 
 
@@ -37,7 +43,21 @@ namespace WiseEasyData.Controllers
                 return this.View();
             }
 
+            var (created, error) = employeeService.AddEmployee(model);
+
+            if (!created)
+            {
+                
+                return View("EmployeeController/Error");
+            }
+
             return Redirect("/");
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
     }

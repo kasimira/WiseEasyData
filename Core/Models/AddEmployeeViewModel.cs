@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Models
 {
-    public  class AddEmployeeViewModel
+    public class AddEmployeeViewModel
     {
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -38,6 +38,7 @@ namespace Core.Models
 
         [Required]
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }
 
         [Required]
@@ -62,13 +63,14 @@ namespace Core.Models
 
         [Required]
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime HireDate { get; set; }
 
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? ReleaseDate { get; set; }
-
-        [StringLength(255)]
-        public IFormFile Image { get; set; }
+       
+        public IFormFile? Image { get; set; }
 
         [Required]
         [Range(1,1000, ErrorMessage = "Hourly salary must be a positive number between 1 and 1000.")]
@@ -87,6 +89,7 @@ namespace Core.Models
         public string Address { get; set; }
    
         public string City { get; set; }
+
 
         [Required]
         [StringLength(20)]

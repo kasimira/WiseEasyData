@@ -19,6 +19,7 @@
                     <form method="post" enctype="multipart/form-data">
                         <!-- Form Row-->
                         <div class="row gx-3 mb-3">
+                            <div asp-validation-summary="All" class="text-danger"></div>
                             <!-- Form Group (middle name)-->
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputFirstName">First name</label>
@@ -44,12 +45,12 @@
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputNumberOfPersonalId">Number Of Personal Id</label>
-                                <input class="form-control" id="inputNumberOfPersonalId" type="number" placeholder="Enter employee's Id" asp-for="NumberOfPersonalId">
+                                <input class="form-control" id="inputNumberOfPersonalId" type="text" placeholder="Enter employee's Id" asp-for="NumberOfPersonalId">
                                 <span asp-validation-for="NumberOfPersonalId" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputBirthday">Birthday</label>
-                                <input class="form-control" id="inputBirthday" type="date" placeholder="Enter your birthday" asp-for="DateOfBirth">
+                                <input class="form-control" id="inputBirthday"  placeholder="Enter your birthday" asp-for="DateOfBirth" asp-format="{0:yyyy-MM-dd}">
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                             </div>
                         </div>
@@ -101,6 +102,11 @@
                                 <input type="text" class="form-control" id="inputZip" placeholder="Enter employee's zip" asp-for="PostalCode">
                                 <span asp-validation-for="PostalCode" class="text-danger"></span>
                             </div>
+                             <div class="col-md-6">
+                                <label class="small mb-1" for="inputCountry">Country</label>
+                                <input class="form-control" id="inputCountry" type="text" placeholder="Enter employee's Country" asp-for="Country">
+                                <span asp-validation-for="Country" class="text-danger"></span>
+                            </div>
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
@@ -119,12 +125,12 @@
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputHireDate">Hire Date</label>
-                                <input class="form-control" id="inputHireDate" type="date" placeholder="Enter employee's hire date" asp-for="HireDate">
+                                <input class="form-control" id="inputHireDate" type="datetime-local" name="HireDate" asp-for="HireDate" asp-format="{0:yyyy-MM-dd}">
                                 <span asp-validation-for="HireDate" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputReleaseDate">Release Date</label>
-                                <input class="form-control" id="inputReleaseDate" type="date" placeholder="Enter employee's release date" asp-for="ReleaseDate">
+                                <input class="form-control" id="inputReleaseDate" type="date" data-val="true" asp-for="ReleaseDate" asp-format="{0:yyyy-MM-dd}">
                                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
                             </div>
                         </div>

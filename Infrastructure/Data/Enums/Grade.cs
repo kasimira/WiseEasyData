@@ -3,7 +3,7 @@
     public enum Grade
     {
         Highern = 0,
-        Secondary = 1,  
+        Secondary = 1,
         Primary = 2,
     }
 }

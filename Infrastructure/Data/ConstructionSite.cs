@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
     public class ConstructionSite
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [StringLength(250)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
         public DateTime StartingDate { get; set; }
@@ -23,7 +18,7 @@ namespace Infrastructure.Data
         public DateTime? EndDate { get; set; }
 
         [Required]
-        [Range(1, 20)]
+        [Range(1, 200)]
         public decimal HourlyRate { get; set; }
 
         [Required]
@@ -31,28 +26,23 @@ namespace Infrastructure.Data
         public double WorkingHoursOnWeekdays { get; set; }
 
         [Required]
-        [Range(1,20)]
+        [Range(1, 20)]
         public double WorkingHoursOnWeekends { get; set; }
 
         [Required]
         [StringLength(200)]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         [Required]
-        public Guid CityId { get; set; } = Guid.NewGuid();
+        public string CityId { get; set; } = Guid.NewGuid().ToString();
 
+        [Required]
         [ForeignKey(nameof(CityId))]
-        public City City { get; set; }
+        public City? City { get; set; }
 
         [Required]
         [StringLength(20)]
-        public string PostalCode { get; set; }
-
-        [Required]
-        public Guid CountryId { get; set; } = Guid.NewGuid();
-
-        [ForeignKey(nameof(CountryId))]
-        public Country Country { get; set; }
+        public string? PostalCode { get; set; }
 
         public bool IsDeleted { get; set; } = false;
 

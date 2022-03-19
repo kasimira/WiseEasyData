@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Data
 {
     public class Cuurrency
     {
         [Key]
-        public Guid CuurrencyId { get; set; } = Guid.NewGuid();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [StringLength(30)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
         [StringLength(6)]
-        public string CurrencyCode { get; set; }
+        public string? CurrencyCode { get; set; }
 
+        [Required]
         [DataType(DataType.Currency)]
         public float? Cost { get; set; }
-        
+
+        public bool IsDeleted { get; set; } = false;
     }
 }

@@ -8,7 +8,7 @@ using WiseEasyData.Infrastructure.Data;
 
 #nullable disable
 
-namespace WiseEasyData.Infrastructure.Data.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -22,14 +22,32 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Infrastructure.Data.CategoryCost", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("Infrastructure.Data.City", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("CountryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CountryId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -45,9 +63,8 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Infrastructure.Data.Client", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -55,15 +72,12 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("CeoName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CountryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -83,7 +97,6 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("MobilePhone")
-                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
@@ -93,7 +106,6 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
@@ -105,10 +117,9 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("ReleaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
+                    b.Property<int>("Status")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("int");
 
                     b.Property<string>("VatNumber")
                         .IsRequired()
@@ -122,30 +133,25 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.HasIndex("CountryId");
-
                     b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("Infrastructure.Data.ConstructionSite", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CountryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
@@ -181,20 +187,20 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("CountryId");
-
                     b.ToTable("ConstructionSites");
                 });
 
-            modelBuilder.Entity("Infrastructure.Data.Costs", b =>
+            modelBuilder.Entity("Infrastructure.Data.Cost", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Category")
+                    b.Property<string>("CategoryId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DataToAdd")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -211,32 +217,33 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Costs");
                 });
 
             modelBuilder.Entity("Infrastructure.Data.Country", b =>
                 {
-                    b.Property<Guid>("CountryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("CountryId");
+                    b.HasKey("Id");
 
                     b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Infrastructure.Data.Cuurrency", b =>
                 {
-                    b.Property<Guid>("CuurrencyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<float?>("Cost")
+                        .IsRequired()
                         .HasColumnType("real");
 
                     b.Property<string>("CurrencyCode")
@@ -244,50 +251,59 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.HasKey("CuurrencyId");
+                    b.HasKey("Id");
 
                     b.ToTable("Currencies");
                 });
 
+            modelBuilder.Entity("Infrastructure.Data.Department", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("Infrastructure.Data.Employee", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("ConstructionSiteId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CountryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ConstructionSiteId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Department")
+                    b.Property<string>("DepartmentId")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("EGN")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
@@ -305,6 +321,12 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("HourlySalary")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -324,19 +346,10 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("NumberOfPersonalId")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
-
-                    b.Property<string>("PhotoPath")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Position")
                         .IsRequired()
@@ -351,9 +364,6 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("ReleaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("SalaryId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Status")
                         .HasMaxLength(10)
                         .HasColumnType("int");
@@ -364,49 +374,58 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
 
                     b.HasIndex("ConstructionSiteId");
 
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("SalaryId1");
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("Infrastructure.Data.File", b =>
+            modelBuilder.Entity("Infrastructure.Data.Image", b =>
                 {
-                    b.Property<Guid>("FileId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<byte[]>("Content")
+                    b.Property<DateTime>("DataToAdd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmployeeId")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("Extension")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("MimeType")
+                    b.Property<string>("RemoteImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("FileId");
+                    b.HasKey("Id");
 
-                    b.ToTable("Files");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Infrastructure.Data.Salary", b =>
                 {
-                    b.Property<Guid>("SalaryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DataToAdd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("HourlySalary")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HoursWorked")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ToDate")
@@ -415,7 +434,9 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("SalaryId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Salaries");
                 });
@@ -627,7 +648,7 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                     b.HasOne("Infrastructure.Data.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Country");
@@ -641,15 +662,7 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.Data.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("City");
-
-                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("Infrastructure.Data.ConstructionSite", b =>
@@ -661,18 +674,21 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Infrastructure.Data.Client", null)
-                        .WithMany("constructionsSites")
+                        .WithMany("ConstructionsSites")
                         .HasForeignKey("ClientId");
 
-                    b.HasOne("Infrastructure.Data.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
+                    b.Navigation("City");
+                });
+
+            modelBuilder.Entity("Infrastructure.Data.Cost", b =>
+                {
+                    b.HasOne("Infrastructure.Data.CategoryCost", "CategoryCost")
+                        .WithMany("Costs")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("City");
-
-                    b.Navigation("Country");
+                    b.Navigation("CategoryCost");
                 });
 
             modelBuilder.Entity("Infrastructure.Data.Employee", b =>
@@ -687,23 +703,26 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         .WithMany("Employees")
                         .HasForeignKey("ConstructionSiteId");
 
-                    b.HasOne("Infrastructure.Data.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infrastructure.Data.Salary", "Salary")
-                        .WithMany()
-                        .HasForeignKey("SalaryId1")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Infrastructure.Data.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("City");
 
-                    b.Navigation("Country");
+                    b.Navigation("Department");
+                });
 
-                    b.Navigation("Salary");
+            modelBuilder.Entity("Infrastructure.Data.Salary", b =>
+                {
+                    b.HasOne("Infrastructure.Data.Employee", "Employee")
+                        .WithMany("Salaries")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -757,6 +776,11 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Infrastructure.Data.CategoryCost", b =>
+                {
+                    b.Navigation("Costs");
+                });
+
             modelBuilder.Entity("Infrastructure.Data.City", b =>
                 {
                     b.Navigation("Employees");
@@ -764,7 +788,7 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Infrastructure.Data.Client", b =>
                 {
-                    b.Navigation("constructionsSites");
+                    b.Navigation("ConstructionsSites");
                 });
 
             modelBuilder.Entity("Infrastructure.Data.ConstructionSite", b =>
@@ -775,6 +799,16 @@ namespace WiseEasyData.Infrastructure.Data.Migrations
             modelBuilder.Entity("Infrastructure.Data.Country", b =>
                 {
                     b.Navigation("Cities");
+                });
+
+            modelBuilder.Entity("Infrastructure.Data.Department", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("Infrastructure.Data.Employee", b =>
+                {
+                    b.Navigation("Salaries");
                 });
 #pragma warning restore 612, 618
         }

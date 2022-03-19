@@ -44,13 +44,8 @@
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
-                                <label class="small mb-1" for="inputNumberOfPersonalId">Number Of Personal Id</label>
-                                <input class="form-control" id="inputNumberOfPersonalId" type="text" placeholder="Enter employee's Id" asp-for="NumberOfPersonalId">
-                                <span asp-validation-for="NumberOfPersonalId" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6">
                                 <label class="small mb-1" for="inputBirthday">Birthday</label>
-                                <input class="form-control" id="inputBirthday"  placeholder="Enter your birthday" asp-for="DateOfBirth" asp-format="{0:yyyy-MM-dd}">
+                                <input class="form-control" id="inputBirthday" type="date" data-val="true" asp-for="DateOfBirth" asp-format="{0:yyyy-MM-dd}">
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                             </div>
                         </div>
@@ -125,7 +120,7 @@
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputHireDate">Hire Date</label>
-                                <input class="form-control" id="inputHireDate" type="datetime-local" name="HireDate" asp-for="HireDate" asp-format="{0:yyyy-MM-dd}">
+                                <input class="form-control" id="inputHireDate"  type="date" data-val="true" asp-for="HireDate" asp-format="{0:yyyy-MM-dd}">
                                 <span asp-validation-for="HireDate" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
@@ -135,17 +130,19 @@
                             </div>
                         </div>
                         <div class="row gx-3 mb-3">
+                            
                             <div class="col-md-6">
-                                <label class="small mb-1" for="inputHireDate">Status</label>
+                                <label class="small mb-1" for="inputSalary">Hourly Salary</label>
+                                <input class="form-control" id="inputHourlySalary" type="number" placeholder="Enter employee's hourly salary " asp-for="HourlySalary">
+                                <span asp-validation-for="HourlySalary" class="text-danger"></span>
+                            </div>
+                             <div class="col-md-6">
+                                <label class="small mb-1" for="inputStatus">Status</label>
                                 <fieldset class="form-group">
-                                    <select class="form-select" id="basicSelect" asp-for="Status" asp-items="@Html.GetEnumSelectList<Status>()"></select>
+                                    <select class="form-select" id="basicSelect" name="Status" asp-items="@Html.GetEnumSelectList<Status>()">
+                                    </select>
                                     <span asp-validation-for="Status" class="text-danger"></span>
                                 </fieldset>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputSalary">Salary</label>
-                                <input class="form-control" id="inputSalary" type="number" placeholder="Enter employee's hourly salary " asp-for="Salary">
-                                <span asp-validation-for="Salary" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputImage">Image</label>

@@ -8,8 +8,8 @@ namespace Core.CustomAttributes
 
         public IsBeforeAttribute(string _propertyToCompare, string errorMessage = "")
         {
-            this.propertyToCompare = _propertyToCompare;
-            this.ErrorMessage = errorMessage;
+            propertyToCompare = _propertyToCompare;
+            ErrorMessage = errorMessage;
         }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)

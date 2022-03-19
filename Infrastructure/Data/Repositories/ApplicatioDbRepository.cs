@@ -7,7 +7,7 @@ namespace Infrastructure.Data.Repositories
     {
         public ApplicatioDbRepository(ApplicationDbContext context)
         {
-            this.Context = context;
+            Context = context;
         }
     }
 }

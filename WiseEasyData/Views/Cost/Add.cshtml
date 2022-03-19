@@ -1,0 +1,56 @@
+﻿@using Core.Models
+@using Infrastructure.Data.Enums
+@model AddCostViewModel
+@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_LayoutIntro";
+}
+
+<div class="container-xl px-4 mt-4">
+    <div class="row">
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="card-title">Add new Cost</h4>
+                </div>  
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <!-- Form Group (middle name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputFirstName">Date</label>
+                                <input class="form-control" id="inputDate" type="date" asp-for="Date">
+                                <span asp-validation-for="Date" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputCategory">Category</label>
+                                <input class="form-control" id="inputCategory" type="text" placeholder="Enter cost category" asp-for="Category">
+                                <span asp-validation-for="Category" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLastName">Last name</label>
+                                <textarea rows="4" class="form-control" id="inputDescription" type="text" placeholder="Enter employee's last name" asp-for="Description"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputValue">Amount</label>
+                                <input class="form-control" id="inputValue" type="text" placeholder="Enter employee's nationality" asp-for="Value">
+                                <span asp-validation-for="Value" class="text-danger"></span>
+                            </div>
+                        </div>      
+                         <button class="btn btn-primary" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<partial name="_ValidationScriptsPartial" />
+}
+
+

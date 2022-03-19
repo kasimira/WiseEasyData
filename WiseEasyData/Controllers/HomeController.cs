@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WiseEasyData.Models;
 
@@ -23,7 +22,7 @@ namespace WiseEasyData.Controllers
             }
             return View();
         }
-        
+
         public IActionResult About()
         {
 
@@ -39,7 +38,6 @@ namespace WiseEasyData.Controllers
         {
             return View();
         }
-
 
         public IActionResult Privacy()
         {

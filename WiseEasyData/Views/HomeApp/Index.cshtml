@@ -1,4 +1,8 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Core.Models
+@using Infrastructure.Data
+@using Microsoft.AspNetCore.Identity
+@model IndexAppViewModel
+
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "_LayoutIntro";
@@ -20,8 +24,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Profile Views</h6>
-                                    <h6 class="font-extrabold mb-0">112.000</h6>
+                                    <h6 class="text-muted font-semibold">Employees Count</h6>
+                                    <h6 class="font-extrabold mb-0">@Model.EmployeeCount</h6>
                                 </div>
                             </div>
                         </div>
@@ -37,8 +41,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Followers</h6>
-                                    <h6 class="font-extrabold mb-0">183.000</h6>
+                                    <h6 class="text-muted font-semibold">Client</h6>
+                                    <h6 class="font-extrabold mb-0">@Model.ClientCount</h6>
                                 </div>
                             </div>
                         </div>
@@ -54,8 +58,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Following</h6>
-                                    <h6 class="font-extrabold mb-0">80.000</h6>
+                                    <h6 class="text-muted font-semibold">Constructions Sites</h6>
+                                    <h6 class="font-extrabold mb-0">@Model.ConstructionSiteCount</h6>
                                 </div>
                             </div>
                         </div>
@@ -71,8 +75,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Saved Post</h6>
-                                    <h6 class="font-extrabold mb-0">112</h6>
+                                    <h6 class="text-muted font-semibold">Costs</h6>
+                                    <h6 class="font-extrabold mb-0">@Model.TotalCost</h6>
                                 </div>
                             </div>
                         </div>
@@ -171,7 +175,7 @@
                                             <td class="col-3">
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar avatar-md">
-                                                        <img src="assets/images/faces/5.jpg">
+                                                        <img src="~/images/faces/5.jpg">
                                                     </div>
                                                     <p class="font-bold ms-3 mb-0">Si Cantik</p>
                                                 </div>
@@ -184,7 +188,7 @@
                                             <td class="col-3">
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar avatar-md">
-                                                        <img src="assets/images/faces/2.jpg">
+                                                        <img src="~/images/faces/2.jpg">
                                                     </div>
                                                     <p class="font-bold ms-3 mb-0">Si Ganteng</p>
                                                 </div>

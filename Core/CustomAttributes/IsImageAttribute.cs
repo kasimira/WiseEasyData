@@ -31,13 +31,13 @@ namespace Core.CustomAttributes
                     // Settings.  
                     isValid = allowedExtensions.Any(y => fileName.EndsWith(y));
 
-                    if (isValid == true && file.Length < 10 * 1024 * 1024)
-                    {
+                    //if (isValid == true && file.Length < 10 * 1024 * 1024)
+                    //{
+                    //
+                    //    return ValidationResult.Success;
+                    //\}
 
-                        return ValidationResult.Success;
-                    }
-
-
+                    return ValidationResult.Success;
                 }
                 
                 if(value == null)

@@ -62,7 +62,7 @@ namespace Core.Models
         public DateTime? ReleaseDate { get; set; }
 
         [IsImage(ErrorMessage = "Please select only Supported Files .png | .jpg. Flite must by maximum 10mb.")] 
-        public IFormFile? Image { get; set; }
+        public IFormFile? Image { get; set; } 
 
         [Required]
         [Range(1, 1000, ErrorMessage = "Hourly salary must be a positive number between 1 and 1000.")]

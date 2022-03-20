@@ -45,7 +45,7 @@
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputBirthday">Birthday</label>
-                                <input class="form-control" id="inputBirthday" type="date" data-val="true" asp-for="DateOfBirth.Value" asp-format="{0:yyyy-MM-dd}">
+                                <input class="form-control" id="inputBirthday" type="date" data-val="true" asp-for="DateOfBirth" asp-format="{0:yyyy-MM-dd}">
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputHireDate">Hire Date</label>
-                                <input class="form-control" id="inputHireDate" type="date" data-val="true" asp-for="HireDate" asp-format="{0:yyyy-MM-dd}">
+                                <input class="form-control" id="inputHireDate"  type="date" data-val="true" asp-for="HireDate" asp-format="{0:yyyy-MM-dd}">
                                 <span asp-validation-for="HireDate" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
@@ -150,6 +150,7 @@
                                 <span asp-validation-for="Image" class="text-danger"></span>
                             </div>                        
                         </div>
+                        <input type="hidden" asp-for="Id" />
                          <button class="btn btn-primary" type="submit">Submit</button>
                     </form>
                 </div>
@@ -160,4 +161,5 @@
 @section Scripts{
 <partial name="_ValidationScriptsPartial" />
 }
+
 

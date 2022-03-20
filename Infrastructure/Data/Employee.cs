@@ -58,6 +58,8 @@ namespace Infrastructure.Data
 
         public DateTime? ReleaseDate { get; set; }
 
+        public DateTime DateToAdd { get; set; } = DateTime.UtcNow;
+
         public string? ImageId { get; set; } = Guid.NewGuid().ToString();
 
         [StringLength(20)]

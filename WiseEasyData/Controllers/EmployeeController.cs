@@ -14,9 +14,9 @@ namespace WiseEasyData.Controllers
 
         public EmployeeController(ILogger<HomeController> logger, IEmployeeService _employeeService, IWebHostEnvironment _webHostEnvironment)
         {
-            this._logger = logger;
-            this.employeeService = _employeeService;
-            this.webHostEnvironment = _webHostEnvironment;
+            _logger = logger;
+            employeeService = _employeeService;
+            webHostEnvironment = _webHostEnvironment;
         }
 
         public IActionResult All(int id = 1)
@@ -24,11 +24,11 @@ namespace WiseEasyData.Controllers
             const int ItemsPerPage = 2;
             var viewModel = new EmployeesListViewModel
             {
-                ItemsPerPage = ItemsPerPage,    
+                ItemsPerPage = ItemsPerPage,
                 PageNumber = id,
-                EmployeeCount = this.employeeService.GetCount(),
-                Employees = this.employeeService.GetEmployees(id , ItemsPerPage),
-        };
+                EmployeeCount = employeeService.GetCount(),
+                Employees = employeeService.GetEmployees(id, ItemsPerPage),
+            };
             return View(viewModel);
         }
 
@@ -46,17 +46,18 @@ namespace WiseEasyData.Controllers
             }
 
             bool created = false;
+            var rootPath = webHostEnvironment.WebRootPath;
 
-            using (FileStream fs = new FileStream(this.webHostEnvironment.WebRootPath + "/employee.png", FileMode.Create))
+            try
             {
-                if(model.Image != null)
-                {
-                    await model.Image.CopyToAsync(fs);
-                }
-
+                created = await employeeService.AddEmployeeAsync(model, created, rootPath);
             }
+            catch (Exception ex)
+            {
 
-            created = await employeeService.AddEmployeeAsync(model, created);
+                ModelState.AddModelError(string.Empty, ex.Message);
+                await employeeService.AddEmployeeAsync(model, created, rootPath);
+            }
 
             if (!created)
             {
@@ -66,33 +67,35 @@ namespace WiseEasyData.Controllers
             return Redirect("/Employee/All");
         }
 
-        public IActionResult Edit(string employeeId)
-        {
-            var employee = employeeService.GetEmployeeForChange(employeeId);
+       public IActionResult Edit(string employeeId)
+       {
+           var employee = employeeService.GetEmployeeInfo<EditEmployeeViewModel>(employeeId);
+      
+           return View(employee);
+       }
 
-            if (employee == null)
-            {
-                // ModelState.AddModelError(ErrorMessage = "Error", employee);
-            }
-            return View(employee);
-        }
+       [HttpPost]
+       public async Task<IActionResult> Edit(EditEmployeeViewModel model, string employeeId)
+       {
+            
 
-        [HttpPost]
-        public async Task<IActionResult>Edit(AddEmployeeViewModel model, string employeeId)
-        {
             if (!ModelState.IsValid)
-            {
-                return this.View();
-            }
-        
-            await this.employeeService.EditEmployeeAsync(model,employeeId);
-                   
-            return Redirect("/Employee/All");
-        }
+           {
+       
+               //return Redirect($"/Employee/Edit/Id={employeeId}");
+               return this.View(model);
+           }
+
+            var rootPath = webHostEnvironment.WebRootPath;
+
+            await employeeService.EditEmployeeAsync(model, employeeId, rootPath);
+       
+           return Redirect("/Employee/All");
+       }
 
         public async Task<IActionResult> Delete(string employeeId)
         {
-            await this.employeeService.DeleteAsync(employeeId);
+            await employeeService.DeleteAsync(employeeId);
 
             return Redirect("/Employee/All");
         }

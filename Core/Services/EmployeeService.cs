@@ -3,14 +3,13 @@ using Core.Models;
 using Infrastructure.Data;
 using Infrastructure.Data.Enums;
 using Infrastructure.Data.Repositories;
+using Microsoft.AspNetCore.Http;
 using System.Globalization;
-using System.Diagnostics;
 
 namespace Core.Services
 {
     public class EmployeeService : IEmployeeService
     {
-
         private readonly IApplicatioDbRepository repo;
         private readonly ICommonService commonService;
 
@@ -20,8 +19,8 @@ namespace Core.Services
             commonService = _commonService;
         }
 
-        public async Task<bool> AddEmployeeAsync(AddEmployeeViewModel model, bool created)
-        {           
+        public async Task<bool> AddEmployeeAsync(AddEmployeeViewModel model, bool created, string rootPath)
+        {
             var country = commonService.GetCountry(model.Country);
             var city = commonService.GetCity(model.City);
             var department = commonService.GetDepartment(model.Department);
@@ -41,13 +40,32 @@ namespace Core.Services
                 department = commonService.CreateDepartment(model.Department);
             }
 
+            string imageId = null;
+ 
             if (model.Image != null)
             {
-                if (!model.Image.Name.EndsWith(".png") || !model.Image.Name.EndsWith(".jpg"))
+                var extension = Path.GetExtension(model.Image.FileName).TrimStart('.');
+
+                var dbImage = new Image()
                 {
+                    EmployeeId = model.Id,
+                    Extension = extension,
+                };
+                imageId = dbImage.Id;
+
+                Directory.CreateDirectory($"{rootPath}/images/employees/");
+                var physicalPath = $"{rootPath}/images/employees/{dbImage.Id}.{extension}";
+
+                using (FileStream fs = new FileStream(physicalPath, FileMode.Create))
+                {
+                    await model.Image.CopyToAsync(fs);
 
                 }
+
+                await repo.AddAsync(dbImage);
+                await repo.SaveChangesAsync();
             }
+           
 
             var employee = new Employee()
             {
@@ -69,12 +87,12 @@ namespace Core.Services
                 Grade = (Grade)Enum.Parse(typeof(Grade), model.Grade),
                 Status = (Status)Enum.Parse(typeof(Status), model.Status),
                 HireDate = model.HireDate.Date,
-                
+                ImageId = imageId,
             };
 
             if (employee == null)
             {
-                throw new ArgumentException();
+                throw new Exception("Employee is null.");
             }
 
             city.Employees.Add(employee);
@@ -86,12 +104,11 @@ namespace Core.Services
 
             department.Employees.Add(employee);
 
-
             try
             {
-               await this.repo.AddAsync(employee);
-               await this.repo.SaveChangesAsync();
-               created = true;
+                await repo.AddAsync(employee);
+                await repo.SaveChangesAsync();
+                created = true;
             }
             catch (Exception)
             {
@@ -99,7 +116,6 @@ namespace Core.Services
             }
 
             return (created);
-
         }
 
         public IEnumerable<AllEmployeesViewModel> GetEmployees(int page, int itemsPerPage)
@@ -107,7 +123,7 @@ namespace Core.Services
 
             var countEmployee = GetCount();
 
-            if(itemsPerPage > countEmployee)
+            if (itemsPerPage > countEmployee)
             {
                 itemsPerPage = countEmployee;
             }
@@ -115,7 +131,7 @@ namespace Core.Services
             return repo.AllReadonly<Employee>()
                 .Where(e => e.IsDeleted == false)
                 .OrderBy(e => e.FirstName)
-                .Skip((page - 1)  * itemsPerPage).Take(itemsPerPage) 
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .Select(e => new AllEmployeesViewModel()
                 {
                     Id = e.Id,
@@ -125,7 +141,7 @@ namespace Core.Services
                     City = e.City.Name,
                     HireDate = e.HireDate.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
                     HourlySalary = e.HourlySalary,
-                    Status = e.Status.ToString(),           
+                    Status = e.Status.ToString(),
                 })
                 .ToList();
         }
@@ -184,7 +200,7 @@ namespace Core.Services
             }
         }
 
-        public async Task EditEmployeeAsync(AddEmployeeViewModel model, string employeeId)
+        public async Task EditEmployeeAsync(EditEmployeeViewModel model, string employeeId, string rootPath)
         {
             var employee = GetEmployee(employeeId);
             var country = commonService.GetCountry(model.Country);
@@ -206,12 +222,42 @@ namespace Core.Services
                 department = commonService.CreateDepartment(model.Department);
             }
 
+            var imageId = "";
+
+
             if (model.Image != null)
             {
-                //if (!model.Image.Name.EndsWith(".png") || !model.Image.Name.EndsWith(".jpg"))
-                //{
-                //
-                //}
+
+                var imageForDeleteId = repo.All<Employee>().Where(i => i.Id == employeeId).Select(e => e.ImageId).FirstOrDefault();
+
+                if (imageForDeleteId != null)
+                {
+                    var imageForDelete = repo.All<Image>().Where(i => i.Id == imageForDeleteId).FirstOrDefault();
+                    imageForDelete.IsDeleted = true;
+                }
+
+                var extension = Path.GetExtension(model.Image.FileName).TrimStart('.');
+
+                var dbImage = new Image
+                {
+
+                    EmployeeId = employeeId,
+                    Extension = extension,
+                };
+
+                await repo.AddAsync(dbImage);
+
+                imageId = dbImage.Id;
+
+                Directory.CreateDirectory($"{rootPath}/images/employees/");
+                var physicalPath = $"{rootPath}/images/employees/{dbImage.Id}.{extension}";
+
+                using (FileStream fs = new FileStream(physicalPath, FileMode.Create))
+                {
+                    await model.Image.CopyToAsync(fs);
+                }
+
+
             }
 
             employee.FirstName = model.FirstName;
@@ -231,7 +277,7 @@ namespace Core.Services
             employee.Grade = (Grade)Enum.Parse(typeof(Grade), model.Grade);
             employee.Status = (Status)Enum.Parse(typeof(Status), model.Status);
             employee.HireDate = model.HireDate.Date;
-            //employee.Image = 
+            employee.ImageId = imageId;
 
             city.Employees.Add(employee);
 
@@ -252,14 +298,28 @@ namespace Core.Services
             return employee;
         }
 
-        public EditEmployeeViewModel GetEmployeeForChange(string employeeId)
+        public async Task DeleteAsync(string employeeId)
+        {
+            var employee = GetEmployee(employeeId);
+
+            employee.IsDeleted = true;
+
+            await repo.SaveChangesAsync();
+        }
+
+        public int GetCount()
+        {
+            return repo.All<Employee>().Where(e => e.IsDeleted == false).Count();
+
+        }
+
+        public EditEmployeeViewModel GetEmployeeInfo<T>(string employeeId)
         {
             var e = GetEmployee(employeeId);
             var city = commonService.GetCityById(e.CityId);
-            var department = commonService.GetDepartmentById(e.DepartmentId);
-            var image = repo.All<Image>().Where(i => i.Id == e.ImageId).FirstOrDefault();
+            var department = commonService.GetDepartmentById(e.DepartmentId);           
 
-            var employee = new EditEmployeeViewModel()
+            var employee = new EditEmployeeViewModel
             {
                 Id = e.Id,
                 FirstName = e.FirstName,
@@ -280,24 +340,9 @@ namespace Core.Services
                 Grade = e.Grade.GetTypeCode().ToString(),
                 Status = e.Status.GetTypeCode().ToString(),
                 HireDate = e.HireDate.Date,
-                Image = "/images/employees/" + e.ImageId + "." + image.Extension,
+
             };
             return employee;
-        }
-
-        public async Task DeleteAsync(string employeeId)
-        {
-            var employee = GetEmployee(employeeId);
-
-            employee.IsDeleted = true;
-
-            await repo.SaveChangesAsync();
-        }
-
-        public int GetCount()
-        {
-            return this.repo.All<Employee>().Where(e => e.IsDeleted == false).Count();
-
-        }
+        }    
     }
 }

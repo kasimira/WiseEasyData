@@ -1,5 +1,4 @@
 ﻿using Core.Contracts;
-using Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WiseEasyData.Controllers
@@ -8,13 +7,13 @@ namespace WiseEasyData.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IIndexAppService indexAppService;
-        public HomeAppController(ILogger<HomeController> logger, IIndexAppService _indexAppService)
+        public HomeAppController (ILogger<HomeController> logger, IIndexAppService _indexAppService)
         {
             _logger = logger;
             indexAppService = _indexAppService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index ()
         {
             var infoDashboard = indexAppService.GetInfo();
 

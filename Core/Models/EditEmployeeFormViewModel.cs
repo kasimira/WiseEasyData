@@ -5,9 +5,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Models
 {
-    public class EditEmployeeViewModel
-    {
-        public string Id { get; set; }    
+    public class EditEmployeeFormViewModel
+    {      
 
         [Required]
         [StringLength(10, MinimumLength = 3, ErrorMessage = "{0} must be between {2} and {1} characters.")]
@@ -92,7 +91,5 @@ namespace Core.Models
         [Required]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "{0} must be between {2} and {1} characters.")]
         public string? Country { get; set; }
-
     }
 }
-

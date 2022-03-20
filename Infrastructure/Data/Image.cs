@@ -14,9 +14,7 @@ namespace Infrastructure.Data
         [Required]
         public string Extension { get; set; }
 
-        public string RemoteImageUrl { get; set; }
-
-        public DateTime DataToAdd { get; set; } = DateTime.UtcNow;
+        public DateTime DateToAdd { get; set; } = DateTime.UtcNow;
 
         public bool IsDeleted { get; set; } = false;
 

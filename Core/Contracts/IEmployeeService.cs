@@ -9,14 +9,15 @@ namespace Core.Contracts
 
         IEnumerable<AllEmployeesViewModel> GetEmployees(int page, int itemsPerPage);
 
-        //(bool edited, string error) EditEmployee(EditEmployeeViewModel model, Guid employeeId);
-        EditEmployeeViewModel GetEmployeeForChange(string employeeId);
+        //(bool edited, string error) EditEmployee(EditEmployeeViewModel model, Guid employeeId);       
 
         public Employee GetEmployee(string employeeId);
-        Task EditEmployeeAsync(AddEmployeeViewModel model, string employeeId);
+        Task EditEmployeeAsync(EditEmployeeViewModel model, string employeeId, string rootPath);
         Task DeleteAsync(string employeeId);
-        Task<bool> AddEmployeeAsync(AddEmployeeViewModel model, bool created);
+        Task<bool> AddEmployeeAsync(AddEmployeeViewModel model, bool created, string rootPath);
 
         int GetCount();
+        //EditEmployeeViewModel GetEmployeeInfo(EditEmployeeViewModel model, string employeeId);
+        EditEmployeeViewModel GetEmployeeInfo<T>(string employeeId);
     }
 }

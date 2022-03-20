@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Enums
 {
-    public class EntriesPerPage
+    public enum EntriesPerPage
     {
+        One = 2,
+        Thow = 4,
+        Thri = 6
+
+
     }
 }

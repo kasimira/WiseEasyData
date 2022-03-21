@@ -1,5 +1,5 @@
 ﻿using Core.Contracts;
-using Core.Models;
+using Core.Models.Employee;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WiseEasyData.Models;
@@ -12,14 +12,14 @@ namespace WiseEasyData.Controllers
         private readonly IEmployeeService employeeService;
         private readonly IWebHostEnvironment webHostEnvironment;
 
-        public EmployeeController(ILogger<HomeController> logger, IEmployeeService _employeeService, IWebHostEnvironment _webHostEnvironment)
+        public EmployeeController (ILogger<HomeController> logger, IEmployeeService _employeeService, IWebHostEnvironment _webHostEnvironment)
         {
             _logger = logger;
             employeeService = _employeeService;
             webHostEnvironment = _webHostEnvironment;
         }
 
-        public IActionResult All(int id = 1)
+        public IActionResult All (int id = 1)
         {
             const int ItemsPerPage = 2;
             var viewModel = new EmployeesListViewModel
@@ -32,13 +32,27 @@ namespace WiseEasyData.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Add()
+        public IActionResult Profile (string employeeId)
+        {
+            var viewModel = employeeService.GetEmployeeProfil(employeeId);
+
+            return View(viewModel);
+        }
+
+        public async Task<IActionResult> ChangeStatus (string employeeId)
+        {
+            await employeeService.ChangeStatusAsync(employeeId);
+
+            return Redirect("/Employee/All");
+        }
+
+        public IActionResult Add ()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddEmployeeViewModel model)
+        public async Task<IActionResult> Add (AddEmployeeViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -67,33 +81,29 @@ namespace WiseEasyData.Controllers
             return Redirect("/Employee/All");
         }
 
-       public IActionResult Edit(string employeeId)
-       {
-           var employee = employeeService.GetEmployeeInfo<EditEmployeeViewModel>(employeeId);
-      
-           return View(employee);
-       }
+        public IActionResult Edit (string employeeId)
+        {
+            var employee = employeeService.GetEmployeeInfo<EditEmployeeViewModel>(employeeId);
 
-       [HttpPost]
-       public async Task<IActionResult> Edit(EditEmployeeViewModel model, string employeeId)
-       {
-            
+            return View(employee);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> Edit (EditEmployeeViewModel model, string employeeId)
+        {
             if (!ModelState.IsValid)
-           {
-       
-               //return Redirect($"/Employee/Edit/Id={employeeId}");
-               return this.View(model);
-           }
+            {
+                return View(model);
+            }
 
             var rootPath = webHostEnvironment.WebRootPath;
 
             await employeeService.EditEmployeeAsync(model, employeeId, rootPath);
-       
-           return Redirect("/Employee/All");
-       }
 
-        public async Task<IActionResult> Delete(string employeeId)
+            return Redirect("/Employee/All");
+        }
+
+        public async Task<IActionResult> Delete (string employeeId)
         {
             await employeeService.DeleteAsync(employeeId);
 
@@ -101,7 +111,7 @@ namespace WiseEasyData.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error ()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

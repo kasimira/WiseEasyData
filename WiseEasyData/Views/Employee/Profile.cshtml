@@ -1,0 +1,201 @@
+﻿@using Core.Models.Employee
+@model EmployeeProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "_LayoutIntro";
+}
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Profile</h3>
+                <p class="text-subtitle text-muted">Here is the information for the employee</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+            <div class="container bootstrap snippets bootdey">
+                <div class="panel-body inf-content">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img alt="" style="width:600px;" title="" class="img-circle img-thumbnail isTooltip" src="~/images/employees/@Model.Image" data-original-title="Usuario">
+                            <ul title="Ratings" class="list-inline ratings text-center">
+                                <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <strong></strong><br>
+                            <div class="table-responsive">
+                                <table class="table table-user-information">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-user  text-secondary"></span>
+                                                    Name
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                @Model.FirstName @Model.MiddleName @Model.LastName
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-cloud text-secondary"></span>
+                                                    @Model.Department Department
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                Position: @Model.Position       Start date: @Model.HireDate
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-bookmark text-secondary"></span>
+                                                    Nationality
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                @Model.Nationality
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-eye-open text-secondary"></span>
+                                                    Date of birth
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                @Model.DateOfBirth
+                                            </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-eye-open text-secondary"></span>
+                                                    Gender
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                @Model.Gender
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-envelope text-secondary"></span>
+                                                    Grade
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                @Model.Grade
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                                    Address
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                @Model.Address,  @Model.PostalCode @Model.City,  @Model.Country
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                                    Phone Number
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                @Model.PhoneNumber
+                                            </td>
+                                        </tr>
+                                         <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                                    Email
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                @Model.Email
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                                    Status
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                @Model.Status
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                                    Hourly Salary
+                                                </strong>
+                                            </td>
+                                            <td class="text-primary">
+                                                @Model.HourlySalary
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                                    Delivered to
+                                                </strong>
+                                            </td>
+                                            <td class="text-secondary">
+                                                @Model.DataToAdded
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                                    Release date
+                                                </strong>
+                                            </td>
+                                            <td class="text-secondary">
+                                                @Model.ReleaseDate
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                        
+                    </div>
+                    <a class="btn btn-primary" type="button" href="/Employee/Edit?employeeId=@Model.Id">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>

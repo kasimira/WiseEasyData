@@ -3,7 +3,7 @@ using Infrastructure.Data.Enums;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Core.Models
+namespace Core.Models.Employee
 {
     public class EditEmployeeViewModel
     {

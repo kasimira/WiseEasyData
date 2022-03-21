@@ -1,6 +1,7 @@
 ﻿using Core.Contracts;
 using Core.Models;
 using Infrastructure.Data;
+using Infrastructure.Data.Enums;
 using Infrastructure.Data.Repositories;
 
 namespace Core.Services
@@ -14,35 +15,31 @@ namespace Core.Services
         }
         public IndexAppViewModel GetInfo()
         {
-            var employeeCount = repo.All<Employee>().Count();
+            var employeeCount = repo.All<Employee>().Where(e => e.IsDeleted == false).Count();
 
-            var clientCount = repo.All<Client>().Count();
+            var clientCount = repo.All<Client>().Where(c => c.IsDeleted == false).Count();
 
-            var constructionSiteCount = repo.All<ConstructionSite>().Count();
+            var constructionSiteCount = repo.All<ConstructionSite>().Where(c => c.IsDeleted == false).Count();
 
-            var totalSalary = repo.All<Employee>().SelectMany(e => e.Salaries).Sum(e => e.TotalAmount);
+            var totalSalary = repo.All<Employee>().Where(e => e.IsDeleted == false).SelectMany(e => e.Salaries).Sum(e => e.TotalAmount);
 
-            var employeeActive = repo.All<Employee>().Select(e => e.Status.Equals("Active"));
+            var employeeActive = repo.All<Employee>().Where(e => e.IsDeleted == false).Select(e => e.Status == Status.Active).Count();
 
-            var countEmployeeActive = employeeActive.Count();
+            var employeeInactive = repo.All<Employee>().Where(e => e.IsDeleted == false).Select(e => e.Status == Status.Inactive).Count();
 
-            var employeeInactive = repo.All<Employee>().Select(e => e.Status.ToString() == "Active").Count();
+            var employeeFemale = repo.All<Employee>().Where(e => e.IsDeleted == false).Select(e => e.Gender == Gender.Female).Count();
 
-            var employeeFemale = repo.All<Employee>().Select(e => e.Gender.ToString().Equals("Female")).ToArray();
-            var count = employeeFemale.Count();
+            var employeeMale = repo.All<Employee>().Where(e => e.IsDeleted == false).Select(e => e.Gender == Gender.Male).Count();
 
-            var employeeMale = repo.All<Employee>().Where(e => e.Gender.Equals("Male")).Count();
-
-            var totalCosts = repo.All<Cost>().Select(c => c.Value).Sum();
+            var totalCosts = repo.All<Cost>().Where(c => c.IsDeleted == false).Select(c => c.Value).Sum();
 
             var info = new IndexAppViewModel()
             {
                 EmployeeCount = employeeCount,
-                EmployeeActive = countEmployeeActive,
                 EmployeeInactive = employeeInactive,
                 TotalCost = totalCosts,
                 TotalSalary = totalSalary,
-                EmployeeFemale = count,
+                EmployeeFemale = employeeFemale,
                 EmployeeMele = employeeMale,
                 ConstructionSiteCount = constructionSiteCount,
                 ClientCount = clientCount,

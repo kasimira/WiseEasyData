@@ -1,30 +1,32 @@
-﻿namespace Core.Models
+﻿using Core.Models.Employee;
+
+namespace Core.Models
 {
     public class IndexAppViewModel
     {
-
         public int EmployeeCount { get; set; }
-
-        public int EmployeeHours { get; set; }
-
-        public int HoursPorMounth { get; set; }
 
         public int UsersCount { get; set; }
 
-        public decimal TotalCost { get; set; }
+        public decimal TotalExpenses { get; set; }
+
+        public decimal TotalIncomes { get; set; }
 
         public decimal TotalSalary { get; set; }
 
-        public int EmployeeMele { get; set; }
-
-        public int EmployeeFemale { get; set; }
-
-        public int EmployeeActive { get; set; }
-
-        public int EmployeeInactive { get; set; }
-
         public int ClientCount { get; set; }
-        public int ConstructionSiteCount { get; set; }
+
+        public decimal TotalExpensesMonth { get; set; }
+
+        public decimal TotalIncomesMonth { get; set; }
+
+        public IEnumerable<ExpenseViewModel> Expenses { get; set; }
+
+        public IEnumerable<LastTransactionsViewModel> LastTransactions { get; set; }
+
+        public IEnumerable<LastAddedEmployeesViewModel> LastEmployees { get; set; }
+
     }
 }
+
 

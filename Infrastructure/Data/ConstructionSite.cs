@@ -49,3 +49,4 @@ namespace Infrastructure.Data
         public ICollection<Employee> Employees { get; set; } = new List<Employee>();
     }
 }
+

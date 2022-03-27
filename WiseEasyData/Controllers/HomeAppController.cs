@@ -1,5 +1,6 @@
 ﻿using Core.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace WiseEasyData.Controllers
 {
@@ -16,6 +17,9 @@ namespace WiseEasyData.Controllers
         public IActionResult Index ()
         {
             var infoDashboard = indexAppService.GetInfo();
+            var dataPoints = indexAppService.GetDataPoint();
+
+            ViewBag.DataPoints = JsonConvert.SerializeObject(dataPoints);
 
             return View(infoDashboard);
         }

@@ -66,3 +66,4 @@ namespace Infrastructure.Data
         public ICollection<ConstructionSite> ConstructionsSites { get; set; } = new List<ConstructionSite>();
     }
 }
+

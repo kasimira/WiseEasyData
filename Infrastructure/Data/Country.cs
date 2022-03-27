@@ -14,3 +14,4 @@ namespace Infrastructure.Data
         public ICollection<City> Cities { get; set; } = new List<City>();
     }
 }
+

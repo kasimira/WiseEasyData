@@ -20,6 +20,6 @@ namespace Infrastructure.Data
         public Country? Country { get; set; }
 
         public ICollection<Employee> Employees { get; set; } = new List<Employee>();
-
     }
 }
+

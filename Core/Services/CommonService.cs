@@ -1,5 +1,4 @@
 ﻿using Core.Contracts;
-using Core.Models;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
 namespace Core.Services
@@ -8,62 +7,66 @@ namespace Core.Services
     {
         private readonly IApplicatioDbRepository repo;
 
-        public CommonService(IApplicatioDbRepository _repo)
+        public CommonService (IApplicatioDbRepository _repo)
         {
             repo = _repo;
         }
 
-        public Country GetCountry(string countryName)
+        public Country GetCountry (string countryName)
         {
             Country? country = repo.All<Country>().FirstOrDefault(c => c.Name == countryName);
 
             return country;
         }
-        public City GetCity(string cityName)
+
+        public City GetCity (string cityName)
         {
             City? city = repo.All<City>().FirstOrDefault(c => c.Name == cityName);
 
             return city;
         }
-        public Department GetDepartment(string departmantName)
+
+        public Department GetDepartment (string departmantName)
         {
             Department? department = repo.All<Department>().FirstOrDefault(d => d.Name == departmantName);
 
             return department;
         }
 
-        public City CreateCity(string cityName, Country country)
+        public City CreateCity (string cityName, Country country)
         {
             var city = new City()
             {
                 Name = cityName,
-                Country = country,
                 CountryId = country.Id,
                 Employees = new List<Employee>()
             };
+
             return city;
         }
 
-        public Country CreateCountry(string countryName)
+        public Country CreateCountry (string countryName)
         {
             var country = new Country()
             {
                 Name = countryName,
                 Cities = new List<City>()
             };
+
             return country;
         }
 
-        public Department CreateDepartment(string departmentName)
+        public Department CreateDepartment (string departmentName)
         {
             var department = new Department()
             {
                 Name = departmentName
             };
+
             return department;
         }
 
-        public City GetCityById(string cityId)
+        public City GetCityById (string cityId)
         {
             City? city = repo.All<City>().FirstOrDefault(c => c.Id == cityId);
 
@@ -72,11 +75,22 @@ namespace Core.Services
             return city;
         }
 
-        public Department GetDepartmentById(string departmentId)
+        public Department GetDepartmentById (string departmentId)
         {
             Department? department = repo.All<Department>().FirstOrDefault(d => d.Id == departmentId);
 
             return department;
+        }
+
+        public SubmittedFile GetFileById (string imageId)
+        {
+            return repo.All<SubmittedFile>().Where(e => e.Id == imageId).FirstOrDefault();
+        }
+
+        public void DeleteFile (string fileId)
+        {
+            var file = GetFileById(fileId);
+            file.IsDeleted = true;
         }
     }
 }

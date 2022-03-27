@@ -9,7 +9,7 @@ namespace Infrastructure.Data
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
-        public int HourlySalary { get; set; }
+        public decimal HourlySalary { get; set; }
 
         [Required]
         public int HoursWorked { get; set; }
@@ -27,6 +27,7 @@ namespace Infrastructure.Data
         [Required]
         [ForeignKey(nameof(EmployeeId))]
         public Employee? Employee { get; set; }
-
     }
 }
+
+

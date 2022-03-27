@@ -19,6 +19,5 @@
         public int EmployeeCount { get; set; }  
          
         public int ItemsPerPage { get; set; }
-
     }
 }

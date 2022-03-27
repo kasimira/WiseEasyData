@@ -1,0 +1,135 @@
+﻿@using Core.Models.Transactions
+@model TransactionViewModel
+@{
+    ViewData["Title"] = "Transaction";
+    Layout = "_LayoutIntro";
+}
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Transaction</h3>
+                <p class="text-subtitle text-muted">Here is the information for the Transaction</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="HomeApp" asp-action="Index">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Transaction" asp-action="All">All Transaction</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Transaction</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container bootstrap snippets bootdey">
+            <div class="panel-body inf-content">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img alt="" style="width:400px;" title="" src="~/files/transaction/@Model.ImageFile">
+                        <ul title="Ratings" class="list-inline ratings text-center">
+                            <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <strong></strong><br>
+                        <div class="table-responsive">
+                            <table class="table table-user-information">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                <span class="glyphicon glyphicon-user  text-secondary"></span>
+                                                Name
+                                            </strong>
+                                        </td>
+                                        <td class="text-primary">
+                                            @Model.Name
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                <span class="glyphicon glyphicon-cloud text-secondary"></span>
+                                                Category
+                                            </strong>
+                                        </td>
+                                        <td class="text-primary">
+                                            @Model.Category
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                <span class="glyphicon glyphicon-bookmark text-secondary"></span>
+                                                Type
+                                            </strong>
+                                        </td>
+                                        <td class="text-primary">
+                                            @Model.TransactionType
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                <span class="glyphicon glyphicon-eye-open text-secondary"></span>
+                                                Date of issue
+                                            </strong>
+                                        </td>
+                                        <td class="text-primary">
+                                            @Model.Date
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                <span class="glyphicon glyphicon-eye-open text-secondary"></span>
+                                                Amount
+                                            </strong>
+                                        </td>
+                                        <td class="text-primary">
+                                            @Model.Amount @Model.Currency
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                <span class="glyphicon glyphicon-envelope text-secondary"></span>
+                                                Discription
+                                            </strong>
+                                        </td>
+                                        <td class="text-primary">
+                                            @Model.Description
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                                Added To
+                                            </strong>
+                                        </td>
+                                        <td class="text-primary">
+                                            @Model.CreatorName
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-secondary me-2" href="/File/DownloadFile?fileId=@Model.FileId">Download File<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"></svg></a>
+                @if (User.Identity.Name == Model.CreatorName)
+                {
+                    <a class="btn btn-secondary me-2" type="button" href="/Transaction/Edit?transactionId=@Model.Id">Edit Transaction</a>
+                    <a class="btn btn-secondary me-2" type="button" href="/Transaction/Delete?transactionId=@Model.Id">Delete Transaction</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

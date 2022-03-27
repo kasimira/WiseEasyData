@@ -2,6 +2,7 @@
 using Core.Models.Employee;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 using WiseEasyData.Models;
 
 namespace WiseEasyData.Controllers
@@ -21,7 +22,8 @@ namespace WiseEasyData.Controllers
 
         public IActionResult All (int id = 1)
         {
-            const int ItemsPerPage = 2;
+            const int ItemsPerPage = 6;
+
             var viewModel = new EmployeesListViewModel
             {
                 ItemsPerPage = ItemsPerPage,
@@ -29,6 +31,7 @@ namespace WiseEasyData.Controllers
                 EmployeeCount = employeeService.GetCount(),
                 Employees = employeeService.GetEmployees(id, ItemsPerPage),
             };
+
             return View(viewModel);
         }
 
@@ -54,6 +57,9 @@ namespace WiseEasyData.Controllers
         [HttpPost]
         public async Task<IActionResult> Add (AddEmployeeViewModel model)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userName = User.Identity.Name;
+
             if (!ModelState.IsValid)
             {
                 return View();
@@ -64,13 +70,13 @@ namespace WiseEasyData.Controllers
 
             try
             {
-                created = await employeeService.AddEmployeeAsync(model, created, rootPath);
+                created = await employeeService.AddEmployeeAsync(model, created, rootPath, userId, userName);
             }
             catch (Exception ex)
             {
 
                 ModelState.AddModelError(string.Empty, ex.Message);
-                await employeeService.AddEmployeeAsync(model, created, rootPath);
+                await employeeService.AddEmployeeAsync(model, created, rootPath, userId, userName);
             }
 
             if (!created)
@@ -117,3 +123,5 @@ namespace WiseEasyData.Controllers
         }
     }
 }
+
+

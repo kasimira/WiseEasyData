@@ -4,6 +4,7 @@ namespace Core.Contracts
 {
     public interface IIndexAppService
     {
-        public IndexAppViewModel GetInfo();
+        public IndexAppViewModel GetInfo ();
+        public IEnumerable<DataPoint> GetDataPoint ();
     }
 }

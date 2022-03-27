@@ -5,6 +5,7 @@ using Infrastructure.Data.Enums;
 using Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using SubmittedFile = Infrastructure.Data.SubmittedFile;
 
 namespace Core.Services
 {
@@ -19,7 +20,7 @@ namespace Core.Services
             commonService = _commonService;
         }
 
-        public async Task<bool> AddEmployeeAsync (AddEmployeeViewModel model, bool created, string rootPath)
+        public async Task<bool> AddEmployeeAsync (AddEmployeeViewModel model, bool created, string rootPath, string userId, string userName)
         {
             var country = commonService.GetCountry(model.Country);
             var city = commonService.GetCity(model.City);
@@ -28,42 +29,43 @@ namespace Core.Services
             if (country == null)
             {
                 country = commonService.CreateCountry(model.Country);
+                await repo.AddAsync(country);
             }
 
             if (city == null)
             {
                 city = commonService.CreateCity(model.City, country);
+                await repo.AddAsync(city);
             }
 
             if (department == null)
             {
                 department = commonService.CreateDepartment(model.Department);
+                await repo.AddAsync(department);
             }
 
             string imageId = null;
+            SubmittedFile dbFile = null;
 
             if (model.Image != null)
             {
                 var extension = Path.GetExtension(model.Image.FileName).TrimStart('.');
 
-                var dbImage = new Image()
+                dbFile = new SubmittedFile()
                 {
-                    EmployeeId = model.Id,
+                    OwnerId = model.Id,
                     Extension = extension,
                 };
-                imageId = dbImage.Id;
+
+                imageId = dbFile.Id;
 
                 Directory.CreateDirectory($"{rootPath}/images/employees/");
-                var physicalPath = $"{rootPath}/images/employees/{dbImage.Id}.{extension}";
+                var physicalPath = $"{rootPath}/images/employees/{dbFile.Id}.{extension}";
 
                 using (FileStream fs = new FileStream(physicalPath, FileMode.Create))
                 {
                     await model.Image.CopyToAsync(fs);
-
                 }
-
-                await repo.AddAsync(dbImage);
-                await repo.SaveChangesAsync();
             }
 
             var employee = new Employee()
@@ -74,9 +76,9 @@ namespace Core.Services
                 LastName = model.LastName,
                 Nationality = model.Nationality,
                 Address = model.Address,
-                City = city,
+                CityId = city.Id,
                 DateOfBirth = model.DateOfBirth.Date,
-                Department = department,
+                DepartmentId = department.Id,
                 HourlySalary = model.HourlySalary,
                 PhoneNumber = model.PhoneNumber,
                 Email = model.Email,
@@ -87,12 +89,16 @@ namespace Core.Services
                 Status = (Status)Enum.Parse(typeof(Status), model.Status),
                 HireDate = model.HireDate.Date,
                 ImageId = imageId,
+                CreatorId = userId,
+                CreatorName = userName,
             };
 
             if (employee == null)
             {
                 throw new Exception("Employee is null.");
             }
+
+            await repo.AddAsync(dbFile);
 
             city.Employees.Add(employee);
 
@@ -151,7 +157,7 @@ namespace Core.Services
 
             if (imageId != null)
             {
-                var imageInfo = repo.AllReadonly<Image>().Where(i => i.Id == imageId).FirstOrDefault();
+                var imageInfo = repo.AllReadonly<SubmittedFile>().Where(i => i.Id == imageId).FirstOrDefault();
                 image = $"{imageId}.{imageInfo.Extension}";
             }
             else
@@ -187,66 +193,11 @@ namespace Core.Services
                     Position = e.Position,
                     PostalCode = e.PostalCode,
                     DataToAdded = e.DateToAdd.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
-
+                    CreatorName = e.CreatorName,
                 })
                 .FirstOrDefault();
 
-
             return employee;
-        }
-
-        public void AddEmployeeToConstructionSite (string employeeId)
-        {
-            // var daysThisMonthThatAreNotSundays =
-            // Enumerable.Range(1, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).Where(
-            //     d => new DateTime(DateTime.Now.Year, DateTime.Now.Month, d).DayOfWeek != DayOfWeek.Sunday).Count();
-
-            var daysThisMonthThatAreSatadey =
-            Enumerable.Range(1, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).Where(
-                d => new DateTime(DateTime.Now.Year, DateTime.Now.Month, d).DayOfWeek == DayOfWeek.Saturday).Count();
-            var sites = repo.All<ConstructionSite>();
-
-            if (sites.Count() > 0)
-            {
-                foreach (var item in sites)
-                {
-                    if (DateTime.Now.Month == item.StartingDate.Month)
-                    {
-                        var daysThisMonthThatAreNotSundays =
-                         Enumerable.Range(1, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).Where(
-                          d => new DateTime(DateTime.Now.Year, DateTime.Now.Month, d).DayOfWeek != DayOfWeek.Sunday).Count();
-                    }
-
-                }
-
-            }
-
-
-            // define non working days of week
-            var nonWorkingDaysOfWeek = new List<DayOfWeek>
-            {
-              DayOfWeek.Sunday // hard-coded for example
-            };
-
-            // define specific non-working dates
-            var holidays = new List<DateTime>
-            {
-              new DateTime(2010, 12, 25) // hard-coded for example
-            };
-
-            // tally the working days
-            var currentYear = 2010; // hard-coded for example
-            var currentMonth = 12; // hard-coded for example
-            var daysInCurrentMonth = DateTime.DaysInMonth(currentYear, currentMonth);
-            var numberOfWorkingDays = 0;
-            for (var day = 1; day <= daysInCurrentMonth; day++)
-            {
-                var date = new DateTime(currentYear, currentMonth, day);
-                if (!nonWorkingDaysOfWeek.Contains(date.DayOfWeek) && !holidays.Contains(date))
-                {
-                    numberOfWorkingDays++;
-                }
-            }
         }
 
         public async Task EditEmployeeAsync (EditEmployeeViewModel model, string employeeId, string rootPath)
@@ -275,20 +226,16 @@ namespace Core.Services
 
             if (model.Image != null)
             {
-                var imageForDeleteId = repo.All<Employee>().Where(i => i.Id == employeeId).Select(e => e.ImageId).FirstOrDefault();
-
-                if (imageForDeleteId != null)
+                if (employee.ImageId != null)
                 {
-                    var imageForDelete = repo.All<Image>().Where(i => i.Id == imageForDeleteId).FirstOrDefault();
-                    imageForDelete.IsDeleted = true;
+                    commonService.DeleteFile(employee.ImageId);
                 }
 
                 var extension = Path.GetExtension(model.Image.FileName).TrimStart('.');
 
-                var dbImage = new Image
+                var dbImage = new SubmittedFile
                 {
-
-                    EmployeeId = employeeId,
+                    OwnerId = employeeId,
                     Extension = extension,
                 };
 
@@ -334,7 +281,6 @@ namespace Core.Services
             department.Employees.Add(employee);
 
             await repo.SaveChangesAsync();
-
         }
 
         public Employee GetEmployee (string employeeId)
@@ -347,6 +293,11 @@ namespace Core.Services
         {
             var employee = GetEmployee(employeeId);
 
+            if (employee.ImageId != null)
+            {
+                commonService.DeleteFile(employee.ImageId);
+            }
+
             employee.IsDeleted = true;
 
             await repo.SaveChangesAsync();
@@ -355,7 +306,6 @@ namespace Core.Services
         public int GetCount ()
         {
             return repo.All<Employee>().Where(e => e.IsDeleted == false).Count();
-
         }
 
         public EditEmployeeViewModel GetEmployeeInfo<T> (string employeeId)
@@ -385,7 +335,6 @@ namespace Core.Services
                 Grade = e.Grade.GetTypeCode().ToString(),
                 Status = e.Status.GetTypeCode().ToString(),
                 HireDate = e.HireDate.Date,
-
             };
             return employee;
         }
@@ -410,3 +359,4 @@ namespace Core.Services
         }
     }
 }
+

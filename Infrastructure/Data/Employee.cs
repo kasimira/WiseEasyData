@@ -44,7 +44,7 @@ namespace Infrastructure.Data
         public string? Position { get; set; }
 
         [Required]
-        public int HourlySalary { get; set; }
+        public decimal HourlySalary { get; set; }
 
         [Required]
         public string DepartmentId { get; set; } = Guid.NewGuid().ToString();
@@ -85,6 +85,13 @@ namespace Infrastructure.Data
 
         public bool IsDeleted { get; set; } = false;
 
+        [Required]
+        public string CreatorId = Guid.NewGuid().ToString();
+
+        [Required]
+        public string CreatorName { get; set; }
+
         public ICollection<Salary> Salaries { get; set; } = new List<Salary>();
     }
 }
+

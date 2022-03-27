@@ -10,13 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/Wiseasydata.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/bootstrap.css">
     <link rel="stylesheet" href="~/vendors/iconly/bold.css">
     <link rel="stylesheet" href="~/vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="~/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/app.css">
     <link rel="shortcut icon" href="~/images/favicon.svg" type="image/x-icon">
+    @await RenderSectionAsync("Styles", required: false)
+
 </head>
 
 <body class="intro">
@@ -62,15 +63,10 @@
         </div>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     <script src="~/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="~/js/bootstrap.bundle.min.js"></script>
-
-    <script src="~/vendors/apexcharts/apexcharts.js"></script>
-    <script src="~/js/pages/dashboard.js"></script>
-
     <script src="~/js/main.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 </html>

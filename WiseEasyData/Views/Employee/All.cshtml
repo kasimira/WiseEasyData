@@ -16,7 +16,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="HomeApp" asp-action="Index">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">All Employees</li>
                     </ol>
                 </nav>
@@ -36,8 +36,6 @@
             <input class="dataTable-input" placeholder="Search..." type="text">
         </div>
     </div>
-
-
     <section class="section">
         <div class="card">
             <div class="card-header">
@@ -46,116 +44,114 @@
             <div class="card-body">
                 <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                     <div class="dataTable-container">
-                    <table class="table table-striped dataTable-table" id="table1">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                <th>Position</th>
-                                <th>Hire Date</th>
-                                <th>Hourly Salary</th>
-                                <th>City</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.Employees.Count() > 0)
-                            {
-                                @foreach (var item in Model.Employees)
+                        <table class="table table-striped dataTable-table" id="table1">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Position</th>
+                                    <th>Hire Date</th>
+                                    <th>Hourly Salary</th>
+                                    <th>City</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Employees.Count() > 0)
                                 {
-                                    <tr>
-                                        <td>@item.FullName</td>
-                                        <td>@item.PhoneNumber</td>
-                                        <td>@item.Position</td>
-                                        <td>@item.HireDate</td>
-                                        <td>@item.HourlySalary</td>
-                                        <td>@item.City</td>
-                                        <td>
-                                            @if (item.Status == "Active")
-                                            {
-                                                <a href="/Employee/ChangeStatus?employeeId=@item.Id" class="badge bg-success">@item.Status</a>
-                                            }
-                                            else
-                                            {
-                                                <a href="/Employee/ChangeStatus?employeeId=@item.Id" class="badge bg-danger">@item.Status</a>
-                                            }
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="/Employee/Profile?employeeId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></a>
-                                            <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="/Employee/Edit?employeeId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
-                                            <a class="btn btn-datatable btn-icon btn-transparent-dark" href="/Employee/Delete?employeeId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
-                                        </td>
+                                    @foreach (var item in Model.Employees)
+                                    {
+                                        <tr>
+                                            <td>@item.FullName</td>
+                                            <td>@item.PhoneNumber</td>
+                                            <td>@item.Position</td>
+                                            <td>@item.HireDate</td>
+                                            <td>@item.HourlySalary</td>
+                                            <td>@item.City</td>
+                                            <td>
+                                                @if (item.Status == "Active")
+                                                {
+                                                    <a href="/Employee/ChangeStatus?employeeId=@item.Id" class="badge bg-success">@item.Status</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="/Employee/ChangeStatus?employeeId=@item.Id" class="badge bg-danger">@item.Status</a>
+                                                }
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="/Employee/Profile?employeeId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></a>
+                                                <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="/Employee/Edit?employeeId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
+                                                <a class="btn btn-datatable btn-icon btn-transparent-dark" href="/Employee/Delete?employeeId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="card-header">
+                                        <td>No employees added!</td>
                                     </tr>
                                 }
-                            }
-                            else
-                            {
-                                <tr class="card-header">
-                                    <td>No employees added!</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-</div>
     </section>
 
-<div class="dataTable-bottom">
-    <div class="dataTable-info">Showing @((Model.PageNumber - 1) * Model.ItemsPerPage) to @((Model.PageNumber - 1) * Model.ItemsPerPage + Model.ItemsPerPage) of @Model.EmployeeCount entries</div>
-    <ul class="pagination pagination-primary float-end dataTable-pagination">
-        @if (!Model.HasPreviousPage)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" asp-action="All" asp-route-id="@Model.PreviousPageNumber">Previous</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link" asp-action="All" asp-route-id="@Model.PreviousPageNumber">Previous</a>
-            </li>
-        }
-
-        @for (var i = Model.PageNumber - 2; i < Model.PageNumber; i++)
-        {
-            if (i > 0)
+    <div class="dataTable-bottom">
+        <div class="dataTable-info">Showing @((Model.PageNumber - 1) * Model.ItemsPerPage) to @((Model.PageNumber - 1) * Model.ItemsPerPage + Model.ItemsPerPage) of @Model.EmployeeCount entries</div>
+        <ul class="pagination pagination-primary float-end dataTable-pagination">
+            @if (!Model.HasPreviousPage)
             {
-                <li class="page-item"><a class="page-link" asp-action="All" asp-route-id="@i">@i</a></li>
+                <li class="page-item disabled">
+                    <a class="page-link" asp-action="All" asp-route-id="@Model.PreviousPageNumber">Previous</a>
+                </li>
             }
-        }
-        <li class="page-item active" aria-current="page">
-            <span class="page-link">@Model.PageNumber</span>
-        </li>
-
-        @for (var i = Model.PageNumber + 1; i < Model.PageNumber + 3; i++)
-        {
-            if (i <= Model.PagesCount)
+            else
             {
-                <li class="page-item"><a class="page-link" asp-action="All" asp-route-id="@i">@i</a></li>
+                <li class="page-item">
+                    <a class="page-link" asp-action="All" asp-route-id="@Model.PreviousPageNumber">Previous</a>
+                </li>
             }
-        }
 
-        @if (!Model.HasNextPage)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" asp-action="All" asp-route-id="@Model.NextPageNumber">Next</a>
+            @for (var i = Model.PageNumber - 2; i < Model.PageNumber; i++)
+            {
+                if (i > 0)
+                {
+                    <li class="page-item"><a class="page-link" asp-action="All" asp-route-id="@i">@i</a></li>
+                }
+            }
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">@Model.PageNumber</span>
             </li>
-        }
-        else
-        {
 
-            <li class="page-item">
-                <a class="page-link" asp-action="All" asp-route-id="@Model.NextPageNumber">Next</a>
-            </li>
-        }
+            @for (var i = Model.PageNumber + 1; i < Model.PageNumber + 3; i++)
+            {
+                if (i <= Model.PagesCount)
+                {
+                    <li class="page-item"><a class="page-link" asp-action="All" asp-route-id="@i">@i</a></li>
+                }
+            }
 
-    </ul>
+            @if (!Model.HasNextPage)
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" asp-action="All" asp-route-id="@Model.NextPageNumber">Next</a>
+                </li>
+            }
+            else
+            {
+
+                <li class="page-item">
+                    <a class="page-link" asp-action="All" asp-route-id="@Model.NextPageNumber">Next</a>
+                </li>
+            }
+        </ul>
+    </div>
 </div>
-</div>
-
 
 <script>
     // Simple Datatable
@@ -163,9 +159,9 @@
     let dataTable = new simpleDatatables.DataTable(table1);
 </script>
 @section Scripts{
-<link rel="stylesheet" href="~/vendors/simple-datatables/style.css">
 <script src="~/vendors/simple-datatables/simple-datatables.js"></script>
 <script src="~/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="~/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/mazer.js"></script>
+<partial name="_ValidationScriptsPartial" />
 }

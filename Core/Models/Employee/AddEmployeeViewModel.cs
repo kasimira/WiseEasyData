@@ -55,18 +55,18 @@ namespace Core.Models.Employee
         public string? Department { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]      
+        [DataType(DataType.Date)]
         public DateTime HireDate { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? ReleaseDate { get; set; }
 
-        [IsImage(ErrorMessage = "Please select only Supported Files .png | .jpg. Flite must by maximum 10mb.")] 
-        public IFormFile? Image { get; set; } 
+        [IsImage(ErrorMessage = "Please select only Supported Files .png | .jpg. Flite must by maximum 10mb.")]
+        public IFormFile? Image { get; set; }
 
         [Required]
         [Range(1, 1000, ErrorMessage = "Hourly salary must be a positive number between 1 and 1000.")]
-        public int HourlySalary { get; set; }
+        public decimal HourlySalary { get; set; }
 
         [Required]
         [EnumDataType(typeof(Grade))]
@@ -93,6 +93,5 @@ namespace Core.Models.Employee
         [Required]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "{0} must be between {2} and {1} characters.")]
         public string? Country { get; set; }
-
     }
 }

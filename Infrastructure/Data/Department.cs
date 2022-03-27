@@ -4,6 +4,10 @@ namespace Infrastructure.Data
 {
     public class Department
     {
+        public Department ()
+        {
+            Employees= new List<Employee> ();   
+        }
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
@@ -11,6 +15,6 @@ namespace Infrastructure.Data
         [StringLength(50)]
         public string? Name { get; set; }
 
-        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
+        public ICollection<Employee> Employees { get; set; }
     }
 }

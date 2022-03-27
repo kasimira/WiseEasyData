@@ -7,20 +7,20 @@ namespace Core.CustomAttributes
     {
         private string Extensions { get; set; } = "png,jpg,jpeg,gif";
 
-        public IsImageAttribute(string errorMessage = "")
+        public IsImageAttribute (string errorMessage = "")
         {
             ErrorMessage = errorMessage;
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid (object value, ValidationContext validationContext)
         {
             try
             {
-                IFormFile file = value as IFormFile; 
+                IFormFile? file = value as IFormFile;
 
                 bool isValid = true;
 
-                List<string> allowedExtensions = this.Extensions.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                List<string> allowedExtensions = Extensions.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
                 // Verification.  
                 if (value != null)
@@ -30,22 +30,16 @@ namespace Core.CustomAttributes
 
                     // Settings.  
                     isValid = allowedExtensions.Any(y => fileName.EndsWith(y));
-
-                    //if (isValid == true && file.Length < 10 * 1024 * 1024)
-                    //{
-                    //
-                    //    return ValidationResult.Success;
-                    //\}
-
-                    return ValidationResult.Success;
+                    if (isValid)
+                    {
+                        return ValidationResult.Success;
+                    }
                 }
-                
-                if(value == null)
+
+                if (value == null)
                 {
                     return ValidationResult.Success;
                 }
-
-
             }
             catch (Exception)
             { }
@@ -53,5 +47,4 @@ namespace Core.CustomAttributes
             return new ValidationResult(ErrorMessage);
         }
     }
-
 }

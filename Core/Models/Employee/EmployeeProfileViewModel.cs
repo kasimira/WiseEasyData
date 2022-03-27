@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Data.Enums;
-using Microsoft.AspNetCore.Http;
 namespace Core.Models.Employee
 {
     public class EmployeeProfileViewModel
@@ -33,7 +32,7 @@ namespace Core.Models.Employee
 
         public string Image { get; set; }
 
-        public int HourlySalary { get; set; }
+        public decimal HourlySalary { get; set; }
 
         public Grade Grade { get; set; }
 
@@ -46,5 +45,7 @@ namespace Core.Models.Employee
         public string? PostalCode { get; set; }
 
         public string? Country { get; set; }
+
+        public string CreatorName { get; set; }
     }
 }

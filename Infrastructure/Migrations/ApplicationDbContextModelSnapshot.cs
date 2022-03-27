@@ -22,7 +22,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Infrastructure.Data.CategoryCost", b =>
+            modelBuilder.Entity("Infrastructure.Data.CategoryTransactions", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -190,38 +190,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("ConstructionSites");
                 });
 
-            modelBuilder.Entity("Infrastructure.Data.Cost", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CategoryId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DataToAdd")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(700)
-                        .HasColumnType("nvarchar(700)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Costs");
-                });
-
             modelBuilder.Entity("Infrastructure.Data.Country", b =>
                 {
                     b.Property<string>("Id")
@@ -235,33 +203,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
-                });
-
-            modelBuilder.Entity("Infrastructure.Data.Cuurrency", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<float?>("Cost")
-                        .IsRequired()
-                        .HasColumnType("real");
-
-                    b.Property<string>("CurrencyCode")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Currencies");
                 });
 
             modelBuilder.Entity("Infrastructure.Data.Department", b =>
@@ -296,6 +237,10 @@ namespace Infrastructure.Migrations
                     b.Property<string>("ConstructionSiteId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CreatorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
@@ -325,8 +270,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("HourlySalary")
-                        .HasColumnType("int");
+                    b.Property<decimal>("HourlySalary")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ImageId")
                         .HasColumnType("nvarchar(max)");
@@ -382,30 +327,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("Infrastructure.Data.Image", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateToAdd")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmployeeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Extension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("Infrastructure.Data.Salary", b =>
                 {
                     b.Property<string>("Id")
@@ -421,8 +342,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("HourlySalary")
-                        .HasColumnType("int");
+                    b.Property<decimal>("HourlySalary")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("HoursWorked")
                         .HasColumnType("int");
@@ -438,6 +359,90 @@ namespace Infrastructure.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("Salaries");
+                });
+
+            modelBuilder.Entity("Infrastructure.Data.SubmittedFile", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateToAdd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsImage")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubmittedFiles");
+                });
+
+            modelBuilder.Entity("Infrastructure.Data.Transaction", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CategoryId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Currency")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DataToAdd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(700)
+                        .HasColumnType("nvarchar(700)");
+
+                    b.Property<string>("FileId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -679,17 +684,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("Infrastructure.Data.Cost", b =>
-                {
-                    b.HasOne("Infrastructure.Data.CategoryCost", "CategoryCost")
-                        .WithMany("Costs")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CategoryCost");
-                });
-
             modelBuilder.Entity("Infrastructure.Data.Employee", b =>
                 {
                     b.HasOne("Infrastructure.Data.City", "City")
@@ -722,6 +716,17 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Infrastructure.Data.Transaction", b =>
+                {
+                    b.HasOne("Infrastructure.Data.CategoryTransactions", "Category")
+                        .WithMany("Transactions")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -775,9 +780,9 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Infrastructure.Data.CategoryCost", b =>
+            modelBuilder.Entity("Infrastructure.Data.CategoryTransactions", b =>
                 {
-                    b.Navigation("Costs");
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("Infrastructure.Data.City", b =>

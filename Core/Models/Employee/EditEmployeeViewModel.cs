@@ -7,7 +7,7 @@ namespace Core.Models.Employee
 {
     public class EditEmployeeViewModel
     {
-        public string Id { get; set; }    
+        public string Id { get; set; }
 
         [Required]
         [StringLength(10, MinimumLength = 3, ErrorMessage = "{0} must be between {2} and {1} characters.")]
@@ -65,7 +65,7 @@ namespace Core.Models.Employee
 
         [Required]
         [Range(1, 1000, ErrorMessage = "Hourly salary must be a positive number between 1 and 1000.")]
-        public int HourlySalary { get; set; }
+        public decimal HourlySalary { get; set; }
 
         [Required]
         [EnumDataType(typeof(Grade))]
@@ -92,7 +92,5 @@ namespace Core.Models.Employee
         [Required]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "{0} must be between {2} and {1} characters.")]
         public string? Country { get; set; }
-
     }
 }
-

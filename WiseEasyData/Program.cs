@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using WiseEasyData.Infrastructure.Data;
+using WiseEasyData.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,13 +13,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews()
     .AddMvcOptions(options =>
     {
-        //options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+        options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
         // options.ModelBinderProviders.Insert(1, new DateTimeModelBinderProvider(FormatingConstant.NormalDateFormat));
         // options.ModelBinderProviders.Insert(2, new DoubleModelBinderProvider());
     });
 
 builder.Services.AddApplicationServices();
-
 
 var app = builder.Build();
 

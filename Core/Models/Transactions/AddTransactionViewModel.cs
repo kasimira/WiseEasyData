@@ -2,6 +2,7 @@
 using Infrastructure.Data.Enums;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace Core.Models.Transactions
 {
@@ -38,5 +39,7 @@ namespace Core.Models.Transactions
         public DateTime Date { get; set; }
 
         public bool IsDeleted { get; set; } = false;
+        
+        public IEnumerable<SelectListItem>? Categories { get; set; }
     }
 }

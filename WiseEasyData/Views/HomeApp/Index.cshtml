@@ -9,7 +9,22 @@
 }
 
 <div class="page-heading">
-    <h3>Dashboard</h3>
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Dashboard</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <form class="text-muted" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="text-muted mb-0 btn btn-link">Logout</button>
+                        </form>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="page-content">
     <section class="row">
@@ -241,5 +256,3 @@
     }
 </script>
 }
-
-

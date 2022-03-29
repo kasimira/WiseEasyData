@@ -1,4 +1,5 @@
 ﻿using Core.Models.Transactions;
+using System.Web.Mvc;
 
 namespace Core.Contracts
 {
@@ -13,5 +14,11 @@ namespace Core.Contracts
         TransactionViewModel GetTransactionInfo (string id);
 
         Task DeleteTransactionAsync (string id);
+
+        //Task AddCategory (AddCategoryTransactionViewModel model);
+
+        IEnumerable<SelectListItem> GetAllCategories ();
+
+        Task AddCategory (AddCategoryTransactionViewModel model);
     }
 }

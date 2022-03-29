@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Infrastructure.Data.Enums;
 using Infrastructure.Data.Repositories;
 using System.Globalization;
+using System.Web.Mvc;
 
 namespace Core.Services
 {
@@ -75,18 +76,18 @@ namespace Core.Services
                 }
             }
 
-            var category = GetCategoryByName(model.CategoryTransactions);
+            var category = GetCategory(model.CategoryTransactions);
 
-            if (category == null)
-            {
-                category = new CategoryTransactions()
-                {
-                    Name = model.CategoryTransactions,
-                    Transactions = new List<Transaction>()
-                };
-
-                repo.AddAsync(category);
-            }
+           if (category == null)
+           {
+               category = new CategoryTransactions()
+               {
+                   Name = model.CategoryTransactions,
+                   Transactions = new List<Transaction>()
+               };
+           
+               repo.AddAsync(category);
+           }
 
             var transaction = new Transaction()
             {
@@ -126,7 +127,6 @@ namespace Core.Services
 
             return (created);
         }
-
 
         public TransactionViewModel GetTransactionInfo (string id)
         {
@@ -184,6 +184,11 @@ namespace Core.Services
             return repo.AllReadonly<CategoryTransactions>().Where(c => c.Id == cateroryId).Select(c => c.Name).FirstOrDefault();
         }
 
+        public CategoryTransactions GetCategory (string cateroryId)
+        {
+            return repo.AllReadonly<CategoryTransactions>().Where(c => c.Id == cateroryId).FirstOrDefault();
+        }
+
         public CategoryTransactions GetCategoryByName (string cateroryName)
         {
             return repo.AllReadonly<CategoryTransactions>().Where(c => c.Name == cateroryName).FirstOrDefault();
@@ -207,6 +212,42 @@ namespace Core.Services
 
             await repo.SaveChangesAsync();
         }
+
+        public IEnumerable<SelectListItem> GetAllCategories ()
+        {
+            var query =  repo.All<CategoryTransactions>()
+                .Where(x => x.IsDeleted == false)
+                .OrderBy(x => x.Name)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id,
+                    Text = c.Name
+                }).ToList();       
+
+            return query;
+        }
+
+        public async Task AddCategory (AddCategoryTransactionViewModel model)
+        {
+            var category = GetCategoryByName (model.Name);
+
+            if(category == null)
+            {
+                category = new CategoryTransactions()
+                {
+                    Name = model.Name
+                };
+            }           
+
+            try
+            {
+                await repo.AddAsync(category);
+                await repo.SaveChangesAsync();              
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException();
+            }
+        }
     }
 }
-

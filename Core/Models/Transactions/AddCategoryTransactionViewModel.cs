@@ -4,14 +4,8 @@ namespace Core.Models.Transactions
 {
     public class AddCategoryTransactionViewModel
     {
-        [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        [Required]
-        [StringLength(250, MinimumLength = 3, ErrorMessage = "{0} must be between {2} and {1} characters.")]
-        [RegularExpression("[A-Z][^_]+", ErrorMessage = "Name should start with upper letter. ")]
+        [Required, StringLength(200)]
         public string Name { get; set; }
-
-        public bool IsDeleted { get; set; } = false;
     }
 }

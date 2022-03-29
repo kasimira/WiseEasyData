@@ -6,7 +6,9 @@
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "_LayoutIntro";
+
 }
+
 <div class="page-heading">
     <div class="page-title">
         <div class="row">
@@ -48,9 +50,12 @@
                             </div>
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
-                                    <label class="small mb-1" for="inputCategory">Category</label>
-                                    <input class="form-control" id="inputCategory" type="text" asp-for="CategoryTransactions">
-                                    <span asp-validation-for="CategoryTransactions" class="text-danger"></span>
+                                    <label class="small mb-1" for="inputCategoryTransaction">Category</label>
+                                    <fieldset class="form-group">
+                                        <select class="form-select" id="basicSelect" asp-for="CategoryTransactions" asp-items="@(new SelectList(Model.Categories, "Value", "Text"))">
+                                        </select>
+                                        <span asp-validation-for="CategoryTransactions" class="text-danger"></span>
+                                    </fieldset>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputGender">Transaction type</label>

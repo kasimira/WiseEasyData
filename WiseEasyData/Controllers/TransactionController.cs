@@ -33,22 +33,29 @@ namespace WiseEasyData.Controllers
             return View(viewModel);
         }
 
-        public IActionResult AllCostsByCategory ()
+        public IActionResult AllTransactionsByCategory ()
         {
             return View();
         }
 
         public IActionResult Add ()
         {
-            return View();
+            var viewModel = new AddTransactionViewModel();
+            viewModel.Categories = transactionService.GetAllCategories();
+            viewModel.Date = DateTime.UtcNow;
+
+            return View(viewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Add (AddTransactionViewModel model, string id)
         {
+            model.Categories = transactionService.GetAllCategories();
+
             if (!ModelState.IsValid)
             {
-                return View();
+                model.Categories = transactionService.GetAllCategories();
+                return View(model);
             }
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -101,6 +108,28 @@ namespace WiseEasyData.Controllers
         public IActionResult AddCategory ()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCategory (AddCategoryTransactionViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            try
+            {
+                await transactionService.AddCategory(model);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
+            }
+
+            return Redirect("/Transaction/Add");
         }
     }
 }

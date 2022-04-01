@@ -1,12 +1,14 @@
-﻿using Core.Contracts;
+﻿using Core.Constants;
+using Core.Contracts;
 using Core.Models.Employee;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
 using WiseEasyData.Models;
 
 namespace WiseEasyData.Controllers
-{
+{ 
     public class EmployeeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
@@ -20,6 +22,7 @@ namespace WiseEasyData.Controllers
             webHostEnvironment = _webHostEnvironment;
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
         public IActionResult All (int id = 1)
         {
             const int ItemsPerPage = 6;
@@ -35,6 +38,7 @@ namespace WiseEasyData.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
         public IActionResult Profile (string employeeId)
         {
             var viewModel = employeeService.GetEmployeeProfil(employeeId);
@@ -42,6 +46,7 @@ namespace WiseEasyData.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
         public async Task<IActionResult> ChangeStatus (string employeeId)
         {
             await employeeService.ChangeStatusAsync(employeeId);
@@ -49,11 +54,13 @@ namespace WiseEasyData.Controllers
             return Redirect("/Employee/All");
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
         public IActionResult Add ()
         {
             return View();
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
         [HttpPost]
         public async Task<IActionResult> Add (AddEmployeeViewModel model)
         {
@@ -87,6 +94,7 @@ namespace WiseEasyData.Controllers
             return Redirect("/Employee/All");
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
         public IActionResult Edit (string employeeId)
         {
             var employee = employeeService.GetEmployeeInfo<EditEmployeeViewModel>(employeeId);
@@ -94,6 +102,7 @@ namespace WiseEasyData.Controllers
             return View(employee);
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
         [HttpPost]
         public async Task<IActionResult> Edit (EditEmployeeViewModel model, string employeeId)
         {
@@ -109,6 +118,7 @@ namespace WiseEasyData.Controllers
             return Redirect("/Employee/All");
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
         public async Task<IActionResult> Delete (string employeeId)
         {
             await employeeService.DeleteAsync(employeeId);
@@ -123,5 +133,3 @@ namespace WiseEasyData.Controllers
         }
     }
 }
-
-

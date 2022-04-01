@@ -200,7 +200,14 @@
                         </div>
                     </div>
                 </div>
-                <a class="btn btn-primary" type="button" href="/Employee/Edit?employeeId=@Model.Id">Edit Profile</a>
+                @if (User.IsInRole("Guest"))
+                {
+                    <a class="btn btn-primary" type="button" href="/Employee/All">All Employees</a>
+                }
+                else
+                {
+                    <a class="btn btn-primary" type="button" href="/Employee/Edit?employeeId=@Model.Id">Edit Profile</a>
+                }
             </div>
         </div>
     </div>

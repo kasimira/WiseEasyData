@@ -76,7 +76,7 @@ namespace Core.Services
                     {
                         foreach (var item in roles.Result)
                         {
-                            userManager.RemoveFromRoleAsync(user, item);
+                            await userManager.RemoveFromRoleAsync(user, item);
                         }
                     }
                 }

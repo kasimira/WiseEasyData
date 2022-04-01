@@ -2,7 +2,6 @@
 using Core.Models.File;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace WiseEasyData.Controllers
 {
     public class FileController : BaseController

@@ -30,14 +30,26 @@
                 <i class="bi bi-globe"></i>
                 <span>Clients</span>
             </a>
-            <ul class="submenu ">
-                <li class="submenu-item ">
-                    <a class="sidebar-link" asp-area="" asp-controller="Client" asp-action="All">All Clients</a>
-                </li>
-                <li class="submenu-item ">
-                    <a class="sidebar-link" asp-area="" asp-controller="Client" asp-action="Add">Add new Client</a>
-                </li>
-            </ul>
+            @if (User.IsInRole("Guest"))
+            {
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Client" asp-action="All">All Clients</a>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Client" asp-action="All">All Clients</a>
+                    </li>
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Client" asp-action="Add">Add new Client</a>
+                    </li>
+                </ul>
+            }
+
         </li>
         @if (User.IsInRole("Administrator"))
         {
@@ -62,48 +74,84 @@
                 <i class="bi bi-people-fill"></i>
                 <span>Employees</span>
             </a>
-            <ul class="submenu ">
-                <li class="submenu-item ">
-                    <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="All">All Employees</a>
-                </li>
-                <li class="submenu-item ">
-                    <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="Add">Add new Employee</a>
-                </li>
-            </ul>
+            @if (User.IsInRole("Guest"))
+            {
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="All">All Employees</a>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="All">All Employees</a>
+                    </li>
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="Add">Add new Employee</a>
+                    </li>
+                </ul>
+            }
         </li>
         <li class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
                 <i class="bi bi-receipt"></i>
                 <span>Transaction</span>
             </a>
-            <ul class="submenu ">
-                <li class="submenu-item ">
-                    <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="All">All Transactions</a>
-                </li>
-                <li class="submenu-item ">
-                    <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="AllTransactionsByCategory">All transactions by category</a>
-                </li>
-                <li class="submenu-item ">
-                    <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="Add" asp-route-id=@User.Identity.Name>Add new Transaction</a>
-                </li>
-                <li class="submenu-item ">
-                    <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="AddCategory">Add new Category</a>
-                </li>
-            </ul>
+            @if (User.IsInRole("Guest"))
+            {
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="All">All Transactions</a>
+                    </li>
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="AllTransactionsByCategory">All transactions by category</a>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="All">All Transactions</a>
+                    </li>
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="AllTransactionsByCategory">All transactions by category</a>
+                    </li>
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="Add" asp-route-id=@User.Identity.Name>Add new Transaction</a>
+                    </li>
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="AddCategory">Add new Category</a>
+                    </li>
+                </ul>
+            }
         </li>
         <li class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
                 <i class="bi bi-archive-fill"></i>
                 <span>File Sistem</span>
             </a>
-            <ul class="submenu ">
-                <li class="submenu-item ">
-                    <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="All">All Files</a>
-                </li>
-                <li class="submenu-item ">
-                    <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="Add">Add new Folder</a>
-                </li>
-            </ul>
+            @if (User.IsInRole("Guest"))
+            {
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="All">All Files</a>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="All">All Files</a>
+                    </li>
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="Add">Add new Folder</a>
+                    </li>
+                </ul>
+            }
         </li>
     </ul>
 }

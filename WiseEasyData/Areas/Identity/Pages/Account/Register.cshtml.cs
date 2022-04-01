@@ -186,3 +186,4 @@ namespace WiseEasyData.Areas.Identity.Pages.Account
         }
     }
 }
+

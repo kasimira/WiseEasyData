@@ -24,7 +24,7 @@ namespace WiseEasyData.Areas.Admin.Controllers
 
         public IActionResult Index ()
         {
-            return View();  
+            return View();
         }
 
         public async Task<IActionResult> All (int id = 1)
@@ -34,8 +34,8 @@ namespace WiseEasyData.Areas.Admin.Controllers
             var viewModel = new UsersListViewModel()
             {
                 ItemsPerPage = ItemsPerPage,
-                PageNumber = id,               
-                UserCount =  userService.GetCount(),
+                PageNumber = id,
+                UserCount = userService.GetCount(),
                 Users = userService.GetUsers(id, ItemsPerPage),
             };
 
@@ -44,14 +44,13 @@ namespace WiseEasyData.Areas.Admin.Controllers
 
         public async Task<IActionResult> ManageUsers ()
         {
-            
             return View();
         }
 
         public async Task<IActionResult> Edit (string id)
-        {          
-            var model =  await userService.GetUserForEdit(id);
-            
+        {
+            var model = await userService.GetUserForEdit(id);
+
             return View(model);
         }
 
@@ -64,15 +63,14 @@ namespace WiseEasyData.Areas.Admin.Controllers
 
                 return View(model);
             }
-            
+
             if (await userService.EditUser(model))
             {
                 ViewData[MessageConstant.SuccessMessage] = "Successful change";
-                RedirectToAction("Admin/User/All");
+
             }
 
             return RedirectToAction("All");
-
         }
 
         public async Task<IActionResult> Delete (string id)

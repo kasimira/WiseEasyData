@@ -1,5 +1,7 @@
-﻿using Core.Contracts;
+﻿using Core.Constants;
+using Core.Contracts;
 using Core.Models.Transactions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -20,6 +22,7 @@ namespace WiseEasyData.Controllers
             webHostEnvironment = _webHostEnvironment;
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
         public IActionResult All (int id = 1)
         {
             const int ItemsPerPage = 6;
@@ -33,11 +36,13 @@ namespace WiseEasyData.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
         public IActionResult AllTransactionsByCategory ()
         {
             return View();
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
         public IActionResult Add ()
         {
             var viewModel = new AddTransactionViewModel();
@@ -47,6 +52,7 @@ namespace WiseEasyData.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
         [HttpPost]
         public async Task<IActionResult> Add (AddTransactionViewModel model, string id)
         {
@@ -89,6 +95,7 @@ namespace WiseEasyData.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
         public async Task<IActionResult> Delete (string transactionId)
         {
             try
@@ -105,11 +112,13 @@ namespace WiseEasyData.Controllers
             return Redirect("/Transaction/All");
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
         public IActionResult AddCategory ()
         {
             return View();
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
         [HttpPost]
         public async Task<IActionResult> AddCategory (AddCategoryTransactionViewModel model)
         {

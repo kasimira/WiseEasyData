@@ -19,7 +19,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IUserService, UserService>();
 
-
             return services;
         }
 

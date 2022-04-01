@@ -31,7 +31,7 @@ namespace Core.Services
 
             return repo.AllReadonly<Transaction>()
                 .Where(t => t.IsDeleted == false)
-                .OrderBy(t => t.Date)
+                .OrderByDescending(t => t.Date)
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .Select(t => new AllTransactionsViewModel()
                 {
@@ -104,6 +104,7 @@ namespace Core.Services
 
             if (transaction == null)
             {
+                
                 throw new Exception("Transaction is null.");
             }
 

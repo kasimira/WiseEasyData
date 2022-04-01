@@ -8,232 +8,235 @@
     Layout = "_LayoutIntro";
 }
 
-<div class="page-heading">
-    <div class="page-title">
-        <div class="row">
-            <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Dashboard</h3>
-            </div>
-            <div class="col-12 col-md-6 order-md-2 order-first">
-                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                    <ol class="breadcrumb">
-                        <form class="text-muted" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                            <button type="submit" class="text-muted mb-0 btn btn-link">Logout</button>
-                        </form>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="page-content">
-    <section class="row">
-        <div class="col-12 col-lg-9">
+@if (User.IsInRole("Administrator") || User.IsInRole("Editor") || User.IsInRole("Guest"))
+{
+    <div class="page-heading">
+        <div class="page-title">
             <div class="row">
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card">
-                        <div class="card-body px-3 py-4-5">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="stats-icon purple">
-                                        <i class="iconly-boldUser1"></i>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Employees</h6>
-                                    <h6 class="font-extrabold mb-0">@Model.EmployeeCount</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Dashboard</h3>
                 </div>
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card">
-                        <div class="card-body px-3 py-4-5">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="stats-icon blue">
-                                        <i class="iconly-boldWork"></i>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Client</h6>
-                                    <h6 class="font-extrabold mb-0">@Model.ClientCount</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card">
-                        <div class="card-body px-3 py-4-5">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="stats-icon green">
-                                        <i class="iconly-boldWallet"></i>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Incomes</h6>
-                                    <h6 class="font-extrabold mb-0">@Model.TotalIncomes</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card">
-                        <div class="card-body px-3 py-4-5">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="stats-icon red">
-                                        <i class="iconly-boldPaper"></i>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Expenses</h6>
-                                    <h6 class="font-extrabold mb-0">@Model.TotalExpenses</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-xl-4">
-                    <div class="card m-b-30">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Employee age statistics</h5>
-                        </div>
-                        <div class="card-body">
-                            <div id="chartContainer" style="height: 290px; width: 100%;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-xl-8">
-                    <div class="card m-b-30">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Expenses to date for the current month</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-6 col-lg-3">
-                                    <div class="border-primary border rounded text-center py-3 mb-3">
-                                        <h5 class="card-title text-primary mb-1">€ @Model.TotalExpensesMonth</h5>
-                                        <p class="text-primary mb-0">Expenses</p>
-                                    </div>
-                                    <div class="border-success border rounded text-center py-3 mb-3">
-                                        <h5 class="card-title text-success mb-1">€ @Model.TotalIncomesMonth</h5>
-                                        <p class="text-success mb-0">Incomes</p>
-                                    </div>
-                                    <div class="border-warning border rounded text-center py-3">
-                                        <h5 class="card-title text-warning mb-1">€ @Model.TotalSalary</h5>
-                                        <p class="text-warning mb-0">Salaries</p>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-lg-9">
-                                    @foreach (var item in Model.Expenses)
-                                    {
-                                        var sumex = Math.Ceiling(item.Amount * 100 / Model.TotalExpenses);
-
-                                        <p>@item.CategoryName <span class="float-right">@sumex%</span></p>
-                                        <div class="progress mb-3" style="height: 5px;">
-                                            <div class="progress-bar" role="progressbar" style="width: @sumex%" aria-valuenow="@sumex" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-xl-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Last 10 Tranzactions</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-lg">
-                                <thead>
-                                    <tr>
-                                        <th>Date to Add</th>
-                                        <th>Name</th>
-                                        <th>Type</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.LastTransactions)
-                                    {
-                                        <tr>
-                                            <td class="col-auto">
-                                                <p class=" mb-0">@item.Date</p>
-                                            </td>
-                                            <td class="col-auto">
-                                                <p class=" mb-0">@item.Name</p>
-                                            </td>
-                                            <td class="col-auto">
-                                                <p class=" mb-0">@item.Type</p>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-3">
-            <div class="card">
-                <div class="card-body py-4 px-5">
-                    <div class="d-flex align-items-center">
-                        <div class="ms-3 name">
-                            <h5 class="font-bold">@User.Identity.Name</h5>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
                             <form class="text-muted" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                 <button type="submit" class="text-muted mb-0 btn btn-link">Logout</button>
                             </form>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <section class="row">
+            <div class="col-12 col-lg-9">
+                <div class="row">
+                    <div class="col-6 col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body px-3 py-4-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="stats-icon purple">
+                                            <i class="iconly-boldUser1"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h6 class="text-muted font-semibold">Employees</h6>
+                                        <h6 class="font-extrabold mb-0">@Model.EmployeeCount</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body px-3 py-4-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="stats-icon blue">
+                                            <i class="iconly-boldWork"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h6 class="text-muted font-semibold">Client</h6>
+                                        <h6 class="font-extrabold mb-0">@Model.ClientCount</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body px-3 py-4-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="stats-icon green">
+                                            <i class="iconly-boldWallet"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h6 class="text-muted font-semibold">Incomes</h6>
+                                        <h6 class="font-extrabold mb-0">@Model.TotalIncomes</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body px-3 py-4-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="stats-icon red">
+                                            <i class="iconly-boldPaper"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h6 class="text-muted font-semibold">Expenses</h6>
+                                        <h6 class="font-extrabold mb-0">@Model.TotalExpenses</h6>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h4>Recent added employees</h4>
+                <div class="row">
+                    <div class="col-12 col-xl-4">
+                        <div class="card m-b-30">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Employee age statistics</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="chartContainer" style="height: 290px; width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-8">
+                        <div class="card m-b-30">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Expenses to date for the current month</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-6 col-lg-3">
+                                        <div class="border-primary border rounded text-center py-3 mb-3">
+                                            <h5 class="card-title text-primary mb-1">€ @Model.TotalExpensesMonth</h5>
+                                            <p class="text-primary mb-0">Expenses</p>
+                                        </div>
+                                        <div class="border-success border rounded text-center py-3 mb-3">
+                                            <h5 class="card-title text-success mb-1">€ @Model.TotalIncomesMonth</h5>
+                                            <p class="text-success mb-0">Incomes</p>
+                                        </div>
+                                        <div class="border-warning border rounded text-center py-3">
+                                            <h5 class="card-title text-warning mb-1">€ @Model.TotalSalary</h5>
+                                            <p class="text-warning mb-0">Salaries</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-lg-9">
+                                        @foreach (var item in Model.Expenses)
+                                        {
+                                            var sumex = Math.Ceiling(item.Amount * 100 / Model.TotalExpensesMonth);
+
+                                            <p>@item.CategoryName <span class="float-right">@sumex%</span></p>
+                                            <div class="progress mb-3" style="height: 5px;">
+                                                <div class="progress-bar" role="progressbar" style="width: @sumex%" aria-valuenow="@sumex" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="card-content pb-4">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-lg">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.LastEmployees)
-                                    {
+                <div class="col-12 col-xl-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Last 10 Tranzactions</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-lg">
+                                    <thead>
                                         <tr>
-                                            <td class="col-auto">
-                                                <p class=" mb-0">@item.Name</p>
-                                            </td>
+                                            <th>Date to Add</th>
+                                            <th>Name</th>
+                                            <th>Type</th>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
-                            <div class="px-4">
-                                <button class="btn btn-block btn-xl btn-light-primary font-bold mt-3"><a asp-area="" asp-controller="Employee" asp-action="All"> View All</a></button>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.LastTransactions)
+                                        {
+                                            <tr>
+                                                <td class="col-auto">
+                                                    <p class=" mb-0">@item.Date</p>
+                                                </td>
+                                                <td class="col-auto">
+                                                    <p class=" mb-0">@item.Name</p>
+                                                </td>
+                                                <td class="col-auto">
+                                                    <p class=" mb-0">@item.Type</p>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+            <div class="col-12 col-lg-3">
+                <div class="card">
+                    <div class="card-body py-4 px-5">
+                        <div class="d-flex align-items-center">
+                            <div class="ms-3 name">
+                                <h5 class="font-bold">@User.Identity.Name</h5>
+                                <form class="text-muted" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" class="text-muted mb-0 btn btn-link">Logout</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Recent added employees</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-content pb-4">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-lg">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.LastEmployees)
+                                        {
+                                            <tr>
+                                                <td class="col-auto">
+                                                    <p class=" mb-0">@item.Name</p>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <div class="px-4">
+                                    <button class="btn btn-block btn-xl btn-light-primary font-bold mt-3"><a asp-area="" asp-controller="Employee" asp-action="All"> View All</a></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 
-@section Scripts{
+    @section Scripts{
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
 
@@ -255,4 +258,56 @@
     chart.render();
     }
 </script>
+}
+}
+else
+{
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Dashboard</h3>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+                            <form class="text-muted" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <button type="submit" class="text-muted mb-0 btn btn-link">Logout</button>
+                            </form>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body" style="width: 60%;">
+            <h5 class="card-title">Welcome to WiseEasyDate App</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Your registration was successful.</h6>
+            <p class="card-text">To access the information, your account must first be approved by the administrator.</p>
+            <p class="card-text">Thank you in advance for your patience.</p>
+
+        </div>
+    </div>
+    <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3" style="width: 80%;">
+        <div class="bg-primary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
+            <div class="my-3 py-3">
+                <h2 class="display-5">Our Dashboard</h2>
+                <p class="lead">Easy access to all information.</p>
+            </div>
+            <div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;">
+                <img src="~/images/samples/jump.jpg" class="rounded mx-auto d-block" alt="...">
+            </div>
+        </div>
+        <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+            <div class="my-3 p-3">
+                <h2 class="display-5">Custom statisticse</h2>
+                <p class="lead">Information on the current state of the company.</p>
+            </div>
+            <div class="bg-dark shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;">
+                <img src="~/images/samples/water.jpg" class="rounded float-start" alt="...">
+            </div>
+        </div>
+    </div>
 }

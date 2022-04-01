@@ -1,109 +1,137 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@if (User.IsInRole("Administrator") || User.IsInRole("Editor") || User.IsInRole("Guest"))
+{
+    <ul class="menu">
+        <li class="sidebar-title">Menu</li>
+        <li class="sidebar-item active ">
+            <a class="sidebar-link" asp-area="" asp-controller="HomeApp" asp-action="Index">
+                <i class="bi bi-grid-fill"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="sidebar-item  has-sub">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-person-fill"></i>
+                <span>Profil</span>
+            </a>
+            <ul class="submenu ">
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Your Profile</a>
+                </li>
+                <li class="submenu-item ">
+                    <form class="sidebar-link" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="sidebar-link btn btn-link">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item  has-sub">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-globe"></i>
+                <span>Clients</span>
+            </a>
+            <ul class="submenu ">
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="Client" asp-action="All">All Clients</a>
+                </li>
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="Client" asp-action="Add">Add new Client</a>
+                </li>
+            </ul>
+        </li>
+        @if (User.IsInRole("Administrator"))
+        {
+            <li class="sidebar-item  has-sub">
+                <a href="#" class='sidebar-link'>
+                    <i class="bi bi-house-fill"></i>
+                    <span>Users</span>
+                </a>
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="Admin" asp-controller="User" asp-action="All">All Users</a>
+                    </li>
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="Admin" asp-controller="User" asp-action="Management">Management of users</a>
+                    </li>
+                </ul>
+            </li>
 
-<ul class="menu">
-    <li class="sidebar-title">Menu</li>
-    <li class="sidebar-item active ">
-        <a class="sidebar-link" asp-area="" asp-controller="HomeApp" asp-action="Index">
-            <i class="bi bi-grid-fill"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>
-    <li class="sidebar-item  has-sub">
-        <a href="#" class='sidebar-link'>
-            <i class="bi bi-person-fill"></i>
-            <span>Profil</span>
-        </a>
-        <ul class="submenu ">
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="User" asp-action="ListProfile">Your Profile</a>
-            </li>
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="User" asp-action="Create">Create Profile</a>
-            </li>
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="User" asp-action="Edit">Edit Profile</a>
-            </li>
-            <li class="submenu-item ">
-                <form class="sidebar-link" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button type="submit" class="sidebar-link btn btn-link">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </li>
-    <li class="sidebar-item  has-sub">
-        <a href="#" class='sidebar-link'>
-            <i class="bi bi-globe"></i>
-            <span>Clients</span>
-        </a>
-        <ul class="submenu ">
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="Client" asp-action="All">All Clients</a>
-            </li>
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="Client" asp-action="Add">Add new Client</a>
-            </li>
-        </ul>
-    </li>
-    <li class="sidebar-item  has-sub">
-        <a href="#" class='sidebar-link'>
-            <i class="bi bi-house-fill"></i>
-            <span>Users</span>
-        </a>
-        <ul class="submenu ">
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="User" asp-action="All">All Users</a>
-            </li>
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="User" asp-action="Management">Management of users</a>
-            </li>
-        </ul>
-    </li>
-    <li class="sidebar-item  has-sub">
-        <a href="#" class='sidebar-link'>
-            <i class="bi bi-people-fill"></i>
-            <span>Employees</span>
-        </a>
-        <ul class="submenu ">
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="All">All Employees</a>
-            </li>
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="Add">Add new Employee</a>
-            </li>
-        </ul>
-    </li>
-    <li class="sidebar-item  has-sub">
-        <a href="#" class='sidebar-link'>
-            <i class="bi bi-receipt"></i>
-            <span>Transaction</span>
-        </a>
-        <ul class="submenu ">
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="All">All Transactions</a>
-            </li>
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="AllTransactionsByCategory">All transactions by category</a>
-            </li>
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="Add" asp-route-id=@User.Identity.Name>Add new Transaction</a>
-            </li>
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="AddCategory">Add new Category</a>
-            </li>
-        </ul>
-    </li>
-    <li class="sidebar-item  has-sub">
-        <a href="#" class='sidebar-link'>
-            <i class="bi bi-archive-fill"></i>
-            <span>File Sistem</span>
-        </a>
-        <ul class="submenu ">
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="All">All Files</a>
-            </li>
-            <li class="submenu-item ">
-                <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="Add">Add new Folder</a>
-            </li>
-        </ul>
-    </li>
-</ul>
+        }
+        <li class="sidebar-item  has-sub">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-people-fill"></i>
+                <span>Employees</span>
+            </a>
+            <ul class="submenu ">
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="All">All Employees</a>
+                </li>
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="Add">Add new Employee</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item  has-sub">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-receipt"></i>
+                <span>Transaction</span>
+            </a>
+            <ul class="submenu ">
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="All">All Transactions</a>
+                </li>
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="AllTransactionsByCategory">All transactions by category</a>
+                </li>
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="Add" asp-route-id=@User.Identity.Name>Add new Transaction</a>
+                </li>
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="Transaction" asp-action="AddCategory">Add new Category</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item  has-sub">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-archive-fill"></i>
+                <span>File Sistem</span>
+            </a>
+            <ul class="submenu ">
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="All">All Files</a>
+                </li>
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="Add">Add new Folder</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="menu">
+        <li class="sidebar-title">Menu</li>
+        <li class="sidebar-item active ">
+            <a class="sidebar-link" asp-area="" asp-controller="HomeApp" asp-action="Index">
+                <i class="bi bi-grid-fill"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="sidebar-item  has-sub">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-person-fill"></i>
+                <span>Profil</span>
+            </a>
+            <ul class="submenu ">
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Your Profile</a>
+                </li>
+                <li class="submenu-item ">
+                    <form class="sidebar-link" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="sidebar-link btn btn-link">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    </ul>
+}

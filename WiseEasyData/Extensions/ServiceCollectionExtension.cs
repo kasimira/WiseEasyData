@@ -17,6 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<ICommonService, CommonService>();
             services.AddTransient<ITransactionService, TransactionService>();
             services.AddTransient<IFileService, FileService>();
+            services.AddTransient<IUserService, UserService>();
 
 
             return services;

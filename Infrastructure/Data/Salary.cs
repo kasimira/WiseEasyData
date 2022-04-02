@@ -9,12 +9,22 @@ namespace Infrastructure.Data
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
+        [Range(1, 100000)]
         public decimal HourlySalary { get; set; }
 
         [Required]
         public int HoursWorked { get; set; }
 
+        [Required]
+        [Range(1, 100000)]
         public decimal TotalAmount { get; set; }
+
+        [Required]
+        [Range(1, 100000)]
+        public decimal SalaryAmount { get; set; }
+
+        [Range(0, 100000)]
+        public decimal? InAdvance { get; set; }
 
         public DateTime DataToAdd { get; set; } = DateTime.UtcNow;
 
@@ -27,7 +37,7 @@ namespace Infrastructure.Data
         [Required]
         [ForeignKey(nameof(EmployeeId))]
         public Employee? Employee { get; set; }
+
+        public string? Note { get; set; }
     }
 }
-
-

@@ -78,12 +78,7 @@ namespace WiseEasyData.Controllers
 
                 ModelState.AddModelError(string.Empty, ex.Message);
                 await transactionService.AddTransactionAsync(model, created, rootPath, id, userId);
-            }
-
-            if (!created)
-            {
-                return Redirect("/Transaction/Error");
-            }
+            }        
 
             return Redirect("/Transaction/All");
         }

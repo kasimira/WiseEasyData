@@ -131,7 +131,7 @@ namespace Core.Services
 
             var totalSalary = repo.AllReadonly<Employee>().Where(e => e.IsDeleted == false)
                 .SelectMany(e => e.Salaries)
-                .Where(d => d.FromDate.Month == DateTime.Now.Month)
+                .Where(d => d.FromDate.Month == DateTime.Now.Month -1)
                 .Sum(e => e.TotalAmount);
 
             var totalExpenses = repo.AllReadonly<Transaction>()
@@ -250,6 +250,3 @@ namespace Core.Services
         }
     }
 }
-
-
-

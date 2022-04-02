@@ -1,0 +1,101 @@
+﻿@using Core.Models
+@using Core.Models.Salaries
+@using Infrastructure.Data.Enums
+@using Microsoft.AspNetCore.Identity
+@model AddSalaryViewModel
+
+@{
+    ViewData["Title"] = "Add Salary";
+    Layout = "_LayoutIntro";
+}
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Add Salary</h3>
+                <p class="text-subtitle text-muted">Please complete the worker information.</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="HomeApp" asp-action="Index">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Add Salary</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="container-xl px-4 mt-4">
+        <div class="row">
+            <div class="col-xl-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title">Add new Salary</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="row gx-3 mb-3">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputEmployees">Employee Name</label>
+                                    <fieldset class="form-group">
+                                        <select class="form-select" id="basicSelect" asp-for="EmployeeName" asp-items="@(new SelectList(Model.Employees, "Value", "Text"))">
+                                        </select>
+                                        <span asp-validation-for="EmployeeName" class="text-danger"></span>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputHoursWorked">Hours Worked</label>
+                                    <input class="form-control" id="inputHoursWorked" type="number" data-val="true" asp-for="HoursWorked">
+                                    <span asp-validation-for="HoursWorked" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputFromDate">From Date</label>
+                                    <input class="form-control" id="inputFromDate" type="date" data-val="true" asp-for="FromDate" asp-format="{0:yyyy-MM-dd}">
+                                    <span asp-validation-for="FromDate" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputToDate">To Date</label>
+                                    <input class="form-control" id="inputToDate" type="date" data-val="true" asp-for="ToDate" asp-format="{0:yyyy-MM-dd}">
+                                    <span asp-validation-for="ToDate" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row gx-3 mb-3">
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputInAdvance">In Advance</label>
+                                    <input class="form-control" id="inputInAdvance" type="number" asp-for="InAdvance">
+                                    <span asp-validation-for="InAdvance" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputSalary">Salary</label>
+                                    <input class="form-control" id="inputSalary" type="number" asp-for="Salary">
+                                    <span asp-validation-for="Salary" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputTotalAmount">Total Amount</label>
+                                    <input class="form-control" id="inputTotalAmount" type="number" asp-for="TotalAmount">
+                                    <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputNote">Note</label>
+                                    <textarea class="form-control" id="inputNote" type="text" style="height: 100px" placeholder="Leave a comment here" asp-for="Note"></textarea>
+                                    <span asp-validation-for="Note" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<partial name="_ValidationScriptsPartial" />
+}

@@ -1,7 +1,6 @@
 ﻿using Core.Constants;
 using Core.Contracts;
 using Core.Models.User;
-using Infrastructure.Data.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,15 +9,12 @@ namespace WiseEasyData.Areas.Admin.Controllers
     public class UserController : BaseController
     {
         private readonly RoleManager<IdentityRole> roleManager;
-
-        private readonly UserManager<ApplicationUser> userManager;
         private readonly IUserService userService;
 
-        public UserController (RoleManager<IdentityRole> _roleoManager, UserManager<ApplicationUser> _userManager
+        public UserController (RoleManager<IdentityRole> _roleoManager
             , IUserService _userService)
         {
             roleManager = _roleoManager;
-            userManager = _userManager;
             userService = _userService;
         }
 
@@ -40,11 +36,6 @@ namespace WiseEasyData.Areas.Admin.Controllers
             };
 
             return View(viewModel);
-        }
-
-        public async Task<IActionResult> ManageUsers ()
-        {
-            return View();
         }
 
         public async Task<IActionResult> Edit (string id)
@@ -73,9 +64,16 @@ namespace WiseEasyData.Areas.Admin.Controllers
             return RedirectToAction("All");
         }
 
-        public async Task<IActionResult> Delete (string id)
+        public IActionResult Delete (string id)
         {
-            return Ok();
+            var model = userService.GetUserForDelete(id);
+            return View(model);
+        }
+
+        public async Task<IActionResult> DeleteUser (string userId)
+        {
+            await userService.DeleteUserAsync(userId);
+            return RedirectToAction("All");
         }
 
         public async Task<IActionResult> CreateRole ()

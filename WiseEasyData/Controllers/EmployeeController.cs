@@ -119,11 +119,18 @@ namespace WiseEasyData.Controllers
         }
 
         [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
-        public async Task<IActionResult> Delete (string employeeId)
+        public async Task<IActionResult> DeleteEmployee (string employeeId)
         {
             await employeeService.DeleteAsync(employeeId);
 
             return Redirect("/Employee/All");
+        }
+
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
+        public IActionResult Delete (string employeeId)
+        {
+            var model = employeeService.GetEmployeeForDelete(employeeId);
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

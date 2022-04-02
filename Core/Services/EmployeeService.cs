@@ -357,6 +357,19 @@ namespace Core.Services
             employee.Status = status;
             await repo.SaveChangesAsync();
         }
+
+        public DeleteEmployeeViewModel GetEmployeeForDelete (string id)
+        {
+            var employee = GetEmployee(id);
+
+            var employeeForDelete = new DeleteEmployeeViewModel
+            {            
+                Id = id,
+                Name = employee.FirstName + " " + employee.LastName, 
+                HireDate = employee.HireDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+            };
+
+            return employeeForDelete;
+        }
     }
 }
-

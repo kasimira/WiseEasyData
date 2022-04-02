@@ -122,5 +122,34 @@ namespace Core.Services
         {
             return repo.AllReadonly<ApplicationUser>().Count();
         }
+
+        public async Task DeleteUserAsync (string id)
+        {
+            var user = await repo.GetByIdAsync<ApplicationUser>(id);
+
+            if (user == null)
+            {
+                throw new ArgumentException("Тhe user not found");
+            }
+
+            await userManager.RemoveFromRolesAsync(user, userManager.GetRolesAsync(user).Result);
+            await repo.DeleteAsync<ApplicationUser>(user.Id);  
+            await repo.SaveChangesAsync();
+        }
+
+        public DeleteUserViewModel GetUserForDelete (string id)
+        {
+            var user = repo.GetByIdAsync<ApplicationUser>(id);
+
+             var userForDelete =  new DeleteUserViewModel
+                {
+                    UserId = user.Result.Id,
+                    UserName = user.Result.FirstName + " " + user.Result.LastName,
+                    Email = user.Result.Email,
+                    Roles = userManager.GetRolesAsync(user.Result).Result,
+                };   
+
+            return userForDelete;
+        }
     }
 }

@@ -5,22 +5,24 @@ namespace Core.Contracts
 {
     public interface IEmployeeService
     {
-        IEnumerable<AllEmployeesViewModel> GetEmployees (int page, int itemsPerPage);
-
-        public Employee GetEmployee (string employeeId);
-
-        Task EditEmployeeAsync (EditEmployeeViewModel model, string employeeId, string rootPath);
+        int GetCount ();
 
         Task DeleteAsync (string employeeId);
 
-        Task<bool> AddEmployeeAsync (AddEmployeeViewModel model, bool created, string rootPath, string userId, string userName);
+        Task ChangeStatusAsync (string employeeId);
 
-        int GetCount ();
-
-        EditEmployeeViewModel GetEmployeeInfo<T> (string employeeId);
+        public Employee GetEmployee (string employeeId);
 
         EmployeeProfileViewModel GetEmployeeProfil (string id);
 
-        Task ChangeStatusAsync (string employeeId);
+        DeleteEmployeeViewModel GetEmployeeForDelete (string id);
+
+        EditEmployeeViewModel GetEmployeeInfo<T> (string employeeId);
+
+        IEnumerable<AllEmployeesViewModel> GetEmployees (int page, int itemsPerPage);
+
+        Task EditEmployeeAsync (EditEmployeeViewModel model, string employeeId, string rootPath);       
+
+        Task<bool> AddEmployeeAsync (AddEmployeeViewModel model, bool created, string rootPath, string userId, string userName);
     }
 }

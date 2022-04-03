@@ -8,16 +8,14 @@ using System.Security.Claims;
 using WiseEasyData.Models;
 
 namespace WiseEasyData.Controllers
-{ 
+{
     public class EmployeeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IEmployeeService employeeService;
         private readonly IWebHostEnvironment webHostEnvironment;
 
-        public EmployeeController (ILogger<HomeController> logger, IEmployeeService _employeeService, IWebHostEnvironment _webHostEnvironment)
+        public EmployeeController (IEmployeeService _employeeService, IWebHostEnvironment _webHostEnvironment)
         {
-            _logger = logger;
             employeeService = _employeeService;
             webHostEnvironment = _webHostEnvironment;
         }
@@ -64,8 +62,8 @@ namespace WiseEasyData.Controllers
         [HttpPost]
         public async Task<IActionResult> Add (AddEmployeeViewModel model)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var userName = User.Identity.Name;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var userName = User.Identity!.Name;
 
             if (!ModelState.IsValid)
             {
@@ -77,13 +75,13 @@ namespace WiseEasyData.Controllers
 
             try
             {
-                created = await employeeService.AddEmployeeAsync(model, created, rootPath, userId, userName);
+                created = await employeeService.AddEmployeeAsync(model, created, rootPath, userId, userName!);
             }
             catch (Exception ex)
             {
 
                 ModelState.AddModelError(string.Empty, ex.Message);
-                await employeeService.AddEmployeeAsync(model, created, rootPath, userId, userName);
+                await employeeService.AddEmployeeAsync(model, created, rootPath, userId, userName!);
             }
 
             if (!created)

@@ -116,7 +116,7 @@ namespace Core.Services
                     ToDate = s.ToDate.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
                     HoursWorked = s.HoursWorked,
                     EmployeeId = s.EmployeeId,
-                    EmployeeName = s.Employee.FirstName + " " + s.Employee.LastName,
+                    EmployeeName = s.Employee!.FirstName + " " + s.Employee.LastName,
                     InAdvance = s.InAdvance,
                     TransferredPaymen = s.SalaryAmount,
                 })
@@ -167,7 +167,7 @@ namespace Core.Services
                 {
                     InAdvance = s.InAdvance,
                     TotalAmount = s.TotalAmount,
-                    EmployeeName = s.Employee.FirstName + " " + s.Employee.LastName,
+                    EmployeeName = s.Employee!.FirstName + " " + s.Employee.LastName,
                     FromDate = s.FromDate,
                     ToDate = s.ToDate,
                     Salary = s.SalaryAmount,
@@ -185,7 +185,7 @@ namespace Core.Services
                 .Where(s => s.Id == salaryId)
                 .FirstOrDefault();
 
-            salary.InAdvance = model.InAdvance;
+            salary!.InAdvance = model.InAdvance;
             salary.Note = model.Note;
             salary.SalaryAmount = model.Salary;
             salary.FromDate = model.FromDate;

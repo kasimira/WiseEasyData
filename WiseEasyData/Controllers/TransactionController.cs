@@ -9,15 +9,12 @@ namespace WiseEasyData.Controllers
 {
     public class TransactionController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ITransactionService transactionService;
         private readonly IWebHostEnvironment webHostEnvironment;
 
-        public TransactionController (ILogger<HomeController> logger,
-            ITransactionService _transactionService,
+        public TransactionController (ITransactionService _transactionService,
             IWebHostEnvironment _webHostEnvironment)
         {
-            _logger = logger;
             transactionService = _transactionService;
             webHostEnvironment = _webHostEnvironment;
         }
@@ -64,7 +61,7 @@ namespace WiseEasyData.Controllers
                 return View(model);
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
             bool created = false;
             var rootPath = webHostEnvironment.WebRootPath;
@@ -79,6 +76,47 @@ namespace WiseEasyData.Controllers
                 ModelState.AddModelError(string.Empty, ex.Message);
                 await transactionService.AddTransactionAsync(model, created, rootPath, id, userId);
             }        
+
+            return Redirect("/Transaction/All");
+        }
+
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
+        public IActionResult Edit (string transactionId)
+        {
+            var viewModel = transactionService.GetTransactionForEdit(transactionId);
+            
+            viewModel.Date = DateTime.UtcNow;
+
+            return View(viewModel);
+        }
+
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
+        [HttpPost]
+        public async Task<IActionResult> Edit (EditTransactionViewModel model,string transactionId)
+        {
+            model.Categories = transactionService.GetAllCategories();
+
+            if (!ModelState.IsValid)
+            {
+                model.Categories = transactionService.GetAllCategories();
+                return View(model);
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
+            bool edited = false;
+            var rootPath = webHostEnvironment.WebRootPath;
+
+            try
+            {
+                edited = await transactionService.EditTransactionAsync(model, edited, rootPath, transactionId, userId);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError(string.Empty, ex.Message);
+                await transactionService.EditTransactionAsync(model, edited, rootPath, transactionId, userId);
+            }
 
             return Redirect("/Transaction/All");
         }

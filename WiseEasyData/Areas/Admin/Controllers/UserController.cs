@@ -23,7 +23,7 @@ namespace WiseEasyData.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> All (int id = 1)
+        public IActionResult All (int id = 1)
         {
             const int ItemsPerPage = 6;
 

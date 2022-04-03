@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
-
 namespace Core.Models.Transactions
 {
-    public class AddTransactionViewModel
+    public class EditTransactionViewModel
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [Required]
         [StringLength(200)]
@@ -40,7 +39,7 @@ namespace Core.Models.Transactions
         public DateTime Date { get; set; }
 
         public bool IsDeleted { get; set; } = false;
-        
+
         public IEnumerable<SelectListItem>? Categories { get; set; }
     }
 }

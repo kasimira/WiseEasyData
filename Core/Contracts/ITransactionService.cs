@@ -1,5 +1,5 @@
 ﻿using Core.Models.Transactions;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Core.Contracts
 {
@@ -20,5 +20,7 @@ namespace Core.Contracts
         IEnumerable<SelectListItem> GetAllCategories ();
 
         Task AddCategory (AddCategoryTransactionViewModel model);
+        EditTransactionViewModel GetTransactionForEdit (string transactionId);
+        Task<bool> EditTransactionAsync (EditTransactionViewModel model, bool edited, string rootPath, object id, string userId);
     }
 }

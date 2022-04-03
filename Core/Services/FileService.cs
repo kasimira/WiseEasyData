@@ -32,8 +32,8 @@ namespace Core.Services
             .Select(e => new AllFilesViewModel()
             {
                 Id = e.Id,
-                TransactionName = e.TransactionName,
-                TransactionId = repo.AllReadonly<Transaction>().Where(t => t.Name == e.TransactionName).Select(t => t.Id).FirstOrDefault(),
+                TransactionName = e.TransactionName!,
+                TransactionId = repo.AllReadonly<Transaction>().Where(t => t.Name == e.TransactionName).Select(t => t.Id).FirstOrDefault()!,
                 DateToAdd = e.DateToAdd.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
                 FileExtension = e.Extension,
                 Name = e.Id.ToString(),

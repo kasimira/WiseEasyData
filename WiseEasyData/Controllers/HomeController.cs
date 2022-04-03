@@ -15,7 +15,7 @@ namespace WiseEasyData.Controllers
 
         public IActionResult Index ()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity!.IsAuthenticated)
             {
                 return Redirect("/HomeApp/Index");
             }
@@ -25,7 +25,7 @@ namespace WiseEasyData.Controllers
 
         public IActionResult About ()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity!.IsAuthenticated)
             {
                 return Redirect("/HomeApp/Index");
             }
@@ -40,7 +40,7 @@ namespace WiseEasyData.Controllers
 
         public IActionResult Privacy ()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity!.IsAuthenticated)
             {
                 return Redirect("/HomeApp/Index");
             }
@@ -50,7 +50,7 @@ namespace WiseEasyData.Controllers
 
         public IActionResult StartMenu ()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity!.IsAuthenticated)
             {
                 return Redirect("/HomeApp/Index");
             }
@@ -60,7 +60,7 @@ namespace WiseEasyData.Controllers
 
         public IActionResult Profile ()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity!.IsAuthenticated)
             {
                 return Redirect("/HomeApp/Index");
             }

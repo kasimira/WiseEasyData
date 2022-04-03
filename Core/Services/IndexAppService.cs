@@ -183,7 +183,7 @@ namespace Core.Services
                 .Select(c => new ExpenseViewModel
                 {
                     Amount = c.Sum(b => b.Amount),
-                    CategoryName = c.Key
+                    CategoryName = c.Key!
                 })
                 .OrderBy(c => c.Amount)
                 .ToList();

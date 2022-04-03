@@ -22,30 +22,30 @@ namespace Core.Services
 
         public async Task<bool> AddEmployeeAsync (AddEmployeeViewModel model, bool created, string rootPath, string userId, string userName)
         {
-            var country = commonService.GetCountry(model.Country);
-            var city = commonService.GetCity(model.City);
-            var department = commonService.GetDepartment(model.Department);
+            var country = commonService.GetCountry(model.Country!);
+            var city = commonService.GetCity(model.City!);
+            var department = commonService.GetDepartment(model.Department!);
 
             if (country == null)
             {
-                country = commonService.CreateCountry(model.Country);
+                country = commonService.CreateCountry(model.Country!);
                 await repo.AddAsync(country);
             }
 
             if (city == null)
             {
-                city = commonService.CreateCity(model.City, country);
+                city = commonService.CreateCity(model.City!, country);
                 await repo.AddAsync(city);
             }
 
             if (department == null)
             {
-                department = commonService.CreateDepartment(model.Department);
+                department = commonService.CreateDepartment(model.Department!);
                 await repo.AddAsync(department);
             }
 
-            string imageId = null;
-            SubmittedFile dbFile = null;
+            string imageId = null!;
+            SubmittedFile dbFile = null!;
 
             if (model.Image != null)
             {
@@ -84,9 +84,9 @@ namespace Core.Services
                 Email = model.Email,
                 Position = model.Position,
                 PostalCode = model.PostalCode,
-                Gender = (Gender)Enum.Parse(typeof(Gender), model.Gender),
-                Grade = (Grade)Enum.Parse(typeof(Grade), model.Grade),
-                Status = (Status)Enum.Parse(typeof(Status), model.Status),
+                Gender = (Gender)Enum.Parse(typeof(Gender), model.Gender!),
+                Grade = (Grade)Enum.Parse(typeof(Grade), model.Grade!),
+                Status = (Status)Enum.Parse(typeof(Status), model.Status!),
                 HireDate = model.HireDate.Date,
                 ImageId = imageId,
                 CreatorId = userId,
@@ -140,9 +140,9 @@ namespace Core.Services
                 {
                     Id = e.Id,
                     FullName = e.FirstName + " " + e.MiddleName + " " + e.LastName,
-                    PhoneNumber = e.PhoneNumber,
-                    Position = e.Position,
-                    City = e.City.Name,
+                    PhoneNumber = e.PhoneNumber!,
+                    Position = e.Position!,
+                    City = e.City!.Name!,
                     HireDate = e.HireDate.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
                     HourlySalary = e.HourlySalary,
                     Status = e.Status.ToString(),
@@ -158,7 +158,7 @@ namespace Core.Services
             if (imageId != null)
             {
                 var imageInfo = repo.AllReadonly<SubmittedFile>().Where(i => i.Id == imageId).FirstOrDefault();
-                image = $"{imageId}.{imageInfo.Extension}";
+                image = $"{imageId}.{imageInfo!.Extension}";
             }
             else
             {
@@ -167,7 +167,7 @@ namespace Core.Services
 
             var employee = repo.AllReadonly<Employee>().Where(e => e.Id == id)
                 .Include(e => e.City)
-                .Include(c => c.City.Country)
+                .Include(c => c.City!.Country)
                 .Include(e => e.Department)
                 .Select(e => new EmployeeProfileViewModel()
                 {
@@ -177,9 +177,9 @@ namespace Core.Services
                     LastName = e.LastName,
                     Nationality = e.Nationality,
                     Address = e.Address,
-                    City = e.City.Name,
-                    Country = e.City.Country.Name,
-                    Department = e.Department.Name,
+                    City = e.City!.Name,
+                    Country = e.City!.Country!.Name,
+                    Department = e.Department!.Name,
                     DateOfBirth = e.DateOfBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                     Email = e.Email,
                     PhoneNumber = e.PhoneNumber,
@@ -203,23 +203,23 @@ namespace Core.Services
         public async Task EditEmployeeAsync (EditEmployeeViewModel model, string employeeId, string rootPath)
         {
             var employee = GetEmployee(employeeId);
-            var country = commonService.GetCountry(model.Country);
-            var city = commonService.GetCity(model.City);
-            var department = commonService.GetDepartment(model.Department);
+            var country = commonService.GetCountry(model.Country!);
+            var city = commonService.GetCity(model.City!);
+            var department = commonService.GetDepartment(model.Department!);
 
             if (country == null)
             {
-                country = commonService.CreateCountry(model.Country);
+                country = commonService.CreateCountry(model.Country!);
             }
 
             if (city == null)
             {
-                city = commonService.CreateCity(model.City, country);
+                city = commonService.CreateCity(model.City!, country);
             }
 
             if (department == null)
             {
-                department = commonService.CreateDepartment(model.Department);
+                department = commonService.CreateDepartment(model.Department!);
             }
 
             var imageId = "";
@@ -265,9 +265,9 @@ namespace Core.Services
             employee.Email = model.Email;
             employee.Position = model.Position;
             employee.PostalCode = model.PostalCode;
-            employee.Gender = (Gender)Enum.Parse(typeof(Gender), model.Gender);
-            employee.Grade = (Grade)Enum.Parse(typeof(Grade), model.Grade);
-            employee.Status = (Status)Enum.Parse(typeof(Status), model.Status);
+            employee.Gender = (Gender)Enum.Parse(typeof(Gender), model.Gender!);
+            employee.Grade = (Grade)Enum.Parse(typeof(Grade), model.Grade!);
+            employee.Status = (Status)Enum.Parse(typeof(Status), model.Status!);
             employee.HireDate = model.HireDate.Date;
             employee.ImageId = imageId;
 
@@ -323,7 +323,7 @@ namespace Core.Services
                 Nationality = e.Nationality,
                 Address = e.Address,
                 City = city.Name,
-                Country = city.Country.Name,
+                Country = city.Country!.Name,
                 DateOfBirth = e.DateOfBirth,
                 Department = department.Name,
                 HourlySalary = e.HourlySalary,

@@ -1,0 +1,109 @@
+﻿@using Core.Models
+@using Core.Models.Transactions
+@using Infrastructure.Data.Enums
+@model EditTransactionViewModel
+@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "Edit Transaction";
+    Layout = "_LayoutIntro";
+
+}
+
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Edit</h3>
+                <p class="text-subtitle text-muted">Here you can edit the transaction and upload the relevant document if available.</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="HomeApp" asp-action="Index">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Transaction</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="container-xl px-4 mt-4">
+        <div class="row">
+            <div class="col-xl-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title">Edit transaction</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="row gx-3 mb-3">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputName">Name</label>
+                                    <input class="form-control" id="inputName" type="text" asp-for="Name">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputDate">Issue date</label>
+                                    <input class="form-control" id="inputDate" type="date" data-val="true" asp-for="Date" asp-format="{0:yyyy-MM-dd}">
+                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputCategoryTransaction">Category</label>
+                                    <fieldset class="form-group">
+                                        <select class="form-select" id="basicSelect" asp-for="CategoryTransactions" asp-items="@(new SelectList(Model.Categories, "Value", "Text"))">
+                                        </select>
+                                        <span asp-validation-for="CategoryTransactions" class="text-danger"></span>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputGender">Transaction type</label>
+                                    <fieldset class="form-group">
+                                        <select class="form-select" id="basicSelect" asp-for="TransactionType" asp-items="@Html.GetEnumSelectList<TransactionType>()">
+                                        </select>
+                                        <span asp-validation-for="TransactionType" class="text-danger"></span>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputAmount">Amount</label>
+                                    <input class="form-control" id="inputAmount" type="number" asp-for="Amount">
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputGrade">Currency</label>
+                                    <fieldset class="form-group">
+                                        <select class="form-select" id="basicSelect" name="Currency" asp-items="@Html.GetEnumSelectList<Currency>()">
+                                        </select>
+                                        <span asp-validation-for="Currency" class="text-danger"></span>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputDescription">Description</label>
+                                    <textarea class="form-control" id="inputDescription" type="text" style="height: 100px" placeholder="Leave a comment here" asp-for="Description"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputFile">File</label>
+                                    <input asp-for="File" class="form-control" id="inputFile">
+                                    <p>Supported file formats are png, jpg, jpeg, pdf, docx, xlsx</p>
+                                    <span asp-validation-for="File" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit" asp-route-id=@Model.Id>Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<partial name="_ValidationScriptsPartial" />
+}

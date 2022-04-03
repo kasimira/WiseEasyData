@@ -70,7 +70,7 @@ namespace Core.Services
         {
             City? city = repo.All<City>().FirstOrDefault(c => c.Id == cityId);
 
-            city.Country = repo.All<Country>().FirstOrDefault(c => c.Id == city.CountryId);
+            city!.Country = repo.All<Country>().FirstOrDefault(c => c.Id == city.CountryId);
 
             return city;
         }

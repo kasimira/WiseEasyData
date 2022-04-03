@@ -26,7 +26,7 @@ namespace Core.CustomAttributes
                 if (value != null)
                 {
                     // Initialization.  
-                    var fileName = file.FileName;
+                    var fileName = file!.FileName;
 
                     // Settings.  
                     isValid = allowedExtensions.Any(y => fileName.EndsWith(y));

@@ -8,7 +8,6 @@ namespace Core.Models.Transactions
 {
     public class EditTransactionViewModel
     {
-        public string? Id { get; set; }
 
         [Required]
         [StringLength(200)]
@@ -37,8 +36,6 @@ namespace Core.Models.Transactions
         [Required]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
-
-        public bool IsDeleted { get; set; } = false;
 
         public IEnumerable<SelectListItem>? Categories { get; set; }
     }

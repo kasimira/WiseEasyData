@@ -2,7 +2,9 @@
 using Core.Models.Transactions;
 using Infrastructure.Data;
 using Infrastructure.Data.Enums;
+using Infrastructure.Data.Identity;
 using Infrastructure.Data.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
 
@@ -14,11 +16,15 @@ namespace Core.Services
 
         private readonly IApplicatioDbRepository repo;
         private readonly ICommonService commonService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public TransactionService (IApplicatioDbRepository _repo, ICommonService _commonService)
+        public TransactionService (IApplicatioDbRepository _repo, 
+            ICommonService _commonService,
+            UserManager<ApplicationUser> _userManager)
         {
             repo = _repo;
             commonService = _commonService;
+            userManager = _userManager;
         }
 
         public IEnumerable<AllTransactionsViewModel> GetTransactions (int page, int itemsPerPage)
@@ -100,7 +106,8 @@ namespace Core.Services
                 TransactionType = (TransactionType)Enum.Parse(typeof(TransactionType), model.TransactionType),
                 FileId = fileId,
                 Description = model.Description,
-                CreatorName = id,
+                CreatorId = userId,
+                CreatorName = GetUserNameById(userId)
             };
 
             if (transaction == null)
@@ -178,6 +185,12 @@ namespace Core.Services
                 })
                 .FirstOrDefault();
 
+            if (transaction == null)
+            {
+
+                throw new Exception("Transaction is null.");
+            }
+
             return transaction;
         }
 
@@ -240,6 +253,10 @@ namespace Core.Services
                     Name = model.Name
                 };
             }
+            else
+            {
+                throw new ArgumentException("The category already exists.");
+            }
 
             try
             {
@@ -248,7 +265,7 @@ namespace Core.Services
             }
             catch (Exception)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Category record failed.");
             }
         }
 
@@ -273,13 +290,24 @@ namespace Core.Services
             return transactionModel;
         }
 
-        public async Task<bool> EditTransactionAsync (EditTransactionViewModel model, bool edited, string rootPath, object id, string userId)
+        public async Task<bool> EditTransactionAsync (EditTransactionViewModel model, bool edited, string rootPath, string transactionId, string userId)
         {
+            var transaction = repo.AllReadonly<Transaction>().Where(t => t.Id == transactionId).FirstOrDefault();
+
+            if(transaction != null)
+            {
+                if(userId != transaction.CreatorId)
+                {
+                    throw new ArgumentException("You are not authorized to perform this action.");
+                }
+            }
+
             SubmittedFile dbFile = null!;
 
             if (model.File != null)
             {
-                dbFile = await CreateFile(model, rootPath, userId);             
+                dbFile = await CreateFile(model, rootPath, userId);  
+                transaction!.FileId = dbFile.Id;
             }
 
             var category = GetCategory(model.CategoryTransactions);
@@ -295,18 +323,12 @@ namespace Core.Services
                 await repo.AddAsync(category);
             }
 
-            var transaction = new Transaction()
-            {
-                Name = model.Name,
-                CategoryId = category.Id,
-                Date = model.Date,
-                Amount = model.Amount,
-                Currency = (Currency)Enum.Parse(typeof(Currency), model.Currency),
-                TransactionType = (TransactionType)Enum.Parse(typeof(TransactionType), model.TransactionType),
-                FileId = dbFile.Id,
-                Description = model.Description,
-                CreatorName = userId,
-            };
+            transaction!.Name = model.Name;
+            transaction.Description = model.Description;
+            transaction.TransactionType = (TransactionType)Enum.Parse(typeof(TransactionType), model.TransactionType);           
+            transaction.Amount = model.Amount;
+            transaction.Currency = (Currency)Enum.Parse(typeof(Currency), model.Currency);
+            transaction.CategoryId = category.Id;           
 
             if (transaction == null)
             {
@@ -355,6 +377,17 @@ namespace Core.Services
             }
 
             return dbFile;
+        }
+
+        public string GetUserIdByName (string username)
+        {
+            var user =  repo.All<ApplicationUser>().Where(u => u.UserName == username).FirstOrDefault();
+            return user!.Id;
+        }
+        public string GetUserNameById (string userId)
+        {
+            var user = repo.All<ApplicationUser>().Where(u => u.Id == userId).FirstOrDefault();
+            return user!.UserName;
         }
     }
 }

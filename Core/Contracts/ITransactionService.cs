@@ -21,6 +21,7 @@ namespace Core.Contracts
 
         Task AddCategory (AddCategoryTransactionViewModel model);
         EditTransactionViewModel GetTransactionForEdit (string transactionId);
-        Task<bool> EditTransactionAsync (EditTransactionViewModel model, bool edited, string rootPath, object id, string userId);
+        Task<bool> EditTransactionAsync (EditTransactionViewModel model, bool edited, string rootPath, string id, string userId);
+        string GetUserIdByName (string username);
     }
 }

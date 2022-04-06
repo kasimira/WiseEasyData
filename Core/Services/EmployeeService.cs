@@ -335,6 +335,7 @@ namespace Core.Services
                 Grade = e.Grade.GetTypeCode().ToString(),
                 Status = e.Status.GetTypeCode().ToString(),
                 HireDate = e.HireDate.Date,
+                
             };
             return employee;
         }

@@ -2,6 +2,7 @@
 using Core.Contracts;
 using Core.Models.Transactions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -11,12 +12,14 @@ namespace WiseEasyData.Controllers
     {
         private readonly ITransactionService transactionService;
         private readonly IWebHostEnvironment webHostEnvironment;
+        //private readonly UserManager userMenager;
 
         public TransactionController (ITransactionService _transactionService,
             IWebHostEnvironment _webHostEnvironment)
         {
             transactionService = _transactionService;
             webHostEnvironment = _webHostEnvironment;
+            //userMenager = _userMenager; 
         }
 
         [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
@@ -61,7 +64,9 @@ namespace WiseEasyData.Controllers
                 return View(model);
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+           // var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var userId = transactionService.GetUserIdByName(User.Identity!.Name!);
+            //var user = await this.userManager.GetUserAsync(this.User);
 
             bool created = false;
             var rootPath = webHostEnvironment.WebRootPath;

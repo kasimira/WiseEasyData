@@ -19,8 +19,13 @@ namespace Core.Services
         private readonly IFileService fileService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public TransactionService (IApplicatioDbRepository _repo, 
-            ICommonService _commonService,IFileService _fileService,
+        private string[] colorsArray = { "#a362ea", "#fc5f9b", "#0ed095", "#0d6efd", "#fd7e14", "#d63384", "#dc3545", "#ffc107", "#198754", "#20c997", "#adb5bd", "#0dcaf0", "#6f42c1" };
+        private List<string> colors = new List<string>();
+        private string[] iconsArray = { "cash-outline", "wallet-outline", "receipt-outline", "journal-outline", "layers-outline","reader-outline", "calculator-outline", "card-outline","document-text-outline","reader-outline"};
+        private List<string> icons = new List<string>();
+        
+        public TransactionService (IApplicatioDbRepository _repo,
+            ICommonService _commonService, IFileService _fileService,
             UserManager<ApplicationUser> _userManager)
         {
             repo = _repo;
@@ -84,7 +89,6 @@ namespace Core.Services
                     await model.File.CopyToAsync(fs);
                 }
             }
-            
 
             var category = GetCategory(model.CategoryTransactions);
 
@@ -201,6 +205,8 @@ namespace Core.Services
         public async Task DeleteTransactionAsync (string transactionId)
         {
             var transaction = GetTransactionById(transactionId);
+            var category = repo.All<CategoryTransactions>().Where(c => c.Id == transaction.CategoryId).FirstOrDefault();
+            category!.Transactions.Remove(transaction);
 
             if (transaction!.FileId != null)
             {
@@ -208,6 +214,7 @@ namespace Core.Services
             }
 
             transaction.IsDeleted = true;
+
 
             await repo.SaveChangesAsync();
         }
@@ -280,7 +287,7 @@ namespace Core.Services
 
             if (transaction != null)
             {
-                if(userId != transaction.CreatorId)
+                if (userId != transaction.CreatorId)
                 {
                     throw new ArgumentException("You are not authorized to perform this action.");
                 }
@@ -290,7 +297,7 @@ namespace Core.Services
 
             if (model.File != null)
             {
-                if(transaction!.FileId != null)
+                if (transaction!.FileId != null)
                 {
                     var OldFile = fileService.GetFileById(transaction.FileId);
 
@@ -301,7 +308,7 @@ namespace Core.Services
                     await fileService.DeleteFile(fullPath, OldFile);
                 }
 
-                dbFile = await fileService.CreateFile(model, rootPath, userId);  
+                dbFile = await fileService.CreateFile(model, rootPath, userId);
                 transaction!.FileId = dbFile.Id;
                 await repo.AddAsync(dbFile);
             }
@@ -321,10 +328,10 @@ namespace Core.Services
 
             transaction!.Name = model.Name;
             transaction.Description = model.Description;
-            transaction.TransactionType = (TransactionType)Enum.Parse(typeof(TransactionType), model.TransactionType);           
+            transaction.TransactionType = (TransactionType)Enum.Parse(typeof(TransactionType), model.TransactionType);
             transaction.Amount = model.Amount;
             transaction.Currency = (Currency)Enum.Parse(typeof(Currency), model.Currency);
-            transaction.CategoryId = category.Id;                   
+            transaction.CategoryId = category.Id;
 
             category.Transactions.Add(transaction);
 
@@ -340,10 +347,10 @@ namespace Core.Services
 
             return (edited);
         }
-       
+
         public string GetUserIdByName (string username)
         {
-            var user =  repo.All<ApplicationUser>().Where(u => u.UserName == username).FirstOrDefault();
+            var user = repo.All<ApplicationUser>().Where(u => u.UserName == username).FirstOrDefault();
             return user!.Id;
         }
         public string GetUserNameById (string userId)
@@ -376,6 +383,92 @@ namespace Core.Services
         {
             return repo.All<Transaction>()
                 .Where(t => t.Id == transactionId).FirstOrDefault();
+        }
+
+        public ICollection<CategoryViewModel> GetCategories ()
+        {
+            colors.AddRange(colorsArray);
+            icons.AddRange(iconsArray);
+
+            List<CategoryViewModel> model = new List<CategoryViewModel>();
+
+            var categories = repo.AllReadonly<CategoryTransactions>().Where(c => c.IsDeleted == false)
+                .Select(c => new CategoryViewModel()
+                {
+                    Name = c.Name!,
+                    Id = c.Id,
+                    TransactionCount = c.Transactions.Count(),
+                    
+                }).ToList();
+
+            foreach (var item in categories)
+            {
+                item.Color = GetColor();
+                item.Icon = GetIcon();
+                model.Add(item);
+            }
+            
+            return model;   
+        }
+
+        private string GetColor ()
+        {
+            var color = colors.First();
+            colors.RemoveAt(0);
+            colors.Add(color);
+            return color;
+        }
+
+        private string GetIcon ()
+        {
+            var icon = icons.First();
+            icons.RemoveAt(0);
+            icons.Add(icon);
+            return icon;
+        }
+
+        public IEnumerable<AllCategoryTransactionsViewModel> GetCategoryTransactions (int page, int itemsPerPage, string categoryId)
+        {
+            var countTransactions = GetCategoryTransactionsCount(categoryId);
+
+            if (itemsPerPage > countTransactions)
+            {
+                itemsPerPage = countTransactions;
+            }
+
+            return repo.AllReadonly<Transaction>()
+                .Where(t => t.IsDeleted == false)
+                .Where(t => t.CategoryId == categoryId)
+                .OrderByDescending(t => t.Date)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .Select(t => new AllCategoryTransactionsViewModel()
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Amount = t.Amount,
+                    Currency = t.Currency,
+                    Date = t.Date.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+                    TransactionType = t.TransactionType,
+                    FileId = t.FileId!,
+                    Category = t.Category.Name!,
+                    CreatorName = t.CreatorName,
+                })
+                .ToList();
+        }
+
+        public int GetCategoryTransactionsCount (string categoryId)
+        {
+            int countTransaction = repo.AllReadonly<CategoryTransactions>().Where(c => c.Id == categoryId).Where(c => c.IsDeleted == false).Select(c => c.Transactions).Count();
+            return countTransaction;              
+        }
+
+        public decimal GetTotalAmounthTransactions (string categoryId)
+        {
+            decimal countTransaction = repo.AllReadonly<CategoryTransactions>()
+                .Where(c => c.Id == categoryId)
+                .Where(c => c.IsDeleted == false)
+                .Select(c => c.Transactions.Sum(t => t.Amount)).FirstOrDefault();
+            return countTransaction;
         }
     }
 }

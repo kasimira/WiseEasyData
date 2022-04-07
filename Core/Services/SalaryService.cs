@@ -105,7 +105,35 @@ namespace Core.Services
 
             return repo.AllReadonly<Salary>()
                 .OrderByDescending(t => t.TotalAmount)
-                .Where(s => s.FromDate.Month == DateTime.Now.Month -2)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .Select(s => new AllSalariesViewModel()
+                {
+                    Id = s.Id,
+                    TotalAmount = s.TotalAmount,
+                    HourlySalary = s.HourlySalary,
+                    FromDate = s.FromDate.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+                    ToDate = s.ToDate.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+                    HoursWorked = s.HoursWorked,
+                    EmployeeId = s.EmployeeId,
+                    EmployeeName = s.Employee!.FirstName + " " + s.Employee.LastName,
+                    InAdvance = s.InAdvance,
+                    TransferredPaymen = s.SalaryAmount,
+                })
+                .ToList();
+        }
+
+        public IEnumerable<AllSalariesViewModel> GetSalariesLastMonth (int page, int itemsPerPage)
+        {
+            var countSalaries = GetCountSalaries();
+
+            if (itemsPerPage > countSalaries)
+            {
+                itemsPerPage = countSalaries;
+            }
+
+            return repo.AllReadonly<Salary>()
+                .OrderByDescending(t => t.TotalAmount)
+                .Where(s => s.FromDate.Month == DateTime.Now.Month - 2)
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .Select(s => new AllSalariesViewModel()
                 {

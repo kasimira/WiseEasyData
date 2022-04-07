@@ -16,6 +16,20 @@ namespace WiseEasyData.Controllers
         }
 
         [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
+        public IActionResult AllLastMonth (int id = 1)
+        {
+            const int ItemsPerPage = 20;
+            var viewModel = new SalaryListViewModel
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                SalariesCount = salaryService.GetCountSalaries(),
+                Salaries = salaryService.GetSalariesLastMonth(id, ItemsPerPage),
+            };
+            return View(viewModel);
+        }
+
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
         public IActionResult All (int id = 1)
         {
             const int ItemsPerPage = 20;

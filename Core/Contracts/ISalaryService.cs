@@ -9,6 +9,8 @@ namespace Core.Contracts
 
         public IEnumerable<AllSalariesViewModel> GetSalaries (int id, int itemsPerPage);
 
+        public IEnumerable<AllSalariesViewModel> GetSalariesLastMonth (int id, int itemsPerPage);
+
         IEnumerable<SelectListItem>? GetAllEmployees ();
 
         Task<bool> AddSalaryAsync (AddSalaryViewModel model, bool created);

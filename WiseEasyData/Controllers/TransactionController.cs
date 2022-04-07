@@ -12,14 +12,12 @@ namespace WiseEasyData.Controllers
     {
         private readonly ITransactionService transactionService;
         private readonly IWebHostEnvironment webHostEnvironment;
-        //private readonly UserManager userMenager;
 
         public TransactionController (ITransactionService _transactionService,
             IWebHostEnvironment _webHostEnvironment)
         {
             transactionService = _transactionService;
-            webHostEnvironment = _webHostEnvironment;
-            //userMenager = _userMenager; 
+            webHostEnvironment = _webHostEnvironment; 
         }
 
         [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
@@ -34,12 +32,6 @@ namespace WiseEasyData.Controllers
                 Transactions = transactionService.GetTransactions(id, ItemsPerPage),
             };
             return View(viewModel);
-        }
-
-        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
-        public IActionResult AllTransactionsByCategory ()
-        {
-            return View();
         }
 
         [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
@@ -64,9 +56,7 @@ namespace WiseEasyData.Controllers
                 return View(model);
             }
 
-           // var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             var userId = transactionService.GetUserIdByName(User.Identity!.Name!);
-            //var user = await this.userManager.GetUserAsync(this.User);
 
             bool created = false;
             var rootPath = webHostEnvironment.WebRootPath;
@@ -177,6 +167,32 @@ namespace WiseEasyData.Controllers
             }
 
             return Redirect("/Transaction/Add");
+        }
+
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
+        public IActionResult AllTransactionsByCategory ()
+        {
+            var model = new CategoryListViewModel()
+            {
+                Categories = transactionService.GetCategories()
+            };
+            return View(model);
+        }
+
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor},{UserConstants.Roles.Guest}")]
+        public IActionResult CategoryTransactionsList (string categoryId, int id = 1)
+        {
+            const int ItemsPerPage = 6;
+            var viewModel = new CategoryTransactionsListViewModel
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                TransactionsCount = transactionService.GetCategoryTransactionsCount(categoryId),
+                Transactions = transactionService.GetCategoryTransactions(id, ItemsPerPage, categoryId),
+                Name = transactionService.GetCategoryName(categoryId),
+                TotalAmounth = transactionService.GetTotalAmounthTransactions(categoryId)
+            };
+            return View(viewModel);          
         }
     }
 }

@@ -21,7 +21,5 @@ namespace Core.Contracts
         public Department GetDepartmentById (string departmentId);
 
         public SubmittedFile GetFileById (string imageId);
-
-        void DeleteFile (string fileId);
     }
 }

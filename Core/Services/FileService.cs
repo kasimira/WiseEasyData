@@ -1,5 +1,6 @@
 ﻿using Core.Contracts;
 using Core.Models.File;
+using Core.Models.Transactions;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
 using System.Globalization;
@@ -13,6 +14,22 @@ namespace Core.Services
         public FileService (IApplicatioDbRepository _repo)
         {
             repo = _repo;
+        }
+
+        public void ChangeFileIsDeletedTrue (string fileId)
+        {
+            var file = GetFileById(fileId);
+            file.IsDeleted = true;
+        }
+
+        public async Task DeleteFile (string fullPath, SubmittedFile file)
+        {
+            await repo.DeleteAsync<SubmittedFile>(file.Id);
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
         }
 
         public IEnumerable<AllFilesViewModel> GetAllFiles (int page, int itemsPerPage)
@@ -41,6 +58,11 @@ namespace Core.Services
             .ToList();
         }
 
+        public SubmittedFile GetFileById (string fileId)
+        {
+            return repo.All<SubmittedFile>().Where(f => f.Id == fileId).FirstOrDefault();
+        }
+
         public string GetFileNameById (string fileId)
         {
             var currentfile = repo.AllReadonly<SubmittedFile>().Where(i => i.Id == fileId).FirstOrDefault();
@@ -57,6 +79,29 @@ namespace Core.Services
         {
             return repo.AllReadonly<SubmittedFile>().Where(e => e.IsDeleted == false)
             .Where(e => e.IsImage == false).Count();
+        }
+
+        public async Task<SubmittedFile> CreateFile (EditTransactionViewModel model, string rootPath, string userId)
+        {
+            var extension = Path.GetExtension(model.File!.FileName).TrimStart('.');
+
+            var dbFile = new SubmittedFile()
+            {
+                OwnerId = userId,
+                Extension = extension,
+                IsImage = false,
+                TransactionName = model.Name,
+            };
+
+            Directory.CreateDirectory($"{rootPath}/files/transaction/");
+            var physicalPath = $"{rootPath}/files/transaction/{dbFile.Id}.{extension}";
+
+            using (FileStream fs = new FileStream(physicalPath, FileMode.Create))
+            {
+                await model.File.CopyToAsync(fs);
+            }
+
+            return dbFile;
         }
     }
 }

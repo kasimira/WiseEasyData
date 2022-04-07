@@ -86,11 +86,5 @@ namespace Core.Services
         {
             return repo.All<SubmittedFile>().Where(e => e.Id == imageId).FirstOrDefault();
         }
-
-        public void DeleteFile (string fileId)
-        {
-            var file = GetFileById(fileId);
-            file.IsDeleted = true;
-        }
     }
 }

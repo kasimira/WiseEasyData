@@ -13,11 +13,13 @@ namespace Core.Services
     {
         private readonly IApplicatioDbRepository repo;
         private readonly ICommonService commonService;
+        private readonly IFileService fileService;
 
-        public EmployeeService (IApplicatioDbRepository _repo, ICommonService _commonService)
+        public EmployeeService (IApplicatioDbRepository _repo, ICommonService _commonService, IFileService _fileService)
         {
             repo = _repo;
             commonService = _commonService;
+            fileService = _fileService;
         }
 
         public async Task<bool> AddEmployeeAsync (AddEmployeeViewModel model, bool created, string rootPath, string userId, string userName)
@@ -157,7 +159,7 @@ namespace Core.Services
 
             if (imageId != null)
             {
-                var imageInfo = repo.AllReadonly<SubmittedFile>().Where(i => i.Id == imageId).FirstOrDefault();
+                var imageInfo = fileService.GetFileById(imageId);
                 image = $"{imageId}.{imageInfo!.Extension}";
             }
             else
@@ -227,8 +229,14 @@ namespace Core.Services
             if (model.Image != null)
             {
                 if (employee.ImageId != null)
-                {
-                    commonService.DeleteFile(employee.ImageId);
+                {                   
+                    var OldImage = fileService.GetFileById(employee.ImageId);
+
+                    OldImage!.IsDeleted = true;
+
+                    var fullPath = $"{rootPath}/images/employees/{OldImage.Id}.{OldImage.Extension}";
+
+                    await fileService.DeleteFile(fullPath, OldImage);
                 }
 
                 var extension = Path.GetExtension(model.Image.FileName).TrimStart('.');
@@ -295,7 +303,7 @@ namespace Core.Services
 
             if (employee.ImageId != null)
             {
-                commonService.DeleteFile(employee.ImageId);
+                fileService.ChangeFileIsDeletedTrue(employee.ImageId);
             }
 
             employee.IsDeleted = true;

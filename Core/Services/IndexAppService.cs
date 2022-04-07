@@ -51,31 +51,31 @@ namespace Core.Services
 
                 switch (age)
                 {
-                    case < 25:
+                    case <= 25:
                         age25++;
                         break;
-                    case < 30:
+                    case <= 30:
                         age30++;
                         break;
-                    case < 35:
+                    case <= 35:
                         age35++;
                         break;
-                    case < 40:
+                    case <= 40:
                         age40++;
                         break;
-                    case < 45:
+                    case <= 45:
                         age45++;
                         break;
-                    case < 50:
+                    case <= 50:
                         age50++;
                         break;
-                    case < 55:
+                    case <= 55:
                         age55++;
                         break;
-                    case < 60:
+                    case <= 60:
                         age60++;
                         break;
-                    case < 65:
+                    case <= 65:
                         age65++;
                         break;
                     case > 65:

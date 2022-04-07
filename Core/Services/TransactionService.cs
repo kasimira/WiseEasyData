@@ -16,14 +16,16 @@ namespace Core.Services
 
         private readonly IApplicatioDbRepository repo;
         private readonly ICommonService commonService;
+        private readonly IFileService fileService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public TransactionService (IApplicatioDbRepository _repo, 
-            ICommonService _commonService,
+            ICommonService _commonService,IFileService _fileService,
             UserManager<ApplicationUser> _userManager)
         {
             repo = _repo;
             commonService = _commonService;
+            fileService = _fileService;
             userManager = _userManager;
         }
 
@@ -82,6 +84,7 @@ namespace Core.Services
                     await model.File.CopyToAsync(fs);
                 }
             }
+            
 
             var category = GetCategory(model.CategoryTransactions);
 
@@ -146,7 +149,7 @@ namespace Core.Services
 
             if (fileId != null)
             {
-                var currentfile = repo.AllReadonly<SubmittedFile>().Where(i => i.Id == fileId).FirstOrDefault();
+                var currentfile = fileService.GetFileById(fileId);
 
                 file = $"{fileId}.{currentfile!.Extension}";
 
@@ -164,6 +167,7 @@ namespace Core.Services
             else
             {
                 file = "noFile.jpg";
+                imageFile = "noFileUpload.jpg";
             }
 
             var transaction = repo.AllReadonly<Transaction>().Where(e => e.Id == id)
@@ -194,33 +198,13 @@ namespace Core.Services
             return transaction;
         }
 
-        public string GetCategoryName (string cateroryId)
+        public async Task DeleteTransactionAsync (string transactionId)
         {
-            return repo.AllReadonly<CategoryTransactions>().Where(c => c.Id == cateroryId).Select(c => c.Name).FirstOrDefault();
-        }
-
-        public CategoryTransactions GetCategory (string cateroryId)
-        {
-            return repo.AllReadonly<CategoryTransactions>().Where(c => c.Id == cateroryId).FirstOrDefault();
-        }
-
-        public CategoryTransactions GetCategoryByName (string cateroryName)
-        {
-            return repo.AllReadonly<CategoryTransactions>().Where(c => c.Name == cateroryName).FirstOrDefault();
-        }
-
-        public int GetCountTransactions ()
-        {
-            return repo.AllReadonly<Transaction>().Where(t => t.IsDeleted == false).Count();
-        }
-
-        public async Task DeleteTransactionAsync (string id)
-        {
-            var transaction = repo.All<Transaction>().Where(e => e.Id == id).FirstOrDefault();
+            var transaction = GetTransactionById(transactionId);
 
             if (transaction!.FileId != null)
             {
-                commonService.DeleteFile(transaction.FileId);
+                fileService.ChangeFileIsDeletedTrue(transaction.FileId);
             }
 
             transaction.IsDeleted = true;
@@ -271,8 +255,8 @@ namespace Core.Services
 
         public EditTransactionViewModel GetTransactionForEdit (string transactionId)
         {
-            var transaction = repo.All<Transaction>()
-                .Where(t => t.Id == transactionId).FirstOrDefault();
+            var transaction = GetTransactionById(transactionId);
+
             var transactionModel = new EditTransactionViewModel()
             {
                 Name = transaction!.Name,
@@ -292,9 +276,9 @@ namespace Core.Services
 
         public async Task<bool> EditTransactionAsync (EditTransactionViewModel model, bool edited, string rootPath, string transactionId, string userId)
         {
-            var transaction = repo.AllReadonly<Transaction>().Where(t => t.Id == transactionId).FirstOrDefault();
+            var transaction = GetTransactionById(transactionId);
 
-            if(transaction != null)
+            if (transaction != null)
             {
                 if(userId != transaction.CreatorId)
                 {
@@ -306,8 +290,20 @@ namespace Core.Services
 
             if (model.File != null)
             {
-                dbFile = await CreateFile(model, rootPath, userId);  
+                if(transaction!.FileId != null)
+                {
+                    var OldFile = fileService.GetFileById(transaction.FileId);
+
+                    OldFile!.IsDeleted = true;
+
+                    var fullPath = $"{rootPath}/files/transaction/{OldFile.Id}.{OldFile.Extension}";
+
+                    await fileService.DeleteFile(fullPath, OldFile);
+                }
+
+                dbFile = await fileService.CreateFile(model, rootPath, userId);  
                 transaction!.FileId = dbFile.Id;
+                await repo.AddAsync(dbFile);
             }
 
             var category = GetCategory(model.CategoryTransactions);
@@ -328,23 +324,12 @@ namespace Core.Services
             transaction.TransactionType = (TransactionType)Enum.Parse(typeof(TransactionType), model.TransactionType);           
             transaction.Amount = model.Amount;
             transaction.Currency = (Currency)Enum.Parse(typeof(Currency), model.Currency);
-            transaction.CategoryId = category.Id;           
-
-            if (transaction == null)
-            {
-                throw new Exception("Transaction is null.");
-            }
-
-            if (dbFile != null)
-            {
-                await repo.AddAsync(dbFile);
-            }
+            transaction.CategoryId = category.Id;                   
 
             category.Transactions.Add(transaction);
 
             try
             {
-                await repo.AddAsync(transaction);
                 await repo.SaveChangesAsync();
                 edited = true;
             }
@@ -355,30 +340,7 @@ namespace Core.Services
 
             return (edited);
         }
-
-        private async Task<SubmittedFile> CreateFile (EditTransactionViewModel model, string rootPath, string userId)
-        {
-            var extension = Path.GetExtension(model.File!.FileName).TrimStart('.');
-
-            var dbFile = new SubmittedFile()
-            {
-                OwnerId = userId,
-                Extension = extension,
-                IsImage = false,
-                TransactionName = model.Name,
-            };
-           
-            Directory.CreateDirectory($"{rootPath}/files/transaction/");
-            var physicalPath = $"{rootPath}/files/transaction/{dbFile.Id}.{extension}";
-
-            using (FileStream fs = new FileStream(physicalPath, FileMode.Create))
-            {
-                 await model.File.CopyToAsync(fs);
-            }
-
-            return dbFile;
-        }
-
+       
         public string GetUserIdByName (string username)
         {
             var user =  repo.All<ApplicationUser>().Where(u => u.UserName == username).FirstOrDefault();
@@ -388,6 +350,32 @@ namespace Core.Services
         {
             var user = repo.All<ApplicationUser>().Where(u => u.Id == userId).FirstOrDefault();
             return user!.UserName;
+        }
+
+        public string GetCategoryName (string cateroryId)
+        {
+            return repo.AllReadonly<CategoryTransactions>().Where(c => c.Id == cateroryId).Select(c => c.Name).FirstOrDefault();
+        }
+
+        public CategoryTransactions GetCategory (string cateroryId)
+        {
+            return repo.AllReadonly<CategoryTransactions>().Where(c => c.Id == cateroryId).FirstOrDefault();
+        }
+
+        public CategoryTransactions GetCategoryByName (string cateroryName)
+        {
+            return repo.AllReadonly<CategoryTransactions>().Where(c => c.Name == cateroryName).FirstOrDefault();
+        }
+
+        public int GetCountTransactions ()
+        {
+            return repo.AllReadonly<Transaction>().Where(t => t.IsDeleted == false).Count();
+        }
+
+        public Transaction GetTransactionById (string transactionId)
+        {
+            return repo.All<Transaction>()
+                .Where(t => t.Id == transactionId).FirstOrDefault();
         }
     }
 }

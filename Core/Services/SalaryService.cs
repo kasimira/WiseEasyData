@@ -105,7 +105,7 @@ namespace Core.Services
 
             return repo.AllReadonly<Salary>()
                 .OrderByDescending(t => t.TotalAmount)
-                .Where(s => s.FromDate.Month == DateTime.Now.Month -1)
+                .Where(s => s.FromDate.Month == DateTime.Now.Month -2)
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .Select(s => new AllSalariesViewModel()
                 {
@@ -194,6 +194,12 @@ namespace Core.Services
             salary.TotalAmount = model.TotalAmount;
             salary.InAdvance = model.InAdvance;
 
+            await repo.SaveChangesAsync();
+        }
+
+        public async Task DeleteSalaryAsync (string salaryId)
+        {
+            await repo.DeleteAsync<Salary>(salaryId);
             await repo.SaveChangesAsync();
         }
     }

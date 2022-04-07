@@ -115,6 +115,10 @@ namespace Test
                 Assert.CatchAsync<ArgumentException>(async () => await service!.AddCategory(model), "The category already exists.");
             }
 
+
+
+
+
             [TearDown]
             public void TearDown ()
             {

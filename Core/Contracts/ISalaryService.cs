@@ -22,5 +22,6 @@ namespace Core.Contracts
         EditSalaryViewModel GetSalaryInfo (string salaryId);
 
         Task EditSalaryAsync (EditSalaryViewModel model, string salaryId);
+        Task DeleteSalaryAsync (string salaryId);
     }
 }

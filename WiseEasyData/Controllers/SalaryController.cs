@@ -104,5 +104,21 @@ namespace WiseEasyData.Controllers
             return Redirect("/Salary/All");
         }
 
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
+        public async Task<IActionResult> Delete (string salaryId)
+        {
+            try
+            {
+                await salaryService.DeleteSalaryAsync(salaryId);
+
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error for delete salary.");
+
+            }
+
+            return Redirect("/Salary/All");
+        }
     }
 }

@@ -190,7 +190,8 @@ namespace WiseEasyData.Controllers
                 TransactionsCount = transactionService.GetCategoryTransactionsCount(categoryId),
                 Transactions = transactionService.GetCategoryTransactions(id, ItemsPerPage, categoryId),
                 Name = transactionService.GetCategoryName(categoryId),
-                TotalAmounth = transactionService.GetTotalAmounthTransactions(categoryId)
+                TotalAmounth = transactionService.GetTotalAmounthTransactions(categoryId),
+                Id = categoryId
             };
             return View(viewModel);          
         }

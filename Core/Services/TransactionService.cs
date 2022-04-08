@@ -458,7 +458,13 @@ namespace Core.Services
 
         public int GetCategoryTransactionsCount (string categoryId)
         {
-            int countTransaction = repo.AllReadonly<CategoryTransactions>().Where(c => c.Id == categoryId).Where(c => c.IsDeleted == false).Select(c => c.Transactions).Count();
+            int countTransaction = repo.AllReadonly<CategoryTransactions>()
+                .Where(c => c.Id == categoryId)
+                .Where(c => c.IsDeleted == false)
+                .Select(c => c.Transactions.Count())
+                .FirstOrDefault();
+              
+                
             return countTransaction;              
         }
 

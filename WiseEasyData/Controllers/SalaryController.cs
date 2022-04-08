@@ -91,7 +91,8 @@ namespace WiseEasyData.Controllers
                 PageNumber = id,
                 SalariesCount = salaryService.GetCountSalaries(),
                 Salaries = salaryService.GetSalariesEmployee(id, ItemsPerPage, employeeId),
-                EmployeeName = salaryService.GetEmployeeName(employeeId)
+                EmployeeName = salaryService.GetEmployeeName(employeeId),
+                Id = employeeId
             };
             return View(viewModel);
         }

@@ -21,5 +21,7 @@
         public int ItemsPerPage { get; set; }
 
         public string EmployeeName { get; set; }
+
+        public string Id { get; set; }
     }
 }

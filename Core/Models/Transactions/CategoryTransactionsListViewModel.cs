@@ -23,5 +23,7 @@
         public string Name { get; set; }
 
         public decimal TotalAmounth { get; set; }
+
+        public string Id { get; set; }
     }
 }

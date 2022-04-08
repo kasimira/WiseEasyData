@@ -100,7 +100,10 @@ namespace Core.Services
                 throw new Exception("Employee is null.");
             }
 
-            await repo.AddAsync(dbFile);
+            if (dbFile != null)
+            {
+                await repo.AddAsync(dbFile);
+            }
 
             city.Employees.Add(employee);
 
@@ -229,7 +232,7 @@ namespace Core.Services
             if (model.Image != null)
             {
                 if (employee.ImageId != null)
-                {                   
+                {
                     var OldImage = fileService.GetFileById(employee.ImageId);
 
                     OldImage!.IsDeleted = true;
@@ -343,7 +346,7 @@ namespace Core.Services
                 Grade = e.Grade.GetTypeCode().ToString(),
                 Status = e.Status.GetTypeCode().ToString(),
                 HireDate = e.HireDate.Date,
-                
+
             };
             return employee;
         }
@@ -372,9 +375,9 @@ namespace Core.Services
             var employee = GetEmployee(id);
 
             var employeeForDelete = new DeleteEmployeeViewModel
-            {            
+            {
                 Id = id,
-                Name = employee.FirstName + " " + employee.LastName, 
+                Name = employee.FirstName + " " + employee.LastName,
                 HireDate = employee.HireDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
             };
 

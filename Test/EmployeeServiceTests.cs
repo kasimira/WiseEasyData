@@ -28,6 +28,7 @@ namespace Test
                 .AddSingleton<IApplicatioDbRepository, ApplicatioDbRepository>()
                 .AddSingleton<IEmployeeService, EmployeeService>()
                 .AddSingleton<ICommonService, CommonService>()
+                .AddSingleton<IFileService, FileService>()
                 .BuildServiceProvider();
 
             var repo = serviceProvider.GetService<IApplicatioDbRepository>();

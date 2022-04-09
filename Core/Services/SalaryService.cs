@@ -52,9 +52,9 @@ namespace Core.Services
                 await repo.SaveChangesAsync();
                 created = true;
             }
-            catch (Exception)
+            catch (ArgumentException)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Without successfully adding salary.");
             }
 
             return (created);

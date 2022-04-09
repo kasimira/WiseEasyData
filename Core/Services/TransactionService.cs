@@ -4,10 +4,8 @@ using Infrastructure.Data;
 using Infrastructure.Data.Enums;
 using Infrastructure.Data.Identity;
 using Infrastructure.Data.Repositories;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
-
 
 namespace Core.Services
 {
@@ -15,23 +13,17 @@ namespace Core.Services
     {
 
         private readonly IApplicatioDbRepository repo;
-        private readonly ICommonService commonService;
         private readonly IFileService fileService;
-        private readonly UserManager<ApplicationUser> userManager;
 
         private string[] colorsArray = { "#a362ea", "#fc5f9b", "#0ed095", "#0d6efd", "#fd7e14", "#d63384", "#dc3545", "#ffc107", "#198754", "#20c997", "#adb5bd", "#0dcaf0", "#6f42c1" };
         private List<string> colors = new List<string>();
-        private string[] iconsArray = { "cash-outline", "wallet-outline", "receipt-outline", "journal-outline", "layers-outline","reader-outline", "calculator-outline", "card-outline","document-text-outline","reader-outline"};
+        private string[] iconsArray = { "cash-outline", "wallet-outline", "receipt-outline", "journal-outline", "layers-outline", "reader-outline", "calculator-outline", "card-outline", "document-text-outline", "reader-outline" };
         private List<string> icons = new List<string>();
-        
-        public TransactionService (IApplicatioDbRepository _repo,
-            ICommonService _commonService, IFileService _fileService,
-            UserManager<ApplicationUser> _userManager)
+
+        public TransactionService (IApplicatioDbRepository _repo, IFileService _fileService)
         {
             repo = _repo;
-            commonService = _commonService;
             fileService = _fileService;
-            userManager = _userManager;
         }
 
         public IEnumerable<AllTransactionsViewModel> GetTransactions (int page, int itemsPerPage)
@@ -119,7 +111,6 @@ namespace Core.Services
 
             if (transaction == null)
             {
-
                 throw new Exception("Transaction is null.");
             }
 
@@ -398,7 +389,7 @@ namespace Core.Services
                     Name = c.Name!,
                     Id = c.Id,
                     TransactionCount = c.Transactions.Count(),
-                    
+
                 }).ToList();
 
             foreach (var item in categories)
@@ -407,8 +398,8 @@ namespace Core.Services
                 item.Icon = GetIcon();
                 model.Add(item);
             }
-            
-            return model;   
+
+            return model;
         }
 
         private string GetColor ()
@@ -463,9 +454,9 @@ namespace Core.Services
                 .Where(c => c.IsDeleted == false)
                 .Select(c => c.Transactions.Count())
                 .FirstOrDefault();
-              
-                
-            return countTransaction;              
+
+
+            return countTransaction;
         }
 
         public decimal GetTotalAmounthTransactions (string categoryId)

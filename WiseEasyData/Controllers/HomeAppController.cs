@@ -23,5 +23,26 @@ namespace WiseEasyData.Controllers
 
             return View(infoDashboard);
         }
+
+        public IActionResult StatisticsExpenses ()
+        {
+            var infoStatistics = indexAppService.GetInfoStatisticsExpenses();
+
+            return View(infoStatistics);
+        }
+
+        public IActionResult StatisticsIncomes ()
+        {
+            var infoStatistics = indexAppService.GetInfoStatisticsIncomes();
+
+            return View(infoStatistics);
+        }
+
+        public IActionResult StatisticsSalaries ()
+        {
+            var infoStatistics = indexAppService.GetInfoStatisticsSalaries();
+
+            return View(infoStatistics);
+        }
     }
 }

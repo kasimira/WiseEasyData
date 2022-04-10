@@ -1,4 +1,4 @@
-﻿using Core.Models;
+﻿using Core.Models.Dashboard;
 
 namespace Core.Contracts
 {
@@ -7,5 +7,9 @@ namespace Core.Contracts
         public IndexAppViewModel GetInfo ();
 
         public IEnumerable<DataPoint> GetDataPoint ();
+
+        StatisticsAppListViewModel GetInfoStatisticsExpenses ();
+        StatisticsAppListViewModel GetInfoStatisticsIncomes ();
+        StatisticsAppListViewModel GetInfoStatisticsSalaries ();
     }
 }

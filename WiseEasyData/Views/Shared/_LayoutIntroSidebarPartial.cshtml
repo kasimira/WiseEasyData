@@ -27,6 +27,23 @@
         </li>
         <li class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
+                <i class="bi bi-bar-chart-line-fill"></i>
+                <span>Statistics </span>
+            </a>
+            <ul class="submenu ">
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="HomeApp" asp-action="StatisticsExpenses" title="Manage">Expenses this Year</a>
+                </li>
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="HomeApp" asp-action="StatisticsIncomes" title="Manage">Incomes this Year</a>
+                </li>
+                <li class="submenu-item ">
+                    <a class="sidebar-link" asp-area="" asp-controller="HomeApp" asp-action="StatisticsSalaries" title="Manage">Salaries this Year</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item  has-sub">
+            <a href="#" class='sidebar-link'>
                 <i class="bi bi-globe"></i>
                 <span>Clients</span>
             </a>
@@ -151,9 +168,6 @@
                 <ul class="submenu ">
                     <li class="submenu-item ">
                         <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="All">All Files</a>
-                    </li>
-                    <li class="submenu-item ">
-                        <a class="sidebar-link" asp-area="" asp-controller="File" asp-action="Add">Add new Folder</a>
                     </li>
                 </ul>
             }

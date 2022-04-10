@@ -1,6 +1,6 @@
 ﻿using Core.Models.Employee;
 
-namespace Core.Models
+namespace Core.Models.Dashboard
 {
     public class IndexAppViewModel
     {
@@ -25,8 +25,5 @@ namespace Core.Models
         public IEnumerable<LastTransactionsViewModel> LastTransactions { get; set; }
 
         public IEnumerable<LastAddedEmployeesViewModel> LastEmployees { get; set; }
-
     }
 }
-
-

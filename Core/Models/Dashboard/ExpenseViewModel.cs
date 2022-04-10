@@ -1,4 +1,4 @@
-﻿namespace Core.Models
+﻿namespace Core.Models.Dashboard
 {
     public class ExpenseViewModel
     {

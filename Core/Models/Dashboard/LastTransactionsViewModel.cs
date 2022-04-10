@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Data.Enums;
 
-namespace Core.Models
+namespace Core.Models.Dashboard
 {
     public class LastTransactionsViewModel
     {
@@ -10,4 +10,3 @@ namespace Core.Models
         public TransactionType Type { get; set; }
     }
 }
-

@@ -1,5 +1,5 @@
 ﻿using Core.Contracts;
-using Core.Models;
+using Core.Models.Dashboard;
 using Core.Models.Employee;
 using Infrastructure.Data;
 using Infrastructure.Data.Enums;
@@ -131,7 +131,7 @@ namespace Core.Services
 
             var totalSalary = repo.AllReadonly<Employee>().Where(e => e.IsDeleted == false)
                 .SelectMany(e => e.Salaries)
-                .Where(d => d.FromDate.Month == DateTime.Now.Month -1)
+                .Where(d => d.FromDate.Month == DateTime.Now.Month - 1)
                 .Sum(e => e.TotalAmount);
 
             var totalExpenses = repo.AllReadonly<Transaction>()
@@ -247,6 +247,78 @@ namespace Core.Services
             };
 
             return info;
+        }
+
+        public StatisticsAppListViewModel GetInfoStatisticsExpenses ()
+        {
+            List<ExpenseViewModel> expeseCategories = new List<ExpenseViewModel>();
+            List<StatisticsAppViewModel> statistics = new List<StatisticsAppViewModel>();
+            var firtsTransaction = repo.AllReadonly<Transaction>()
+                .Where(t => t.IsDeleted == false)
+                .Where(t => t.Date.Year == DateTime.Now.Year -1)
+                .OrderBy(t => t.Date)
+                .FirstOrDefault();
+            if(firtsTransaction == null)
+            {
+               
+            }
+            var firstMonth = firtsTransaction!.Date.Month;
+            var monthNow = DateTime.Now.Month;
+            var numberOfMonths = monthNow - firstMonth;
+            var currentMonth = firstMonth;
+            decimal totalExpenses = 0;
+
+            for (int i = 0; i < numberOfMonths; i++)
+            {
+                expeseCategories = repo.All<Transaction>()
+                .Include("Category")
+                .Where(c => c.Category.Id == c.CategoryId)
+                .Where(t => t.TransactionType == TransactionType.Expense)
+                .Where(t => t.IsDeleted == false)
+                .Where(t => t.Date.Month == currentMonth)
+                .ToList()
+                .GroupBy(c => c.Category.Name)
+                .Select(c => new ExpenseViewModel
+                {
+                    Amount = c.Sum(b => b.Amount),
+                    CategoryName = c.Key!
+                })
+                .OrderBy(c => c.Amount)
+                .ToList();
+
+                totalExpenses = repo.AllReadonly<Transaction>()
+               .Where(c => c.IsDeleted == false)
+               .Where(c => c.TransactionType == TransactionType.Expense)
+               .Where(d => d.Date.Month == currentMonth)
+               .Sum(c => c.Amount);
+
+                var statisticMonth = new StatisticsAppViewModel()
+                {
+                    Expenses = expeseCategories,
+                    TotalExpenses = totalExpenses,
+                    // Month = DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(currentMonth)
+                    Month = $"{currentMonth}/{DateTime.Now.Year}"
+                };
+                statistics.Add(statisticMonth);
+                currentMonth++;
+            }
+
+            var model = new StatisticsAppListViewModel()
+            {
+                Statistics = statistics,
+            };
+
+            return model;
+        }
+
+        public StatisticsAppListViewModel GetInfoStatisticsIncomes ()
+        {
+            throw new NotImplementedException();
+        }
+
+        public StatisticsAppListViewModel GetInfoStatisticsSalaries ()
+        {
+            throw new NotImplementedException();
         }
     }
 }

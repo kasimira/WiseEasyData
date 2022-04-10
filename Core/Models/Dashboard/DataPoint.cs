@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Core.Models
+namespace Core.Models.Dashboard
 {
     [DataContract]
     public class DataPoint

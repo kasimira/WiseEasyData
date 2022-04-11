@@ -104,14 +104,36 @@
                     <li class="submenu-item ">
                         <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="Add">Add new Employee</a>
                     </li>
+                </ul>
+            }
+        </li>
+        <li class="sidebar-item  has-sub">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-card-checklist"></i>
+                <span>Salaries</span>
+            </a>
+            @if (User.IsInRole("Guest"))
+            {
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Salary" asp-action="All">All Salaries</a>
+                    </li>
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Salary" asp-action="AllLastMonth">Salaries for the last month</a>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <ul class="submenu ">
+                    <li class="submenu-item ">
+                        <a class="sidebar-link" asp-area="" asp-controller="Salary" asp-action="All">All Salaries</a>
+                    </li>
                     <li class="submenu-item ">
                         <a class="sidebar-link" asp-area="" asp-controller="Salary" asp-action="AllLastMonth">Salaries for the last month</a>
                     </li>
                     <li class="submenu-item ">
                         <a class="sidebar-link" asp-area="" asp-controller="Salary" asp-action="Add">Add Salary</a>
-                    </li>
-                    <li class="submenu-item ">
-                        <a class="sidebar-link" asp-area="" asp-controller="Salary" asp-action="All">All Salaries</a>
                     </li>
                 </ul>
             }

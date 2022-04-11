@@ -189,20 +189,20 @@ namespace Core.Services
 
         public EditSalaryViewModel GetSalaryInfo (string salaryId)
         {
-           var salary = repo.AllReadonly<Salary>()
-                .Where(s => s.Id == salaryId)
-                .Select(s => new EditSalaryViewModel()
-                {
-                    InAdvance = s.InAdvance,
-                    TotalAmount = s.TotalAmount,
-                    EmployeeName = s.Employee!.FirstName + " " + s.Employee.LastName,
-                    FromDate = s.FromDate,
-                    ToDate = s.ToDate,
-                    Salary = s.SalaryAmount,
-                    HoursWorked = (int)s.HoursWorked,
-                    Note = s.Note
+            var salary = repo.AllReadonly<Salary>()
+                 .Where(s => s.Id == salaryId)
+                 .Select(s => new EditSalaryViewModel()
+                 {
+                     InAdvance = s.InAdvance,
+                     TotalAmount = s.TotalAmount,
+                     EmployeeName = s.Employee!.FirstName + " " + s.Employee.LastName,
+                     FromDate = s.FromDate,
+                     ToDate = s.ToDate,
+                     Salary = s.SalaryAmount,
+                     HoursWorked = (int)s.HoursWorked,
+                     Note = s.Note
 
-                }).FirstOrDefault();
+                 }).FirstOrDefault();
 
             return salary;
         }
@@ -223,6 +223,32 @@ namespace Core.Services
             salary.InAdvance = model.InAdvance;
 
             await repo.SaveChangesAsync();
+        }
+
+        public async Task<DeleteSalaryViewModel> GetSalaryForDelete (string id)
+        {
+            var salary = repo.All<Salary>()
+                .Where(s => s.Id == id)
+                .FirstOrDefault();
+
+            if (salary == null)
+            {
+                throw new Exception("Salary is null.");
+            };
+
+            var employeeName = GetEmployeeName(salary.EmployeeId);
+
+            var model = new DeleteSalaryViewModel()
+            {
+                EmployeeName = employeeName,
+                FromDate = salary.FromDate.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+                ToDate = salary.ToDate.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+                HoursWorked = salary.HoursWorked,
+                Id = salary.Id,
+                TotalAmount = salary.TotalAmount,
+            };
+
+            return model;
         }
 
         public async Task DeleteSalaryAsync (string salaryId)

@@ -120,7 +120,7 @@ namespace WiseEasyData.Controllers
         }
 
         [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
-        public async Task<IActionResult> Delete (string salaryId)
+        public async Task<IActionResult> DeleteSalary (string salaryId)
         {
             try
             {
@@ -134,6 +134,24 @@ namespace WiseEasyData.Controllers
             }
 
             return Redirect("/Salary/All");
+        }
+
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
+        public async Task<IActionResult> Delete (string salaryId)
+        {
+            DeleteSalaryViewModel model;
+            try
+            {
+                model = await salaryService.GetSalaryForDelete(salaryId);
+
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error for delete salary.");
+
+            }
+
+            return View(model);
         }
     }
 }

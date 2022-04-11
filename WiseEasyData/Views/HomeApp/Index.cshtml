@@ -138,7 +138,7 @@
                                     <div class="col-6 col-lg-9">
                                         @foreach (var item in Model.Expenses)
                                         {
-                                            var sumex = Math.Ceiling(item.Amount * 100 / Model.TotalExpensesMonth);
+                                            var sumex = Math.Round(item.Amount * 100 / Model.TotalExpensesMonth);
 
                                             <p>@item.CategoryName <span class="float-right">@sumex%</span></p>
                                             <div class="progress mb-3" style="height: 5px;">

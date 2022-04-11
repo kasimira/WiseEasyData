@@ -1,0 +1,135 @@
+﻿@using Core.Models
+@using Core.Models.Client
+@using Infrastructure.Data.Enums
+@model AddClientViewModel
+@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_LayoutIntro";
+}
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Add</h3>
+                <p class="text-subtitle text-muted">Please complete the client information.</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="HomeApp" asp-action="Index">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Add</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="container-xl px-4 mt-4">
+        <div class="row">
+            <div class="col-xl-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title">Add new Client</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="row gx-3 mb-3">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputName">Name</label>
+                                    <input class="form-control" id="inputName" type="text" asp-for="Name">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputVatNumber">Vat Number</label>
+                                    <input class="form-control" id="inputVatNumber" type="text" asp-for="VatNumber">
+                                    <span asp-validation-for="VatNumber" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputCeoName">Ceo Name</label>
+                                    <input class="form-control" id="inputCeoName" type="text" asp-for="CeoName">
+                                    <span asp-validation-for="CeoName" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputWebsite">Website</label>
+                                    <input class="form-control" id="inputWebsite" type="text" asp-for="Website">
+                                    <span asp-validation-for="Website" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                                    <input class="form-control" id="inputEmailAddress" type="email" asp-for="Email">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputEmailAddress2">Email address 2</label>
+                                    <input class="form-control" id="inputEmailAddress2" type="email" asp-for="Email2">
+                                    <span asp-validation-for="Email2" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputPhone">Phone Number</label>
+                                    <input class="form-control" id="inputPhone" type="tel" asp-for="PhoneNumber">
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputMobilePhone">Mobile Phone</label>
+                                    <input class="form-control" id="inputMobilePhone" type="tel" asp-for="MobilePhone">
+                                    <span asp-validation-for="MobilePhone" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputAddress">Address</label>
+                                    <input class="form-control" id="inputAddress" type="text" asp-for="Address">
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputCity">City</label>
+                                    <input class="form-control" id="inputCity" type="text" asp-for="City">
+                                    <span asp-validation-for="City" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputZip">Zip</label>
+                                    <input type="text" class="form-control" id="inputZip" asp-for="PostalCode">
+                                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputCountry">Country</label>
+                                    <input class="form-control" id="inputCountry" type="text" asp-for="Country">
+                                    <span asp-validation-for="Country" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputHireDate">Hire Date</label>
+                                    <input class="form-control" id="inputHireDate" type="date" data-val="true" asp-for="HireDate" asp-format="{0:yyyy-MM-dd}">
+                                    <span asp-validation-for="HireDate" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputReleaseDate">Release Date</label>
+                                    <input class="form-control" id="inputReleaseDate" type="date" data-val="true" asp-for="ReleaseDate" asp-format="{0:yyyy-MM-dd}">
+                                    <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputStatus">Status</label>
+                                    <fieldset class="form-group">
+                                        <select class="form-select" id="basicSelect" name="Status" asp-items="@Html.GetEnumSelectList<Status>()">
+                                        </select>
+                                        <span asp-validation-for="Status" class="text-danger"></span>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<partial name="_ValidationScriptsPartial" />
+}

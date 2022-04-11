@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using Core.Models.Employee
-@model EmployeesListViewModel
+@using Core.Models.Client
+@model ClientsListViewModel
 @{
-    ViewData["Title"] = "All Employees";
+    ViewData["Title"] = "All Clients";
     Layout = "_LayoutIntro";
 }
 
@@ -10,14 +10,14 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>All Employees</h3>
-                <p class="text-subtitle text-muted">Here is the information for all employees</p>
+                <h3>All Clients</h3>
+                <p class="text-subtitle text-muted">Here is the information for all clients</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a asp-area="" asp-controller="HomeApp" asp-action="Index">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">All Employees</li>
+                        <li class="breadcrumb-item active" aria-current="page">All Clients</li>
                     </ol>
                 </nav>
             </div>
@@ -26,7 +26,7 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                Data Employees
+                Data Clients
             </div>
             <div class="card-body">
                 <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
@@ -36,25 +36,23 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Phone</th>
-                                    <th>Position</th>
+                                    <th>Email</th>
                                     <th>Hire Date</th>
-                                    <th>Hourly Salary</th>
                                     <th>City</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (Model.Employees.Count() > 0)
+                                @if (Model.Clients.Count() > 0)
                                 {
-                                    @foreach (var item in Model.Employees)
+                                    @foreach (var item in Model.Clients)
                                     {
                                         <tr>
-                                            <td>@item.FullName</td>
+                                            <td>@item.Name</td>
                                             <td>@item.PhoneNumber</td>
-                                            <td>@item.Position</td>
+                                            <td>@item.Email</td>
                                             <td>@item.HireDate</td>
-                                            <td>@item.HourlySalary</td>
                                             <td>@item.City</td>
                                             <td>
                                                 @if (item.Status == "Active")
@@ -65,7 +63,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <a href="/Employee/ChangeStatus?employeeId=@item.Id" class="badge bg-success">@item.Status</a>
+                                                        <a href="/Client/ChangeStatus?clientId=@item.Id" class="badge bg-success">@item.Status</a>
                                                     }
                                                 }
                                                 else
@@ -76,20 +74,20 @@
                                                     }
                                                     else
                                                     {
-                                                        <a href="/Employee/ChangeStatus?employeeId=@item.Id" class="badge bg-danger">@item.Status</a>
+                                                        <a href="/Client/ChangeStatus?clientId=@item.Id" class="badge bg-danger">@item.Status</a>
                                                     }
                                                 }
                                             </td>
                                             <td>
                                                 @if (User.IsInRole("Guest"))
                                                 {
-                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="/Employee/Profile?employeeId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></a>
+                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="/Client/Profile?clientId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></a>
                                                 }
                                                 else
                                                 {
-                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="/Employee/Profile?employeeId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></a>
-                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="/Employee/Edit?employeeId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
-                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark" href="/Employee/Delete?employeeId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
+                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="/Client/Profile?clientId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></a>
+                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="/Client/Edit?clientId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
+                                                    <a class="btn btn-datatable btn-icon btn-transparent-dark" href="/Client/Delete?clientId=@item.Id"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
                                                 }
                                             </td>
                                         </tr>
@@ -98,7 +96,7 @@
                                 else
                                 {
                                     <tr class="card-header">
-                                        <td>No employees added!</td>
+                                        <td>No clients added!</td>
                                     </tr>
                                 }
                             </tbody>
@@ -109,7 +107,7 @@
         </div>
     </section>
     <div class="dataTable-bottom">
-        <div class="dataTable-info">Showing @((Model.PageNumber - 1) * Model.ItemsPerPage) to @((Model.PageNumber - 1) * Model.ItemsPerPage + Model.ItemsPerPage) of @Model.EmployeeCount entries</div>
+        <div class="dataTable-info">Showing @((Model.PageNumber - 1) * Model.ItemsPerPage) to @((Model.PageNumber - 1) * Model.ItemsPerPage + Model.ItemsPerPage) of @Model.ClientCount entries</div>
         <ul class="pagination pagination-primary float-end dataTable-pagination">
             @if (!Model.HasPreviousPage)
             {

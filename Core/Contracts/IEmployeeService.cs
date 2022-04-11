@@ -21,7 +21,7 @@ namespace Core.Contracts
 
         IEnumerable<AllEmployeesViewModel> GetEmployees (int page, int itemsPerPage);
 
-        Task EditEmployeeAsync (EditEmployeeViewModel model, string employeeId, string rootPath);       
+        Task EditEmployeeAsync (EditEmployeeViewModel model, string employeeId, string rootPath);
 
         Task<bool> AddEmployeeAsync (AddEmployeeViewModel model, bool created, string rootPath, string userId, string userName);
     }

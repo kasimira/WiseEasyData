@@ -1,0 +1,154 @@
+﻿@using Core.Models.Client
+@model ClientProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "_LayoutIntro";
+}
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Profile</h3>
+                <p class="text-subtitle text-muted">Here is the information for the client</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="HomeApp" asp-action="Index">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Client" asp-action="All">All Clients</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <strong></strong><br>
+            <div class="table-responsive">
+                <table class="table table-user-information">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <span class="glyphicon glyphicon-user  text-secondary"></span>
+                                    Name
+                                </strong>
+                            </td>
+                            <td class="text-primary">
+                                @Model.Name
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <span class="glyphicon glyphicon-cloud text-secondary"></span>
+                                    VAT Number
+                                </strong>
+                            </td>
+                            <td class="text-primary">
+                                @Model.VatNumber
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <span class="glyphicon glyphicon-bookmark text-secondary"></span>
+                                    CEO Name
+                                </strong>
+                            </td>
+                            <td class="text-primary">
+                                @Model.CeoName
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <span class="glyphicon glyphicon-eye-open text-secondary"></span>
+                                    Hire Date
+                                </strong>
+                            </td>
+                            <td class="text-primary">
+                                @Model.HireDate
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <span class="glyphicon glyphicon-eye-open text-secondary"></span>
+                                    Email
+                                </strong>
+                            </td>
+                            <td class="text-primary">
+                                @Model.Email;  @Model.Email2;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <span class="glyphicon glyphicon-envelope text-secondary"></span>
+                                    Website
+                                </strong>
+                            </td>
+                            <td class="text-primary">
+                                @Model.Website
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                    Address
+                                </strong>
+                            </td>
+                            <td class="text-primary">
+                                @Model.Address,  @Model.PostalCode @Model.City,  @Model.Country
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                    Phone Number
+                                </strong>
+                            </td>
+                            <td class="text-primary">
+                                @Model.PhoneNumber;  @Model.MobilePhone;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                    Status
+                                </strong>
+                            </td>
+                            <td class="text-primary">
+                                @Model.Status
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <span class="glyphicon glyphicon-calendar text-secondary"></span>
+                                    Release date
+                                </strong>
+                            </td>
+                            <td class="text-secondary">
+                                @Model.ReleaseDate
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @if (User.IsInRole("Guest"))
+    {
+        <a class="btn btn-primary" type="button" href="/Client/All">All Clients</a>
+    }
+    else
+    {
+        <a class="btn btn-primary" type="button" href="/Client/Edit?clientId=@Model.Id">Edit Profile</a>
+    }
+</div>

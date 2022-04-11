@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Threading.Tasks;  
 
 namespace Test
 {
@@ -46,7 +46,6 @@ namespace Test
 
             var service = serviceProvider.GetService<IEmployeeService>();
             Assert.CatchAsync<Exception>(async () => await service!.AddEmployeeAsync(model, created, "rootPath", "userId", "Krasi"), "Employee is null.");
-
         }
 
         [Test]
@@ -65,6 +64,13 @@ namespace Test
         }
 
         [Test]
+        public void CheckIsReturnCorrectlyTheEmployeeInfo ()
+        {
+            var service = serviceProvider.GetService<IEmployeeService>();
+            Assert.DoesNotThrowAsync(async () => service!.GetEmployeeInfo<EditEmployeeViewModel>("123456789"));
+        }
+
+        [Test]
         public void ThrowWhenTheEmployeeForDeleteNoExist ()
         {
             var service = serviceProvider.GetService<IEmployeeService>();
@@ -78,6 +84,26 @@ namespace Test
             var employee = service!.GetEmployee("123456789");
             await service.ChangeStatusAsync(employee.Id);
             Assert.AreEqual(Status.Inactive, employee.Status);
+        }
+
+        [Test]
+        public void CheckIsreturnCorrectlyTheEmployeePtofil ()
+        {
+            var service = serviceProvider.GetService<IEmployeeService>();
+            Assert.DoesNotThrowAsync(async () => service!.GetEmployeeProfil("123456789"));
+        }
+
+        [Test]
+        public void CheckThatTheNumberOfListEmployeesIsCorrect ()
+        {
+            var service = serviceProvider.GetService<IEmployeeService>();
+            var count = 0;
+            var listEmployees = service!.GetEmployees(1, 3);
+            foreach (var item in listEmployees)
+            {
+                count++;
+            }
+            Assert.AreEqual(1, count);
         }
 
         [Test]

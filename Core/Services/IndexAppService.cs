@@ -255,20 +255,22 @@ namespace Core.Services
             List<StatisticsAppViewModel> statistics = new List<StatisticsAppViewModel>();
             var firtsTransaction = repo.AllReadonly<Transaction>()
                 .Where(t => t.IsDeleted == false)
-                .Where(t => t.Date.Year == DateTime.Now.Year -1)
+                .Where(t => t.Date.Year == DateTime.Now.Year)
                 .OrderBy(t => t.Date)
                 .FirstOrDefault();
+
             if(firtsTransaction == null)
             {
-               
+                return null;
             }
+
             var firstMonth = firtsTransaction!.Date.Month;
             var monthNow = DateTime.Now.Month;
             var numberOfMonths = monthNow - firstMonth;
             var currentMonth = firstMonth;
             decimal totalExpenses = 0;
 
-            for (int i = 0; i < numberOfMonths; i++)
+            for (int i = 0; i <= numberOfMonths; i++)
             {
                 expeseCategories = repo.All<Transaction>()
                 .Include("Category")
@@ -295,7 +297,7 @@ namespace Core.Services
                 var statisticMonth = new StatisticsAppViewModel()
                 {
                     Expenses = expeseCategories,
-                    TotalExpenses = totalExpenses,
+                    TotalAmounth = totalExpenses,
                     // Month = DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(currentMonth)
                     Month = $"{currentMonth}/{DateTime.Now.Year}"
                 };
@@ -313,12 +315,139 @@ namespace Core.Services
 
         public StatisticsAppListViewModel GetInfoStatisticsIncomes ()
         {
-            throw new NotImplementedException();
+            List<IncomesViewModel> incomeCategories = new List<IncomesViewModel>();
+            List<StatisticsAppViewModel> statistics = new List<StatisticsAppViewModel>();
+            var firtsTransaction = repo.AllReadonly<Transaction>()
+                .Where(t => t.IsDeleted == false)
+                .Where(t => t.Date.Year == DateTime.Now.Year)
+                .OrderBy(t => t.Date)
+                .FirstOrDefault();
+
+            if (firtsTransaction == null)
+            {
+                return null;
+            }
+
+            var firstMonth = firtsTransaction!.Date.Month;
+            var monthNow = DateTime.Now.Month;
+            var numberOfMonths = monthNow - firstMonth;
+            var currentMonth = firstMonth;
+            decimal totalIncomes = 0;
+
+            for (int i = 0; i <= numberOfMonths; i++)
+            {
+                incomeCategories = repo.All<Transaction>()
+                .Include("Category")
+                .Where(c => c.Category.Id == c.CategoryId)
+                .Where(t => t.TransactionType == TransactionType.Income)
+                .Where(t => t.IsDeleted == false)
+                .Where(t => t.Date.Month == currentMonth)
+                .ToList()
+                .GroupBy(c => c.Category.Name)
+                .Select(c => new IncomesViewModel
+                {
+                    Amount = c.Sum(b => b.Amount),
+                    CategoryName = c.Key!
+                })
+                .OrderBy(c => c.Amount)
+                .ToList();
+
+                totalIncomes = repo.AllReadonly<Transaction>()
+               .Where(c => c.IsDeleted == false)
+               .Where(c => c.TransactionType == TransactionType.Income)
+               .Where(d => d.Date.Month == currentMonth)
+               .Sum(c => c.Amount);
+
+                var statisticMonth = new StatisticsAppViewModel()
+                {
+                    Incomes = incomeCategories,
+                    TotalAmounth = totalIncomes,
+                    // Month = DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(currentMonth)
+                    Month = $"{currentMonth}/{DateTime.Now.Year}"
+                };
+                statistics.Add(statisticMonth);
+                currentMonth++;
+            }
+
+            var model = new StatisticsAppListViewModel()
+            {
+                Statistics = statistics,
+            };
+
+            return model;
         }
 
         public StatisticsAppListViewModel GetInfoStatisticsSalaries ()
         {
-            throw new NotImplementedException();
+            List<StatisticsAppViewModel> statistics = new List<StatisticsAppViewModel>();
+            var firtsSalary = repo.AllReadonly<Salary>()
+                .Where(t => t.FromDate.Year == DateTime.Now.Year)
+                .OrderBy(t => t.FromDate)
+                .FirstOrDefault();
+
+            if (firtsSalary == null)
+            {
+                return null;
+            }
+
+            var firstMonth = firtsSalary!.FromDate.Month;
+            var monthNow = DateTime.Now.Month;
+            var numberOfMonths = monthNow - firstMonth;
+            var currentMonth = firstMonth;
+            decimal totalSalaries = 0;
+
+            for (int i = 0; i <= numberOfMonths; i++)
+            {
+                decimal inAdvance = 0;
+                decimal inTotal = 0;
+                int totalHoursWork = 0;
+
+                inAdvance = repo.AllReadonly<Salary>()
+                    .Where(s => s.FromDate.Month == currentMonth)
+                    .Sum(s => s.InAdvance)
+                    .GetValueOrDefault();
+
+                inTotal = repo.AllReadonly<Salary>()
+                    .Where(s => s.FromDate.Month == currentMonth)
+                    .Sum(s => s.SalaryAmount);
+
+                totalHoursWork = repo.AllReadonly<Salary>()
+                    .Where(s => s.FromDate.Month == currentMonth)
+                    .Sum(s => s.HoursWorked);
+
+                var salariesCategories =  new SalariesViewModel()
+                {
+                    InAdvance = inAdvance,
+                    InTotal = inTotal,
+                    TotalHoursWork = totalHoursWork
+
+                };
+
+                totalSalaries = repo.AllReadonly<Salary>()
+
+               .Where(d => d.FromDate.Month == currentMonth)
+               .Sum(c => c.TotalAmount);
+
+
+
+                var statisticMonth = new StatisticsAppViewModel()
+                {
+                    Salaries = salariesCategories,
+                    TotalAmounth = totalSalaries,
+                    // Month = DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(currentMonth)
+                    Month = $"{currentMonth}/{DateTime.Now.Year}"
+                };
+
+                statistics.Add(statisticMonth);
+                currentMonth++;
+            }
+
+            var model = new StatisticsAppListViewModel()
+            {
+                Statistics = statistics,
+            };
+
+            return model;
         }
     }
 }

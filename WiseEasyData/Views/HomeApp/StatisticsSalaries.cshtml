@@ -1,0 +1,109 @@
+﻿@using Core.Models.Dashboard
+@using Infrastructure.Data
+@using Microsoft.AspNetCore.Identity
+@model StatisticsAppListViewModel
+
+@{
+    ViewData["Title"] = "Dashboard Statistics";
+    Layout = "_LayoutIntro";
+}
+
+@if (User.IsInRole("Administrator") || User.IsInRole("Editor") || User.IsInRole("Guest"))
+{
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Dashboard Statistics</h3>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+                            <form class="text-muted" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <button type="submit" class="text-muted mb-0 btn btn-link">Logout</button>
+                            </form>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <section class="row">
+            <div class="col-12 col-lg-9">
+                <div class="row">
+                    <div class="col-12 col-xl-8">
+                        @if (@Model != null)
+                        {
+                            @foreach (var item in @Model.Statistics)
+                            {
+                                <div class="card m-b-30">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">Salaries @item.Month</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-6 col-lg-3">
+                                                <div class="border-warning border rounded text-center py-3 mb-3">
+                                                    <h5 class="card-title text-warning mb-1">€ @item.TotalAmounth</h5>
+                                                    <p class="text-warning mb-0">Salaries</p>
+                                                </div>
+                                                <div class="border-warning border rounded text-center py-3 mb-3">
+                                                    <h5 class="card-title text-warning mb-1">€ @item.Salaries!.TotalHoursWork</h5>
+                                                    <p class="text-warning mb-0">Hours worked</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-lg-9">
+                                                @{
+                                                    decimal sum1;
+                                                    decimal sum2;
+                                                    if (item.Salaries!.InAdvance == 0)
+                                                    {
+                                                        sum1 = 0;
+                                                        <p>In Advance <span class="float-right">@sum1%</span></p>
+                                                        <div class="progress mb-3" style="height: 5px;">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: @sum1%" aria-valuenow="@sum1" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        sum1 = Math.Ceiling(item.Salaries!.InAdvance * 100 / item.TotalAmounth);
+                                                        <p>In Advance <span class="float-right">@sum1%</span></p>
+                                                        <div class="progress mb-3" style="height: 5px;">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: @sum1%" aria-valuenow="@sum1" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    }
+                                                    if (item.Salaries!.InTotal == 0)
+                                                    {
+                                                        sum2 = 0;
+                                                        <p>In Total <span class="float-right">@sum2%</span></p>
+                                                        <div class="progress mb-3" style="height: 5px;">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: @sum2%" aria-valuenow="@sum2" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        sum2 = Math.Ceiling(item.Salaries!.InTotal * 100 / item.TotalAmounth);
+                                                        <p>In Total <span class="float-right">@sum2%</span></p>
+                                                        <div class="progress mb-3" style="height: 5px;">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: @sum2%" aria-valuenow="@sum2" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>For now there are no statistics for this year.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+}

@@ -89,6 +89,17 @@
                                 </div>
                             </div>
                             <div class="row gx-3 mb-3">
+                                 <div class="col-md-6">
+                                    <label class="small mb-1" for="inputClientName">If the category is Clients, please select the name of the client</label>
+                                    <fieldset class="form-group">                                       
+                                        <select class="form-select" id="basicSelect" asp-for="ClientName" asp-items="@(new SelectList(Model.Clients, "Value", "Text"))">
+                                            <option value=""></option>
+                                        </select>
+                                        <span asp-validation-for="ClientName" class="text-danger"></span>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFile">File</label>
                                     <input asp-for="File" class="form-control" id="inputFile" placeholder="Please select a photo of the employee ">

@@ -35,5 +35,6 @@ namespace Core.Contracts
 
         string GetCategoryName (string categoryId);
         decimal GetTotalAmounthTransactions (string categoryId);
+        IEnumerable<SelectListItem> GetAllClients ();
     }
 }

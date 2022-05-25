@@ -106,6 +106,24 @@ namespace WiseEasyData.Controllers
         }
 
         [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
+        public IActionResult Invoices (string clientId, int id = 1)
+        {
+            const int ItemsPerPage = 6;
+            var invoicesCount = clientService.GetCountInvoices(clientId);
+
+            var viewModel = new InvoicesListViewModel
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                InvoicesCount = invoicesCount,
+                Invoices = clientService.GetInvoices(id, ItemsPerPage, clientId, invoicesCount),
+                ClientName = clientService.GetClientName(clientId)
+            };
+
+            return View(viewModel);
+        }
+
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor} ")]
         public async Task<IActionResult> DeleteClient (string clientId)
         {
             await clientService.DeleteAsync(clientId);

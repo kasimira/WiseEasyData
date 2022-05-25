@@ -31,6 +31,12 @@ namespace WiseEasyData.Infrastructure.Data
                    .HasForeignKey(e => e.EmployeeId)
                    .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Transaction>()
+                   .HasOne(e => e.Client)
+                   .WithMany(s => s.Invoices)
+                   .HasForeignKey(e => e.ClientId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<City>()
                 .HasOne(c => c.Country)
                 .WithMany(s => s.Cities)

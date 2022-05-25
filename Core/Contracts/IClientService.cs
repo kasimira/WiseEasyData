@@ -24,5 +24,8 @@ namespace Core.Contracts
         Task EditClientAsync (EditClientViewModel model, string clientId);       
 
         Task<bool> AddClientAsync (AddClientViewModel model, bool created);
+        int GetCountInvoices (string clientId);
+        IEnumerable<AllInvoicesViewModel> GetInvoices (int id, int itemsPerPage, string clientId, int invoicesCount);
+        string GetClientName (string clientId);
     }
 }

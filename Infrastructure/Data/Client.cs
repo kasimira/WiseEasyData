@@ -64,6 +64,7 @@ namespace Infrastructure.Data
         public bool IsDeleted { get; set; } = false;
 
         public ICollection<ConstructionSite> ConstructionsSites { get; set; } = new List<ConstructionSite>();
+        public ICollection<Transaction> Invoices { get; set; } = new List<Transaction>();
     }
 }
 

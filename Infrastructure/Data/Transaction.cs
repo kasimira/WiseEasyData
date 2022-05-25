@@ -44,6 +44,11 @@ namespace Infrastructure.Data
 
         public bool IsDeleted { get; set; } = false;
 
+        public string? ClientId { get; set; } = Guid.NewGuid().ToString();
+
+        [ForeignKey(nameof(ClientId))]
+        public Client? Client { get; set; }
+
     }
 }
 

@@ -255,5 +255,42 @@ namespace Core.Services
 
             return clientForDelete;
         }
+
+        public int GetCountInvoices (string clientId)
+        {
+            int number = repo.AllReadonly<Transaction>().Where(c => c.ClientId == clientId).Count();
+            
+            return number;
+        }
+
+        public IEnumerable<AllInvoicesViewModel> GetInvoices (int page, int itemsPerPage, string clientId, int invoicesCount)
+        {
+            if (itemsPerPage > invoicesCount)
+            {
+                itemsPerPage = invoicesCount;
+            }
+
+            return repo.All<Transaction>()
+                .Where(t => t.ClientId == clientId)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .Select(t => new AllInvoicesViewModel()
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Amount = t.Amount,
+                    Currency = t.Currency,
+                    Date = t.Date.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+                    TransactionType = t.TransactionType,
+                    FileId = t.FileId!,
+                    Category = t.Category.Name!,
+                    CreatorName = t.CreatorName,
+                })
+                .ToList();
+        }
+
+        public string GetClientName (string clientId)
+        {
+            return repo.AllReadonly<Client>().Where(c => c.Id == clientId).Select(c => c.Name).FirstOrDefault();
+        }
     }
 }

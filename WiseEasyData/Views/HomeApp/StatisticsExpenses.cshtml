@@ -54,7 +54,7 @@
                                                 @foreach (var expense in item.Expenses)
                                                 {
                                                     var sumex = Math.Round(expense.Amount * 100 / item.TotalAmounth);
-                                                    <p>@expense.CategoryName <span class="float-right">@sumex%</span></p>
+                                                    <p>@expense.CategoryName <span class="float-right">@sumex%  ->  @expense.Amount €</span></p>
                                                     <div class="progress mb-3" style="height: 5px;">
                                                         <div class="progress-bar" role="progressbar" style="width: @sumex%" aria-valuenow="@sumex" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>

@@ -83,6 +83,7 @@ namespace Core.Services
             }
 
             var category = GetCategory(model.CategoryTransactions);
+            var client = GetClient(model.ClientName);
 
             if (category == null)
             {
@@ -106,7 +107,8 @@ namespace Core.Services
                 FileId = fileId,
                 Description = model.Description,
                 CreatorId = userId,
-                CreatorName = GetUserNameById(userId)
+                CreatorName = GetUserNameById(userId),
+                ClientId = model.ClientName,                
             };
 
             if (transaction == null)
@@ -120,6 +122,11 @@ namespace Core.Services
             }
 
             category.Transactions.Add(transaction);
+
+            if (client != null)
+            {
+                client.Invoices.Add(transaction);
+            }
 
             try
             {
@@ -213,6 +220,20 @@ namespace Core.Services
         public IEnumerable<SelectListItem> GetAllCategories ()
         {
             var query = repo.All<CategoryTransactions>()
+                .Where(x => x.IsDeleted == false)
+                .OrderBy(x => x.Name)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id,
+                    Text = c.Name
+                }).ToList();
+
+            return query;
+        }
+
+        public IEnumerable<SelectListItem> GetAllClients ()
+        {
+            var query = repo.All<Client>()
                 .Where(x => x.IsDeleted == false)
                 .OrderBy(x => x.Name)
                 .Select(c => new SelectListItem
@@ -358,6 +379,11 @@ namespace Core.Services
         public CategoryTransactions GetCategory (string cateroryId)
         {
             return repo.AllReadonly<CategoryTransactions>().Where(c => c.Id == cateroryId).FirstOrDefault();
+        }
+
+        public Client GetClient (string clientId)
+        {
+            return repo.AllReadonly<Client>().Where(c => c.Id == clientId).FirstOrDefault();
         }
 
         public CategoryTransactions GetCategoryByName (string cateroryName)

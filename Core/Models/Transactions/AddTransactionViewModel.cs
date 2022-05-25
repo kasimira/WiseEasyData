@@ -40,7 +40,11 @@ namespace Core.Models.Transactions
         public DateTime Date { get; set; }
 
         public bool IsDeleted { get; set; } = false;
-        
+
+        public string ClientName { get; set; }
+
         public IEnumerable<SelectListItem>? Categories { get; set; }
+
+        public IEnumerable<SelectListItem>? Clients { get; set; }
     }
 }

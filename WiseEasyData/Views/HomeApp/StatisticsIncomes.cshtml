@@ -51,11 +51,11 @@
                                                 </div>
                                             </div>
                                             <div class="col-6 col-lg-9">
-                                                @foreach (var expense in item.Incomes!)
+                                                @foreach (var income in item.Incomes!)
                                                 {
-                                                    var sumex = Math.Round(expense.Amount * 100 / item.TotalAmounth);
+                                                    var sumex = Math.Round(income.Amount * 100 / item.TotalAmounth);
 
-                                                    <p>@expense.CategoryName <span class="float-right">@sumex%</span></p>
+                                                    <p>@income.CategoryName <span class="float-right">@sumex% -> @income.Amount €</span></p>
                                                     <div class="progress mb-3" style="height: 5px;">
                                                         <div class="progress-bar bg-success" role="progressbar" style="width: @sumex%" aria-valuenow="@sumex" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>

@@ -2,10 +2,8 @@ using Infrastructure.Data.Identity;
 using Microsoft.AspNetCore.Identity;
 using WiseEasyData.Infrastructure.Data;
 using WiseEasyData.ModelBinders;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Add services to the container.
 builder.Services.AddApplicationDbContexts(builder.Configuration);

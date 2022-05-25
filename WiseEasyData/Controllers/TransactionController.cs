@@ -39,6 +39,7 @@ namespace WiseEasyData.Controllers
         {
             var viewModel = new AddTransactionViewModel();
             viewModel.Categories = transactionService.GetAllCategories();
+            viewModel.Clients = transactionService.GetAllClients();
             viewModel.Date = DateTime.UtcNow;
 
             return View(viewModel);
@@ -49,10 +50,12 @@ namespace WiseEasyData.Controllers
         public async Task<IActionResult> Add (AddTransactionViewModel model, string id)
         {
             model.Categories = transactionService.GetAllCategories();
+            model.Clients = transactionService.GetAllClients();
 
             if (!ModelState.IsValid)
             {
                 model.Categories = transactionService.GetAllCategories();
+                model.Clients = transactionService.GetAllClients();
                 return View(model);
             }
 
@@ -60,7 +63,7 @@ namespace WiseEasyData.Controllers
 
             bool created = false;
             var rootPath = webHostEnvironment.WebRootPath;
-
+            
             try
             {
                 created = await transactionService.AddTransactionAsync(model, created, rootPath, id, userId);
@@ -142,6 +145,12 @@ namespace WiseEasyData.Controllers
 
         [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
         public IActionResult AddCategory ()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = $"{UserConstants.Roles.Administrator}, {UserConstants.Roles.Editor}")]
+        public IActionResult AddClientName ()
         {
             return View();
         }

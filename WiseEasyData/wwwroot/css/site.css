@@ -32,6 +32,16 @@ body {
     height: 100vh;
 }
 
+#login {
+    background-image: url("../images/background/img1006.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    border-radius: 0px !important;
+    height: 100vh;
+}
+
 /*Color of letters*/
 .text-muted {
     --bs-text-opacity: 1;
@@ -85,13 +95,15 @@ body {
 
 /*About Page*/
 
-
+#about .masthead {
+    background-image: url("../images/background/img1002.jpg");
+}
 .masthead {
     padding-top: 10.5rem;
     padding-bottom: 6rem;
     text-align: center;
     color: #fff;
-    background-image: url("../images/background/img1008.jpg");
+    background-image: url("../images/background/img1001.jpg");
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-position: center center;

@@ -117,7 +117,8 @@ namespace WiseEasyData.Controllers
                 PageNumber = id,
                 InvoicesCount = invoicesCount,
                 Invoices = clientService.GetInvoices(id, ItemsPerPage, clientId, invoicesCount),
-                ClientName = clientService.GetClientName(clientId)
+                ClientName = clientService.GetClientName(clientId),
+                TotalAmount = clientService.GetTotalAmountInvoices(clientId),
             };
 
             return View(viewModel);

@@ -1,7 +1,9 @@
 using Infrastructure.Data.Identity;
 using Microsoft.AspNetCore.Identity;
+using WiseEasyData.Hubs;
 using WiseEasyData.Infrastructure.Data;
 using WiseEasyData.ModelBinders;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,7 @@ builder.Services.AddControllersWithViews()
     });
 
 builder.Services.AddApplicationServices();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -52,5 +55,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();

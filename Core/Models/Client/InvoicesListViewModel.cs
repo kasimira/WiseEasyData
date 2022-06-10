@@ -21,5 +21,7 @@
         public int ItemsPerPage { get; set; }
 
         public string ClientName { get; set; }  
+
+        public decimal TotalAmount { get; set; }
     }
 }

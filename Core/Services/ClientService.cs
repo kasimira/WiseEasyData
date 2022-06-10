@@ -292,5 +292,15 @@ namespace Core.Services
         {
             return repo.AllReadonly<Client>().Where(c => c.Id == clientId).Select(c => c.Name).FirstOrDefault();
         }
+
+        public decimal GetTotalAmountInvoices (string clientId)
+        {
+            decimal number = repo.AllReadonly<Transaction>()
+                .Where(c => c.ClientId == clientId)
+                .Select(c => c.Amount)
+                .Sum();
+
+            return number;
+        }
     }
 }

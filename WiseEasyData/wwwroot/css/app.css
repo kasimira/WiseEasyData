@@ -7,6 +7,10 @@
     font-family: 'Poppins', sans-serif;
 }
 
+body .intro{
+    background-color: blueviolet;
+}
+
 .cardCosts {
     padding: 10px;
 }
